@@ -5,7 +5,7 @@
 * Notes: 
 * This is used to instantiate, move and reposition a menu background image.
 * If you want a moving background, attach this to an empty MainMenuController GameObject, and 
-* all it requires is for a designer to add a background sprite via the inspector. 
+* all it requires is for a designer to add a background sprite via the unity inspector. 
 */
 
 using System.Collections;
@@ -15,20 +15,22 @@ using System;
 
 public class ScrollingBackground : MonoBehaviour
 {
-	// Components and GameObjects
+	// GameObjects
 	public Transform backgroundImage;
 	private Transform dupeBackgroundImage;
+
+	// Components
 	private SpriteRenderer backgroundSprite;
 	private Rigidbody2D rb2d;
 	private Rigidbody2D dupeRb2d;
 
 	// Global Variables
-	private const int HORIZONTAL_MOVEMENT = 0;
 	[SerializeField][Range(0.1f, 10.0f)]
 	private float movementSpeed;
+	private const int HORIZONTAL_MOVEMENT = 0;
 
 	// ------------------------------------------------------------------------------
-	void Start()
+	private void Start()
 	{
 		if(backgroundImage != null)
 		{
@@ -44,13 +46,22 @@ public class ScrollingBackground : MonoBehaviour
 		}
 		else
 		{
-			throw new Exception("Error: Missing Background Image. Please add a Background Image via the Inspector.");
+			Debug.LogError("Error: Missing Background Image. Please add a Background Image via the Inspector.");
+		}
+		// Background must be moving.
+		if(movementSpeed == 0)
+		{
+			movementSpeed = 0.1f;
 		}
 	}
 
-	void FixedUpdate()
+	private void FixedUpdate()
 	{
 		MoveBackground();
+	}
+
+	private void Update()
+	{
 		if(backgroundImage.transform.position.x <= RepositionPoint())
 		{
 			RepositionBackground(backgroundImage);

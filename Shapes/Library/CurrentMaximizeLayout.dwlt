@@ -22,10 +22,10 @@ MonoBehaviour:
     y: 30
     width: 1440
     height: 737
-  m_MinSize: {x: 711, y: 494}
-  m_MaxSize: {x: 18006, y: 14044}
+  m_MinSize: {x: 713, y: 494}
+  m_MaxSize: {x: 18008, y: 14044}
   vertical: 0
-  controlID: 10708
+  controlID: 19937
 --- !u!114 &2
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -131,7 +131,7 @@ MonoBehaviour:
   m_MinSize: {x: 202, y: 444}
   m_MaxSize: {x: 4002, y: 8044}
   vertical: 1
-  controlID: 10673
+  controlID: 19890
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -196,9 +196,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: -0.9018203, y: -0.025111824, z: -59.568874}
+    m_Target: {x: 244.79999, y: 1209.1, z: 0}
     speed: 2
-    m_Value: {x: -0.9018203, y: -0.025111824, z: -59.568874}
+    m_Value: {x: 244.79999, y: 1209.1, z: 0}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -231,9 +231,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 19.590687
+    m_Target: 785.44055
     speed: 2
-    m_Value: 19.590687
+    m_Value: 785.44055
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -350,7 +350,7 @@ MonoBehaviour:
   m_ViewDataDictionary: {fileID: 0}
   m_LockTracker:
     m_IsLocked: 0
-  m_LastSelectedObjectID: 15080
+  m_LastSelectedObjectID: -23594
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -401,7 +401,7 @@ MonoBehaviour:
   m_MinSize: {x: 234, y: 494}
   m_MaxSize: {x: 10004, y: 14044}
   vertical: 1
-  controlID: 10709
+  controlID: 19912
 --- !u!114 &10
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -461,7 +461,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 8efbffffd83a0000
+      m_ExpandedIDs: c8a8ffffecfaffff8efbffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -606,7 +606,7 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scripts
+    - Assets/Art/Environment/Props
   m_ViewMode: 0
   m_StartGridSize: 64
   m_LastFolders: []
@@ -618,7 +618,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 0e280000
     m_LastClickedID: 10254
-    m_ExpandedIDs: ffffffff000000008c240000f2280000f8280000de290000aa2a0000882b0000d22b0000a62f000086300000a0300000dc300000803500000c360000da380000923900002c3a0000243b0000263b0000
+    m_ExpandedIDs: ffffffff000000008c240000f4280000fa280000e0290000ac2a0000f62a00008a2b0000d42b00001e2c0000102f0000a82f000088300000a2300000de300000823500000e360000dc380000943900002e3a0000243b0000263b0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -644,23 +644,23 @@ MonoBehaviour:
       m_ResourceFile: 
   m_AssetTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: e83a0000
-    m_LastClickedID: 0
-    m_ExpandedIDs: ffffffff000000008c240000f2280000f8280000de290000aa2a0000882b0000d22b0000a62f000086300000a0300000dc300000803500000c360000da380000923900002c3a0000243b0000263b0000
+    m_SelectedIDs: 12390000
+    m_LastClickedID: 14610
+    m_ExpandedIDs: ffffffff000000008c240000f4280000fa280000e0290000f62a00008a2b0000d42b0000102f0000a82f000088300000a2300000cc300000de3000000e360000dc38000012390000943900002e3a0000243b0000263b0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: 
-      m_OriginalName: 
+      m_Name: Environment
+      m_OriginalName: Environment
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 0
+      m_UserData: 14610
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 11
+      m_OriginalEventType: 0
       m_IsRenamingFilename: 1
       m_ClientGUIView: {fileID: 14}
     m_SearchString: 
@@ -671,8 +671,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: e83a0000
-    m_LastClickedInstanceID: 15080
+    m_SelectedInstanceIDs: 12390000
+    m_LastClickedInstanceID: 14610
     m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: 00000000
     m_RenameOverlay:
