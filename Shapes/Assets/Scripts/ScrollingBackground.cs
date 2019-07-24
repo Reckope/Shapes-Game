@@ -26,11 +26,11 @@ public class ScrollingBackground : MonoBehaviour
 
 	// Global Variables
 	[SerializeField][Range(0.1f, 10.0f)]
-	private float movementSpeed;
+	private float movementSpeed = 0.1f;
 	private const int HORIZONTAL_MOVEMENT = 0;
 
 	// ------------------------------------------------------------------------------
-	private void Start()
+	private void Awake()
 	{
 		if(backgroundImage != null)
 		{
@@ -47,11 +47,6 @@ public class ScrollingBackground : MonoBehaviour
 		else
 		{
 			Debug.LogError("Error: Missing Background Image. Please add a Background Image via the Inspector.");
-		}
-		// Background must be moving.
-		if(movementSpeed == 0)
-		{
-			movementSpeed = 0.1f;
 		}
 	}
 
