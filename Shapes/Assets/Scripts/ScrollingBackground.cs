@@ -36,7 +36,7 @@ public class ScrollingBackground : MonoBehaviour
 		{
 			if(backgroundImage.GetComponent<Rigidbody2D>() == null)
 			{
-				rb2d = gameObject.AddComponent(typeof(Rigidbody2D)) as Rigidbody2D;
+				rb2d = backgroundImage.gameObject.AddComponent(typeof(Rigidbody2D)) as Rigidbody2D;
 			}
 			rb2d = backgroundImage.GetComponent<Rigidbody2D>();
 			rb2d.bodyType = RigidbodyType2D.Kinematic;
