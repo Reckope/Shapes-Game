@@ -62,13 +62,14 @@ public class LevelController : MonoBehaviour
 		TextAsset txtAsset = (TextAsset)Resources.Load("LevelData", typeof(TextAsset));
 		String levelData = txtAsset.text;
 		allLevels = JsonUtility.FromJson<LevelDataCollection>(levelData);
+		numberOfLevels = allLevels.levels.Length;
 	}
 
 	// We then instantiate level buttons for each level in the json file. Designers can simply
 	// add a level to the file, and this will automatically create a button for it. 
 	private void InstantiateLevelButtons()
 	{
-		numberOfLevels = allLevels.levels.Length;
+		//numberOfLevels = allLevels.levels.Length;
 		Debug.Log(numberOfLevels);
 		for(int i = 0; i < numberOfLevels; i++)
 		{

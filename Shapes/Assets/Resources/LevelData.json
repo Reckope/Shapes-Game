@@ -23,7 +23,7 @@
 			"levelName": "Two's Company",
 			"description": "Level Two Objective. I have no idea what will go in here, but this is just a placeholder.",
 			"buildIndex": 2,
-			"isUnlocked": false,
+			"isUnlocked": true,
 			"isActive": false,
 			"completed": false
 		},
