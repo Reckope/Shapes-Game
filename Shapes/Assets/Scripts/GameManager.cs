@@ -5,7 +5,7 @@
 * Notes: 
 * This is used to coordinate actions across the entire game.
 * Design Pattern implemented: Singleton
-* Remove Scene Dupes - Yes. Global Access - Yes.
+* Remove Scene clones - Yes. Global Access - Yes.
 */
 
 using System.Collections;

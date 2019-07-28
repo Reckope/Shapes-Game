@@ -1,9 +1,9 @@
 ﻿/* 
 * Author: Joe Davis
-* Project: Neon Puzzle Game
+* Project: Shapes
 * 2019
 * Notes: 
-* This is used to load and manage the levels. Data can be loaded from a Json file,
+* This is used to load and manage the levels. Data can be loaded from a Json file
 * and buttons are instantiated to gain access to the levels. 
 * Attach this to an empty gameobject. 
 */
@@ -45,6 +45,8 @@ public class LevelController : MonoBehaviour
 
 	// Global Variables
 	private Level[] levelButtons;
+	private int numberOfLevels;
+
 
 	// ------------------------------------------------------------------------------
 	void Awake()
@@ -66,9 +68,9 @@ public class LevelController : MonoBehaviour
 	// add a level to the file, and this will automatically create a button for it. 
 	private void InstantiateLevelButtons()
 	{
-		int numberOfLevelsInGame = allLevels.levels.Length;
-		Debug.Log(numberOfLevelsInGame);
-		for(int i = 0; i < numberOfLevelsInGame; i++)
+		numberOfLevels = allLevels.levels.Length;
+		Debug.Log(numberOfLevels);
+		for(int i = 0; i < numberOfLevels; i++)
 		{
 			if(buttonPrefab != null || canvasParent != null)
 			{
@@ -77,7 +79,7 @@ public class LevelController : MonoBehaviour
 			}
 			else
 			{
-				Debug.Log("Error: Couldn't find button prefab or it's parent canvas.");
+				Debug.LogError("Error: Couldn't find button prefab or it's parent canvas.");
 			}
 		}
 		levelButtons = canvasParent.GetComponentsInChildren<Level>();
@@ -110,5 +112,10 @@ public class LevelController : MonoBehaviour
 			allLevels.levels[i].isUnlocked = false;
 			levelButtons[i].DisableLevel(allLevels.levels[i].isUnlocked);
 		}
+	}
+
+	public int GetNumberOfLevels()
+	{
+		return numberOfLevels;
 	}
 }

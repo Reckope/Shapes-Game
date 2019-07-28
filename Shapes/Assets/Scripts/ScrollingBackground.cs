@@ -17,12 +17,12 @@ public class ScrollingBackground : MonoBehaviour
 {
 	// GameObjects
 	public Transform backgroundImage;
-	private Transform dupeBackgroundImage;
+	private Transform cloneBackgroundImage;
 
 	// Components
 	private SpriteRenderer backgroundSprite;
 	private Rigidbody2D rb2d;
-	private Rigidbody2D dupeRb2d;
+	private Rigidbody2D cloneRb2d;
 
 	// Global Variables
 	[SerializeField][Range(0.1f, 10.0f)]
@@ -61,9 +61,9 @@ public class ScrollingBackground : MonoBehaviour
 		{
 			RepositionBackground(backgroundImage);
 		}
-		else if(dupeBackgroundImage.transform.position.x <= RepositionPoint())
+		else if(cloneBackgroundImage.transform.position.x <= RepositionPoint())
 		{
-			RepositionBackground(dupeBackgroundImage);
+			RepositionBackground(cloneBackgroundImage);
 		}
 	}
 
@@ -88,15 +88,15 @@ public class ScrollingBackground : MonoBehaviour
 	// Clone backgroundImage and position it to edge of it's original.
 	private void DuplicateBackgroundImage()
 	{
-		dupeBackgroundImage = Instantiate(backgroundImage);
-		dupeBackgroundImage.transform.position = new Vector2(backgroundImage.transform.position.x + LengthOfSprite(), backgroundImage.transform.position.y);
-		dupeRb2d = dupeBackgroundImage.GetComponent<Rigidbody2D>();
+		cloneBackgroundImage = Instantiate(backgroundImage);
+		cloneBackgroundImage.transform.position = new Vector2(backgroundImage.transform.position.x + LengthOfSprite(), backgroundImage.transform.position.y);
+		cloneRb2d = cloneBackgroundImage.GetComponent<Rigidbody2D>();
 	}
 
 	private void MoveBackground()
 	{
 		rb2d.velocity = new Vector2 (-movementSpeed, HORIZONTAL_MOVEMENT);
-		dupeRb2d.velocity = new Vector2(-movementSpeed, HORIZONTAL_MOVEMENT);
+		cloneRb2d.velocity = new Vector2(-movementSpeed, HORIZONTAL_MOVEMENT);
 	}
 
 	private void RepositionBackground(Transform background)

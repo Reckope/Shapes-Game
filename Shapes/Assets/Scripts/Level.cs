@@ -1,6 +1,6 @@
 ﻿/* 
 * Author: Joe Davis
-* Project: Neon Puzzle Game
+* Project: Shapes
 * 2019
 * Notes: 
 * This is used to display the unlocked level and it's data, or disable it if not unlocked yet. 
@@ -78,8 +78,9 @@ public class Level : MonoBehaviour
 		}
 		else
 		{
+			levelNameText.color = new Color(255, 255, 255);
 			levelNumberText.text = null;
-			levelNameText.text = null;
+			levelNameText.text = "Locked";
 			levelImage.sprite = lockedLevelSprite;
 			levelButton.interactable = false;
 		}

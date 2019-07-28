@@ -2,6 +2,8 @@ ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
     - GameManager
+    - Level
+    - LevelController
     - SceneController
     - ScrollingBackground
     UnityEditor.Graphs.dll:
@@ -89,7 +91,11 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 9660}
     - Class: 114
-      Script: {instanceID: 10138}
+      Script: {instanceID: 9894}
+    - Class: 114
+      Script: {instanceID: 9940}
+    - Class: 114
+      Script: {instanceID: 10142}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -106,6 +112,21 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 224
       Script: {instanceID: 0}
+    Assets/Scenes/Levels/Level01.unity:
+    - Class: 1
+      Script: {instanceID: 0}
+    - Class: 4
+      Script: {instanceID: 0}
+    - Class: 20
+      Script: {instanceID: 0}
+    - Class: 28
+      Script: {instanceID: 0}
+    - Class: 81
+      Script: {instanceID: 0}
+    - Class: 104
+      Script: {instanceID: 0}
+    - Class: 157
+      Script: {instanceID: 0}
     Assets/Scenes/MainMenu.unity:
     - Class: 1
       Script: {instanceID: 0}
@@ -118,6 +139,8 @@ ScriptsOnlyBuild:
     - Class: 28
       Script: {instanceID: 0}
     - Class: 48
+      Script: {instanceID: 0}
+    - Class: 49
       Script: {instanceID: 0}
     - Class: 50
       Script: {instanceID: 0}
@@ -144,7 +167,7 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 9660}
     - Class: 114
-      Script: {instanceID: 10138}
+      Script: {instanceID: 10142}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -190,7 +213,7 @@ ScriptsOnlyBuild:
     - Class: 104
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 10138}
+      Script: {instanceID: 10142}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 157
@@ -714,10 +737,22 @@ ScriptsOnlyBuild:
     className: TMP_SpriteAnimator
   - hash:
       serializedVersion: 2
+      Hash: 4e8bfa4e64b1f6080680ea0d129f14ec
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: Level
+  - hash:
+      serializedVersion: 2
       Hash: 4fd8bf02e3089425d3502e26c44ba31a
     assemblyName: Unity.TextMeshPro.dll
     namespaceName: TMPro
     className: TextContainer
+  - hash:
+      serializedVersion: 2
+      Hash: b328cfff70936fb63bff61dfbeb91f47
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: LevelController
   - hash:
       serializedVersion: 2
       Hash: 3f8d7b92a6be3c715e55d5cfa7cc8384
@@ -857,4 +892,5 @@ ScriptsOnlyBuild:
   - Assets/Scenes/Settings.unity
   - Assets/Scenes/Credits.unity
   - Assets/Scenes/LevelSelect.unity
+  - Assets/Scenes/Levels/Level01.unity
   playerPath: /Users/JoeDavis/Documents/Unity Projects/Shapes/Builds/v1.1.app
