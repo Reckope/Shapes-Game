@@ -59,6 +59,7 @@
      <Compile Include="Assets\Scripts\Level.cs" />
      <Compile Include="Assets\Scripts\LevelController.cs" />
      <Compile Include="Assets\Scripts\Peds\Ped.cs" />
+     <Compile Include="Assets\Scripts\Peds\Player.cs" />
      <Compile Include="Assets\Scripts\SceneController.cs" />
      <Compile Include="Assets\Scripts\ScrollingBackground.cs" />
      <None Include="Assets\BayatGames\Free Platform Game Assets\Readme.txt" />
