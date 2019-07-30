@@ -62,6 +62,7 @@
      <Compile Include="Assets\Scripts\Peds\Player.cs" />
      <Compile Include="Assets\Scripts\SceneController.cs" />
      <Compile Include="Assets\Scripts\ScrollingBackground.cs" />
+     <Compile Include="Assets\Scripts\States\State.cs" />
      <None Include="Assets\BayatGames\Free Platform Game Assets\Readme.txt" />
  <Reference Include="Unity.Timeline.Editor">
  <HintPath>/Users/JoeDavis/Documents/Unity Projects/Shapes/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>

@@ -14,32 +14,30 @@ using UnityEngine;
 
 public class Player : Ped
 {
-	// Components
-	private Rigidbody2D rb2d;
-	private Collider2D Collider2D;
-	private Animator anim;
+	private State currentState;
+
+	// GameObjects
+	public LayerMask whatIsGround;
+	public Transform groundCheck;
 
 	// Global Variables
-	[Header("Player Settings")]
 	[SerializeField][Range(0.1f, 10.0f)]
-	private float _acceleration = 0.1f;
-	[SerializeField][Range(0.1f, 10.0f)]
-	private float _maxSpeed = 0.1f;
+	private float _speed = 0.1f, jumpForce = 0.1f;
 
 	// Start is called before the first frame update
 	private void Awake()
 	{
 		setName("Morphy");
-		setAcceleration(_acceleration);
-		setMaxSpeed(_maxSpeed);
+		setSpeed(_speed);
 	}
 
 	private void Start()
 	{
-		Collider2D = GetComponent<Collider2D>();
-		rb2d = GetComponent<Rigidbody2D>();
-		anim = GetComponent<Animator>();
-		rb2d.constraints = RigidbodyConstraints2D.FreezeRotation;
+		SetRigidBody2D();
+		SetCollider2D();
+		SetAnimator();
+		GetRigidBody2D().constraints = RigidbodyConstraints2D.FreezeRotation;
+		//SetState(new ReturnHomeState(this));
 	}
 
 	// Update is called once per frame
@@ -55,25 +53,52 @@ public class Player : Ped
 
 	private void MovePlayer()
 	{
+		bool jump;
+		bool grounded;
 		float moveHorizontal;
+		float groundCheckRadius = 0.3f;
 
-		rb2d.bodyType = RigidbodyType2D.Dynamic;
-		//grounded = Physics2D.OverlapCircle (groundCheck.position, groundCheckRadius, whatIsGround);
+		GetRigidBody2D().bodyType = RigidbodyType2D.Dynamic;
+		grounded = Physics2D.OverlapCircle (groundCheck.position, groundCheckRadius, whatIsGround);
 		moveHorizontal = Input.GetAxisRaw("Horizontal");
-		Vector2 movement = new Vector2 (moveHorizontal, 0);
-		if((rb2d.velocity.x >= -_maxSpeed && rb2d.velocity.x <= _maxSpeed)){
-			rb2d.AddForce(movement * _acceleration);
-		}
-		if(rb2d.velocity.x > 0)
+		GetRigidBody2D().velocity = new Vector2(moveHorizontal * _speed, GetRigidBody2D().velocity.y);
+
+		jump = Input.GetKeyDown(KeyCode.W);
+		if(grounded && jump)
 		{
-			anim.Play("WalkRight");
+			GetAnimator().SetTrigger("takeOff");
+			GetRigidBody2D().velocity = Vector2.up * jumpForce;
 		}
-		else if(rb2d.velocity.x < 0)
+
+		if(grounded)
 		{
-			anim.Play("WalkLeft");
+			GetAnimator().SetBool("isJumping", false);
+			if(moveHorizontal == 0)
+			{
+				GetAnimator().SetBool("isRunning", false);
+			}
+			else
+			{
+				GetAnimator().SetBool("isRunning", true);
+			}
 		}
-		else{
-			anim.Play("Idle");
+		else
+		{
+			GetAnimator().SetBool("isJumping", true);
+			GetAnimator().SetBool("isRunning", false);
+		}
+
+		if(moveHorizontal > 0)
+		{
+			transform.eulerAngles = new Vector3(0, 0, 0);
+		}
+		else if(moveHorizontal < 0)
+		{
+			transform.eulerAngles = new Vector3(0, 180, 0);
+		}
+		else
+		{
+			GetAnimator().Play("Idle");
 		}
 	}
 }

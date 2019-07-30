@@ -2,13 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(CapsuleCollider2D))]
+[RequireComponent(typeof(Animator))]
 public class Ped : MonoBehaviour
 {
+	// Components
+	private Rigidbody2D rb2d;
+	private Collider2D Collider2D;
+	private Animator anim;
 
+	// Global Variables
 	private string pedName;
 	private string sound;
-	private float acceleration;
-	private float maxSpeed;
+	private float speed;
 
 	// Ped Name
 	public void setName(string newName)
@@ -33,24 +40,46 @@ public class Ped : MonoBehaviour
 	}
 
 	// Ped Movement Speed
-	public void setAcceleration(float newAcceleration)
+	public void setSpeed(float newSpeed)
 	{
-		acceleration = newAcceleration;
+		speed = newSpeed;
 	}
 
-	public float getAcceleration()
+	public float getSpeed()
 	{
-		return acceleration; 
+		return speed; 
 	}
 
-	// Ped Max Speed
-	public void setMaxSpeed(float newMaxSpeed)
+	// ---------- Components ----------
+	// Any ped that inherits this class, can simply set and get the components they need
+	// from here instead of initializing them everytime. 
+	public void SetRigidBody2D()
 	{
-		maxSpeed = newMaxSpeed;
+		rb2d = GetComponent<Rigidbody2D>();
 	}
 
-	public float getMaxSpeed()
+	public Rigidbody2D GetRigidBody2D()
 	{
-		return maxSpeed; 
+		return rb2d;
+	}
+
+	public void SetCollider2D()
+	{
+		Collider2D = GetComponent<Collider2D>();
+	}
+
+	public Collider2D GetCollider2D()
+	{
+		return Collider2D;
+	}
+
+	public void SetAnimator()
+	{
+		anim = GetComponent<Animator>();
+	}
+
+	public Animator GetAnimator()
+	{
+		return anim;
 	}
 }
