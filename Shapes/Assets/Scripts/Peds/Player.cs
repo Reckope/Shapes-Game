@@ -14,7 +14,7 @@ using UnityEngine;
 
 public class Player : Ped
 {
-	private State currentState;
+	private StateMachine stateMachine;
 
 	// GameObjects
 	public LayerMask whatIsGround;
@@ -37,18 +37,19 @@ public class Player : Ped
 		SetCollider2D();
 		SetAnimator();
 		GetRigidBody2D().constraints = RigidbodyConstraints2D.FreezeRotation;
-		//SetState(new ReturnHomeState(this));
+		SetPedState(new IdleState(this));
 	}
 
 	// Update is called once per frame
 	private void Update()
 	{
+		UpdatePedState(new IdleState(this));
 		MovePlayer();
 	}
 
 	private void FixedUpdate()
 	{
-
+		FixedUpdatePedState(new IdleState(this));
 	}
 
 	private void MovePlayer()

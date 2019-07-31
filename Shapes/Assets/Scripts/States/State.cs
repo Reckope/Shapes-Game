@@ -6,14 +6,13 @@ public abstract class State
 {
 	protected Ped ped;
 
-	public abstract void UpdateState();	// A state needs to be updated at all times. 
-
-	public virtual void HandleInput(){}	// Only handle input if the object needs to. 
-	public virtual void OnStateEnter(){}
-	public virtual void OnStateExit(){}
+	public abstract void EnterState();
+	public abstract void UpdateState();
+	public virtual void FixedUpdateState(){}	// Optional in case there's no physics involved.  
+	public abstract void ExitState();
 
 	public State(Ped ped)
 	{
-		this.ped= ped;
+		this.ped = ped;
 	}
 }
