@@ -4,15 +4,17 @@ using UnityEngine;
 
 public abstract class State
 {
-	protected Ped ped;
+	protected StateMachine stateMachine;
 
 	public abstract void EnterState();
 	public abstract void UpdateState();
 	public virtual void FixedUpdateState(){}	// Optional in case there's no physics involved.  
 	public abstract void ExitState();
 
-	public State(Ped ped)
+	// We take the state machine in the constructor of our state class and keep it in 
+	// a protected variable so it’s available to our state classes.
+	public State(StateMachine stateMachine)
 	{
-		this.ped = ped;
+		this.stateMachine = stateMachine;
 	}
 }

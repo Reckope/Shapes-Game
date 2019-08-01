@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class IdleState : State
 {
+	private Animator anim;
 
-	private Vector3 destination;
-
-	public IdleState(Ped ped) : base(ped)
+	public IdleState(StateMachine stateMachine) : base(stateMachine)
 	{
 
 	}

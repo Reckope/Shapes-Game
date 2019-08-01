@@ -8,7 +8,7 @@ using UnityEngine;
 public class Ped : MonoBehaviour
 {
 	// Classes
-	private State currentState;
+	protected StateMachine stateMachine;
 
 	// Components
 	private Rigidbody2D rb2d;
@@ -20,34 +20,7 @@ public class Ped : MonoBehaviour
 	private string sound;
 	private float speed;
 
-	public void SetPedState(State state)
-	{
-		if (currentState != null)
-		{
-			currentState.ExitState();
-		}
-		currentState = state;
-		//gameObject.name = state.GetType().Name;
-		if (currentState != null)
-		{
-			currentState.EnterState();
-		}
-	}
-
-	public void UpdatePedState(State state)
-	{
-		if (currentState != null){
-			currentState.UpdateState();
-		}
-	}
-
-	public void FixedUpdatePedState(State state)
-	{
-		if (currentState != null){
-			currentState.FixedUpdateState();
-		}
-	}
-
+	// ------------------------------------------------------------------------------
 	// Ped Name
 	public void setName(string newName)
 	{
