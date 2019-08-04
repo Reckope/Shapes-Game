@@ -2,31 +2,32 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IdleState : GroundedState
+public class AirbornState : State
 {
-	public IdleState(StateMachine stateMachine, Ped ped) : base(stateMachine, ped)
+	public AirbornState(StateMachine stateMachine, Ped ped) : base(stateMachine, ped)
 	{
 
 	}
 
 	public override void EnterState()
 	{
-		base.EnterState();
+		
 	}
 
 	public override void UpdateState()
 	{
-		base.UpdateState();
+		
 	}
 
 	public override void FixedUpdateState()
 	{
-		base.FixedUpdateState();
+		ped.Animator.SetBool("isAirborn", true);
 		ped.Animator.SetBool("isWalking", false);
+		ped.Walk();
 	}
 
 	public override void ExitState()
 	{
-		base.ExitState();
+		
 	}
 }

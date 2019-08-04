@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IdleState : GroundedState
+public class WalkingState : GroundedState
 {
-	public IdleState(StateMachine stateMachine, Ped ped) : base(stateMachine, ped)
+	public WalkingState(StateMachine stateMachine, Ped ped) : base(stateMachine, ped)
 	{
 
 	}
@@ -22,7 +22,7 @@ public class IdleState : GroundedState
 	public override void FixedUpdateState()
 	{
 		base.FixedUpdateState();
-		ped.Animator.SetBool("isWalking", false);
+		ped.Animator.SetBool("isWalking", true);
 	}
 
 	public override void ExitState()

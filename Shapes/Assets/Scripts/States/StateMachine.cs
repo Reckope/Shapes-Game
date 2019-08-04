@@ -4,8 +4,17 @@ using UnityEngine;
 
 public class StateMachine : MonoBehaviour
 {
+	// Global Variables
 	private State currentState;
-	//private Ped ped;
+
+	// ============================================================
+	// Monobehaviour public methods to set the state. 
+	// ============================================================
+
+	public StateMachine(State state)
+	{
+		this.currentState = state;
+	}
  
 	public void SetState (State newState)
 	{
@@ -36,13 +45,9 @@ public class StateMachine : MonoBehaviour
 		}
 	}
 
-	public StateMachine(State state)
-	{
-		this.currentState = state;
-	}
+	// ============================================================
+	// Get current state.
+	// ============================================================
 
-	public void test()
-	{
-		Debug.Log("Test");
-	}
+	public State GetCurrentState(){ return currentState; }
 }

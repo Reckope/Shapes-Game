@@ -5,85 +5,130 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(CapsuleCollider2D))]
 [RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(StateMachine))]
 public class Ped : MonoBehaviour
 {
 	// Classes
 	protected StateMachine stateMachine;
 
 	// Components
-	private Rigidbody2D rb2d;
-	private Collider2D Collider2D;
-	private Animator anim;
+	public Rigidbody2D Rigidbody2D;
+	public Collider2D Collider2D;
+	public Animator Animator;
+
+	// GameObjects / Transform
+	public LayerMask whatIsGround;
+	public Transform groundCheck;
 
 	// Global Variables
+	public bool grounded, jumped, moving;
 	private string pedName;
 	private string sound;
 	private float speed;
+	private float jumpForce;
 
-	// ------------------------------------------------------------------------------
+	// *** JOE. If multiple peds are acting the same, create a constructor and use:
+	// Ped player = new ped(name, speed etc) ***
+	// ============================================================
+	// MonoBehaviour methods.
+	// ============================================================
+
+	protected virtual void Awake()
+	{
+		Rigidbody2D = GetComponent<Rigidbody2D>();
+		Collider2D = GetComponent<Collider2D>();
+		Animator = GetComponent<Animator>();
+		stateMachine = GetComponent<StateMachine>();
+	}
+
+	protected virtual void Start()
+	{
+		Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
+		Rigidbody2D.bodyType = RigidbodyType2D.Dynamic;
+		stateMachine.SetState(new IdleState(stateMachine, this));
+	}
+
+	protected virtual void Update()
+	{
+		Debug.Log(stateMachine.GetCurrentState());
+		stateMachine.UpdateState();
+		FlipSprite();
+		float groundCheckRadius = 0.3f;
+		Grounded = Physics2D.OverlapCircle (groundCheck.position, groundCheckRadius, whatIsGround);
+	}
+
+	protected virtual void FixedUpdate()
+	{
+		stateMachine.FixedUpdateState();
+	}
+
+	// ============================================================
+	// Get Set methods / properties.
+	// ============================================================
+
+	// Is the ped grounded or not?
+	public bool Grounded
+	{
+		get
+		{
+			return grounded;
+		}
+		set
+		{
+			if(value == grounded)
+			{
+				return;
+			}
+			stateMachine.SetState(new AirbornState(stateMachine, this));
+			grounded = value;
+			if(grounded)
+			{
+				stateMachine.SetState(new GroundedState(stateMachine, this));
+			}
+		}
+	}
+
 	// Ped Name
-	public void setName(string newName)
-	{
-		pedName = newName;
-	}
-
-	public string getName()
-	{
-		return pedName; 
-	}
+	public string GetName(){ return pedName; }
+	public void SetName(string newName){ pedName = newName; }
 
 	// Ped Sound
-	public void setSound(string newSound)
-	{
-		sound = newSound;
-	}
-
-	public string getSound()
-	{
-		return sound; 
-	}
+	public string GetSound(){ return sound; }
+	public void SetSound(string newSound){ sound = newSound; }
 
 	// Ped Movement Speed
-	public void setSpeed(float newSpeed)
+	public float GetSpeed(){ return speed; }
+	public void SetSpeed(float newSpeed){ speed = newSpeed; }
+
+	// Jump Force
+	public float GetJumpForce(){ return jumpForce; }
+	public void SetJumpForce(float newJumpForce){ jumpForce = newJumpForce; }
+
+	// ============================================================
+	// Ped Tasks
+	// ============================================================
+
+	private void FlipSprite()
 	{
-		speed = newSpeed;
+		if(Rigidbody2D.velocity.x > 0)
+		{
+			transform.eulerAngles = new Vector3(0, 0, 0);
+		}
+		else if(Rigidbody2D.velocity.x < 0)
+		{
+			transform.eulerAngles = new Vector3(0, 180, 0);
+		}
 	}
 
-	public float getSpeed()
+	public void Jump()
 	{
-		return speed; 
+		Animator.SetTrigger("takeOff");
+		Rigidbody2D.velocity = Vector2.up * jumpForce;
+		jumped = false;
 	}
 
-	// ---------- Components ----------
-	// Any ped that inherits this class, can simply set and get the components they need
-	// from here instead of initializing them everytime. 
-	public void SetRigidBody2D()
+	public void Walk()
 	{
-		rb2d = GetComponent<Rigidbody2D>();
-	}
-
-	public Rigidbody2D GetRigidBody2D()
-	{
-		return rb2d;
-	}
-
-	public void SetCollider2D()
-	{
-		Collider2D = GetComponent<Collider2D>();
-	}
-
-	public Collider2D GetCollider2D()
-	{
-		return Collider2D;
-	}
-
-	public void SetAnimator()
-	{
-		anim = GetComponent<Animator>();
-	}
-
-	public Animator GetAnimator()
-	{
-		return anim;
+		Rigidbody2D.velocity = new Vector2(Input.GetAxisRaw("Horizontal") * GetSpeed(), Rigidbody2D.velocity.y);
 	}
 }
