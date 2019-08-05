@@ -32,7 +32,7 @@ public class Ped : MonoBehaviour
 
 	// Global Variables
 	private float groundCheckRadius = 0.3f;
-	private bool grounded, jumped, _morphed;
+	private bool _isGrounded, _hasJumped, _hasMorphed, _isAbleToMove, _isAbleToJump;
 	private string _name;
 	private string _sound;
 	private float _speed;
@@ -71,74 +71,93 @@ public class Ped : MonoBehaviour
 	protected virtual void FixedUpdate()
 	{
 		stateMachine.FixedUpdateState();
-		grounded = Physics2D.OverlapCircle (groundCheck.position, groundCheckRadius, whatIsGround);
+		_isGrounded = Physics2D.OverlapCircle (groundCheck.position, groundCheckRadius, whatIsGround);
 		Walk();
 	}
 
+	protected virtual void LateUpdate()
+	{
+		stateMachine.LateUpdateState();
+	}
+
 	// ============================================================
-	// Get Set methods / properties.
+	// Properties
 	// ============================================================
 
-	public string Name { get { return _name; } set { _name = value; } }
+	public string Name { get { return _name; } protected set { _name = value; } }
 
-	public string Sound { get { return _sound; } set { _sound = value; } }
+	public string Sound { get { return _sound; } protected set { _sound = value; } }
 
 	public float Speed { get { return _speed; } set { _speed = value; } }
 
 	public float JumpForce { get { return _jumpForce; } set { _jumpForce = value; } }
 
-	public bool Morphed { get { return _morphed; } set { _morphed = value; } }
+	public bool HasJumped { get { return _hasJumped; } protected set { _hasJumped = value; } }
+
+	public bool IsGrounded { get { return _isGrounded; } protected set { _isGrounded = value; } }
+
+	public bool HasMorphed { get { return _hasMorphed; } set { _hasMorphed = value; } }
+
+	public bool IsAbleToMove { get { return _isAbleToMove; } set { _isAbleToMove = value; } }
+
+	public bool IsAbleToJump { get { return _isAbleToJump; } set { _isAbleToJump = value; } }
 
 	// Set Movement Direction as a property so we only enter the
 	// walking & idle states once, and not every frame. 
 	public float MovementDirection 
 	{ 
-		get 
+		get { return _movementDirection; }
+		set
 		{
-			return _movementDirection; 
-		}
-		set 
-		{
-			if(value == _movementDirection)
+			if(_movementDirection == value)
 			{
 				return;
 			}
-			if(!Morphed)
-			{
-				stateMachine.SetState(new WalkingState(stateMachine, this));
-			}
 			_movementDirection = value;
-			if(_movementDirection == 0 && !Morphed)
+			if(!HasMorphed)
 			{
-				stateMachine.SetState(new IdleState(stateMachine, this));
+				if(_movementDirection != 0)
+				{
+					stateMachine.SetState(new WalkingState(stateMachine, this));
+				}
+				else
+				{
+					stateMachine.SetState(new IdleState(stateMachine, this));
+				}
 			}
 		}
 	}
 
 	// ============================================================
-	// Ped Tasks
+	// Ped Basic Tasks & States
 	// ============================================================
 
 	public void Jump()
 	{
-		jumped = true;
-		Animator.SetTrigger("takeOff");
-		Rigidbody2D.velocity = Vector2.up * _jumpForce;
-		jumped = false;
+		if(_isAbleToJump)
+		{
+			_hasJumped = true;
+			Animator.SetTrigger("takeOff");
+			Rigidbody2D.velocity = Vector2.up * _jumpForce;
+			_hasJumped = false;
+		}
 	}
 
 	public void Walk()
 	{
-		Rigidbody2D.velocity = new Vector2(_movementDirection * _speed, Rigidbody2D.velocity.y);
+		if(_isAbleToMove)
+		{
+			Rigidbody2D.velocity = new Vector2(_movementDirection * _speed, Rigidbody2D.velocity.y);
+		}
 	}
 
 	private void FlipSprite()
 	{
-		if(Rigidbody2D.velocity.x > 0)
+		if(Rigidbody2D.velocity.x > 0 && !HasMorphed)
 		{
 			transform.eulerAngles = new Vector3(0, 0, 0);
 		}
-		else if(Rigidbody2D.velocity.x < 0)
+		else if(Rigidbody2D.velocity.x < 0 && !HasMorphed)
 		{
 			transform.eulerAngles = new Vector3(0, 180, 0);
 		}
@@ -146,7 +165,7 @@ public class Ped : MonoBehaviour
 
 	private void UpdateAirbornState()
 	{
-		if(grounded)
+		if(_isGrounded)
 		{
 			Animator.SetBool("isAirborn", false);
 		}
@@ -155,14 +174,4 @@ public class Ped : MonoBehaviour
 			Animator.SetBool("isAirborn", true);
 		}
 	}
-
-	// ============================================================
-	// Ped Actions
-	// ============================================================
-
-	public bool IsGrounded() { return grounded; }
-
-	public bool HasJumped() { return jumped; }
-
-	public bool HasMorphed() { return _morphed; }
 }

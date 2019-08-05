@@ -24,6 +24,8 @@ public class Player : Ped
 		Name = "Morphy";
 		Speed = playerSpeed;
 		JumpForce = playerJumpForce;
+		IsAbleToMove = true;
+		IsAbleToJump = true;
 	}
 
 	// Start is called before the first frame update
@@ -37,24 +39,26 @@ public class Player : Ped
 	{
 		base.Update();
 		MovementDirection = Input.GetAxisRaw("Horizontal");
+		Walk();
 
-		if(Input.GetKeyDown("down"))
+		if(Input.GetKeyDown("u"))
 		{
 			stateMachine.SetState(new MorphToBallState(stateMachine, this));
 		}
-		else if (Input.GetKeyUp("down"))
+		else if (Input.GetKeyUp("u"))
 		{
-			stateMachine.SetState(new IdleState(stateMachine, this));
+			if(MovementDirection == 0)
+			{
+				stateMachine.SetState(new IdleState(stateMachine, this));
+			}
+			else
+			{
+				stateMachine.SetState(new WalkingState(stateMachine, this));
+			}
 		}
-		//else if (stateMachine.GetCurrentState() is MorphToBallState)
-		//{
-		//	Animator.SetBool("morphToBall", false);
-			//stateMachine.SetState(new IdleState(stateMachine, this));
-		//}
 
-		if(Input.GetKeyDown(KeyCode.W) && IsGrounded())
+		if(Input.GetKeyDown(KeyCode.W) && IsGrounded)
 		{
-			//stateMachine.SetState(new MorphToBallState(stateMachine, this));
 			Jump();
 		}
 	}

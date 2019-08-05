@@ -1,4 +1,14 @@
-﻿using System.Collections;
+﻿/* 
+* Author: Joe Davis
+* Project: Shapes
+* 2019
+* Notes: 
+* This is where the given model (Derived Ped) transitions
+* to other behavioral states through external input.
+* Derived Ped > Ped > Statemachine (here) > State > SomeState
+*/
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -39,6 +49,14 @@ public class StateMachine : MonoBehaviour
 		if (currentState != null)
 		{
 			currentState.FixedUpdateState();
+		}
+	}
+
+	public void LateUpdateState()
+	{
+		if (currentState != null)
+		{
+			currentState.LateUpdateState();
 		}
 	}
 

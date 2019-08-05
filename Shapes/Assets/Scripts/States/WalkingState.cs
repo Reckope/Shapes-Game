@@ -11,7 +11,7 @@ public class WalkingState : State
 
 	public override void EnterState()
 	{
-		Debug.Log("ENTER WALKING");
+		ped.Animator.SetBool("isWalking", true);
 	}
 
 	public override void UpdateState()
@@ -21,12 +21,11 @@ public class WalkingState : State
 
 	public override void FixedUpdateState()
 	{
-		base.FixedUpdateState();
-		ped.Animator.SetBool("isWalking", true);
+		//ped.Animator.SetBool("isWalking", true);
 	}
 
 	public override void ExitState()
 	{
-		Debug.Log("EXIT WALKING");
+		ped.Animator.SetBool("isWalking", false);
 	}
 }
