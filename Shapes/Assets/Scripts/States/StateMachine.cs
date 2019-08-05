@@ -18,15 +18,12 @@ public class StateMachine : MonoBehaviour
  
 	public void SetState (State newState)
 	{
-		if (currentState != null)
+		if(currentState != null)
 		{
 			currentState.ExitState();
 		}
 		currentState = newState;
-		if (currentState != null)
-		{
-			currentState.EnterState();
-		}
+		currentState.EnterState();
 	}
 
 	public void UpdateState()

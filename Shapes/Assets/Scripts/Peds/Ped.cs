@@ -1,4 +1,14 @@
-﻿using System.Collections;
+﻿/* 
+* Author: Joe Davis
+* Project: Shapes
+* 2019
+* Notes: 
+* This is the core script for peds such as the Player, enemies, allies etc.
+* All peds inherit this script, where they can then access it's components
+* and the state machine.  
+*/
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,14 +28,16 @@ public class Ped : MonoBehaviour
 
 	// GameObjects / Transform
 	public LayerMask whatIsGround;
-	public Transform groundCheck;
+	public Transform groundCheck, leftCheck, rightCheck, topCheck;
 
 	// Global Variables
-	public bool grounded, jumped, moving;
-	private string pedName;
-	private string sound;
-	private float speed;
-	private float jumpForce;
+	private float groundCheckRadius = 0.3f;
+	private bool grounded, jumped, _morphed;
+	private string _name;
+	private string _sound;
+	private float _speed;
+	private float _jumpForce;
+	private float _movementDirection;
 
 	// *** JOE. If multiple peds are acting the same, create a constructor and use:
 	// Ped player = new ped(name, speed etc) ***
@@ -39,13 +51,13 @@ public class Ped : MonoBehaviour
 		Collider2D = GetComponent<Collider2D>();
 		Animator = GetComponent<Animator>();
 		stateMachine = GetComponent<StateMachine>();
+		stateMachine.SetState(new IdleState(stateMachine, this));
 	}
 
 	protected virtual void Start()
 	{
 		Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
 		Rigidbody2D.bodyType = RigidbodyType2D.Dynamic;
-		stateMachine.SetState(new IdleState(stateMachine, this));
 	}
 
 	protected virtual void Update()
@@ -53,60 +65,72 @@ public class Ped : MonoBehaviour
 		Debug.Log(stateMachine.GetCurrentState());
 		stateMachine.UpdateState();
 		FlipSprite();
-		float groundCheckRadius = 0.3f;
-		Grounded = Physics2D.OverlapCircle (groundCheck.position, groundCheckRadius, whatIsGround);
+		UpdateAirbornState();
 	}
 
 	protected virtual void FixedUpdate()
 	{
 		stateMachine.FixedUpdateState();
+		grounded = Physics2D.OverlapCircle (groundCheck.position, groundCheckRadius, whatIsGround);
+		Walk();
 	}
 
 	// ============================================================
 	// Get Set methods / properties.
 	// ============================================================
 
-	// Is the ped grounded or not?
-	public bool Grounded
-	{
-		get
+	public string Name { get { return _name; } set { _name = value; } }
+
+	public string Sound { get { return _sound; } set { _sound = value; } }
+
+	public float Speed { get { return _speed; } set { _speed = value; } }
+
+	public float JumpForce { get { return _jumpForce; } set { _jumpForce = value; } }
+
+	public bool Morphed { get { return _morphed; } set { _morphed = value; } }
+
+	// Set Movement Direction as a property so we only enter the
+	// walking & idle states once, and not every frame. 
+	public float MovementDirection 
+	{ 
+		get 
 		{
-			return grounded;
+			return _movementDirection; 
 		}
-		set
+		set 
 		{
-			if(value == grounded)
+			if(value == _movementDirection)
 			{
 				return;
 			}
-			stateMachine.SetState(new AirbornState(stateMachine, this));
-			grounded = value;
-			if(grounded)
+			if(!Morphed)
 			{
-				stateMachine.SetState(new GroundedState(stateMachine, this));
+				stateMachine.SetState(new WalkingState(stateMachine, this));
+			}
+			_movementDirection = value;
+			if(_movementDirection == 0 && !Morphed)
+			{
+				stateMachine.SetState(new IdleState(stateMachine, this));
 			}
 		}
 	}
 
-	// Ped Name
-	public string GetName(){ return pedName; }
-	public void SetName(string newName){ pedName = newName; }
-
-	// Ped Sound
-	public string GetSound(){ return sound; }
-	public void SetSound(string newSound){ sound = newSound; }
-
-	// Ped Movement Speed
-	public float GetSpeed(){ return speed; }
-	public void SetSpeed(float newSpeed){ speed = newSpeed; }
-
-	// Jump Force
-	public float GetJumpForce(){ return jumpForce; }
-	public void SetJumpForce(float newJumpForce){ jumpForce = newJumpForce; }
-
 	// ============================================================
 	// Ped Tasks
 	// ============================================================
+
+	public void Jump()
+	{
+		jumped = true;
+		Animator.SetTrigger("takeOff");
+		Rigidbody2D.velocity = Vector2.up * _jumpForce;
+		jumped = false;
+	}
+
+	public void Walk()
+	{
+		Rigidbody2D.velocity = new Vector2(_movementDirection * _speed, Rigidbody2D.velocity.y);
+	}
 
 	private void FlipSprite()
 	{
@@ -120,15 +144,25 @@ public class Ped : MonoBehaviour
 		}
 	}
 
-	public void Jump()
+	private void UpdateAirbornState()
 	{
-		Animator.SetTrigger("takeOff");
-		Rigidbody2D.velocity = Vector2.up * jumpForce;
-		jumped = false;
+		if(grounded)
+		{
+			Animator.SetBool("isAirborn", false);
+		}
+		else
+		{
+			Animator.SetBool("isAirborn", true);
+		}
 	}
 
-	public void Walk()
-	{
-		Rigidbody2D.velocity = new Vector2(Input.GetAxisRaw("Horizontal") * GetSpeed(), Rigidbody2D.velocity.y);
-	}
+	// ============================================================
+	// Ped Actions
+	// ============================================================
+
+	public bool IsGrounded() { return grounded; }
+
+	public bool HasJumped() { return jumped; }
+
+	public bool HasMorphed() { return _morphed; }
 }

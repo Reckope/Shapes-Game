@@ -60,9 +60,8 @@
      <Compile Include="Assets\Scripts\Peds\Player.cs" />
      <Compile Include="Assets\Scripts\SceneController.cs" />
      <Compile Include="Assets\Scripts\ScrollingBackground.cs" />
-     <Compile Include="Assets\Scripts\States\AirbornState.cs" />
-     <Compile Include="Assets\Scripts\States\GroundedState.cs" />
      <Compile Include="Assets\Scripts\States\IdleState.cs" />
+     <Compile Include="Assets\Scripts\States\MorphToBallState.cs" />
      <Compile Include="Assets\Scripts\States\State.cs" />
      <Compile Include="Assets\Scripts\States\StateMachine.cs" />
      <Compile Include="Assets\Scripts\States\WalkingState.cs" />

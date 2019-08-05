@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AirbornState : State
+public class MorphToBallState : State
 {
-	public AirbornState(StateMachine stateMachine, Ped ped) : base(stateMachine, ped)
+	public MorphToBallState(StateMachine stateMachine, Ped ped) : base(stateMachine, ped)
 	{
 
 	}
 
 	public override void EnterState()
 	{
-		
+		ped.Morphed = true;
+		ped.Animator.SetBool("morphToBall", true);
 	}
 
 	public override void UpdateState()
@@ -21,13 +22,12 @@ public class AirbornState : State
 
 	public override void FixedUpdateState()
 	{
-		ped.Animator.SetBool("isAirborn", true);
-		ped.Animator.SetBool("isWalking", false);
 		ped.Walk();
 	}
 
 	public override void ExitState()
 	{
-		
+		ped.Morphed = false;
+		ped.Animator.SetBool("morphToBall", false);
 	}
 }

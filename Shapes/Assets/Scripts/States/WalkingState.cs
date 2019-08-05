@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WalkingState : GroundedState
+public class WalkingState : State
 {
 	public WalkingState(StateMachine stateMachine, Ped ped) : base(stateMachine, ped)
 	{
@@ -11,12 +11,12 @@ public class WalkingState : GroundedState
 
 	public override void EnterState()
 	{
-		base.EnterState();
+		Debug.Log("ENTER WALKING");
 	}
 
 	public override void UpdateState()
 	{
-		base.UpdateState();
+		
 	}
 
 	public override void FixedUpdateState()
@@ -27,6 +27,6 @@ public class WalkingState : GroundedState
 
 	public override void ExitState()
 	{
-		base.ExitState();
+		Debug.Log("EXIT WALKING");
 	}
 }

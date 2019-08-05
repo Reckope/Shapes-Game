@@ -16,14 +16,14 @@ public class Player : Ped
 {
 	// Global Variables
 	[SerializeField][Range(0.1f, 10.0f)]
-	private float _speed = 0.1f, _jumpForce = 0.1f;
+	private float playerSpeed = 0.1f, playerJumpForce = 0.1f;
 
 	protected override void Awake()
 	{
 		base.Awake();
-		SetName("Morphy");
-		SetSpeed(_speed);
-		SetJumpForce(_jumpForce);
+		Name = "Morphy";
+		Speed = playerSpeed;
+		JumpForce = playerJumpForce;
 	}
 
 	// Start is called before the first frame update
@@ -36,6 +36,27 @@ public class Player : Ped
 	protected override void Update()
 	{
 		base.Update();
+		MovementDirection = Input.GetAxisRaw("Horizontal");
+
+		if(Input.GetKeyDown("down"))
+		{
+			stateMachine.SetState(new MorphToBallState(stateMachine, this));
+		}
+		else if (Input.GetKeyUp("down"))
+		{
+			stateMachine.SetState(new IdleState(stateMachine, this));
+		}
+		//else if (stateMachine.GetCurrentState() is MorphToBallState)
+		//{
+		//	Animator.SetBool("morphToBall", false);
+			//stateMachine.SetState(new IdleState(stateMachine, this));
+		//}
+
+		if(Input.GetKeyDown(KeyCode.W) && IsGrounded())
+		{
+			//stateMachine.SetState(new MorphToBallState(stateMachine, this));
+			Jump();
+		}
 	}
 
 	protected override void FixedUpdate()
