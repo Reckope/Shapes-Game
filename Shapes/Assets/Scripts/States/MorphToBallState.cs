@@ -15,14 +15,9 @@ using UnityEngine;
 public class MorphToBallState : State
 {
 	private float ballSpeed = 2f;
-	private Vector2 movement;
 
-	public MorphToBallState(StateMachine stateMachine, Ped ped) : base(stateMachine, ped)
-	{
-
-	}
+	public MorphToBallState(StateMachine stateMachine, Ped ped) : base(stateMachine, ped) { }
 	
-
 	public override void EnterState()
 	{
 		ped.IsAbleToJump = false;
@@ -35,7 +30,10 @@ public class MorphToBallState : State
 
 	public override void UpdateState()
 	{
-		
+		if (!Input.GetKey("down") && !ped.CollidedTop)
+		{
+			ped.TransitionAfterExitingState();
+		}
 	}
 
 	public override void FixedUpdateState()
@@ -54,10 +52,10 @@ public class MorphToBallState : State
 		ped.Animator.SetBool("morphToBall", false);
 	}
 
-	// Give the player some sort of control whist morphed into a ball. 
+	// Give the player / ped some sort of control whist morphed into a ball. 
 	private void AddForce()
 	{
-		movement = new Vector2 (ped.MovementDirection, 0);
+		Vector2 movement = new Vector2 (ped.MovementDirection, 0);
 		ped.Rigidbody2D.AddForce(movement * ballSpeed);
 	}
 }

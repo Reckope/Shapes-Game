@@ -58,12 +58,14 @@
      <Compile Include="Assets\Scripts\GameManager.cs" />
      <Compile Include="Assets\Scripts\Level.cs" />
      <Compile Include="Assets\Scripts\LevelController.cs" />
+     <Compile Include="Assets\Scripts\Peds\EnemyOne.cs" />
      <Compile Include="Assets\Scripts\Peds\Ped.cs" />
      <Compile Include="Assets\Scripts\Peds\Player.cs" />
      <Compile Include="Assets\Scripts\SceneController.cs" />
      <Compile Include="Assets\Scripts\ScrollingBackground.cs" />
      <Compile Include="Assets\Scripts\States\IdleState.cs" />
      <Compile Include="Assets\Scripts\States\MorphToBallState.cs" />
+     <Compile Include="Assets\Scripts\States\MorphToBlockState.cs" />
      <Compile Include="Assets\Scripts\States\State.cs" />
      <Compile Include="Assets\Scripts\States\StateMachine.cs" />
      <Compile Include="Assets\Scripts\States\WalkingState.cs" />

@@ -16,55 +16,59 @@ public class Player : Ped
 {
 	// Global Variables
 	[SerializeField][Range(0.1f, 10.0f)]
-	private float playerSpeed = 0.1f, playerJumpForce = 0.1f;
+	private float _speed = 0.1f, _jumpForce = 0.1f, _upwardForce = 180f;
 
+	// We override all of the peds' MonoBehaviour methods to 
+	// inherit any components, methods etc, whilst adding extra code here. 
 	protected override void Awake()
 	{
 		base.Awake();
 		Name = "Morphy";
-		Speed = playerSpeed;
-		JumpForce = playerJumpForce;
+		Speed = _speed;
+		JumpForce = _jumpForce;
+	}
+
+	protected override void Start()
+	{
+		base.Start();
+		stateMachine.SetState(new IdleState(stateMachine, this));
 		IsAbleToMove = true;
 		IsAbleToJump = true;
 	}
 
-	// Start is called before the first frame update
-	protected override void Start()
-	{
-		base.Start();
-	}
-
-	// Update is called once per frame
 	protected override void Update()
 	{
 		base.Update();
-		MovementDirection = Input.GetAxisRaw("Horizontal");
-		Walk();
-
-		if(Input.GetKeyDown("u"))
-		{
-			stateMachine.SetState(new MorphToBallState(stateMachine, this));
-		}
-		else if (Input.GetKeyUp("u"))
-		{
-			if(MovementDirection == 0)
-			{
-				stateMachine.SetState(new IdleState(stateMachine, this));
-			}
-			else
-			{
-				stateMachine.SetState(new WalkingState(stateMachine, this));
-			}
-		}
-
-		if(Input.GetKeyDown(KeyCode.W) && IsGrounded)
-		{
-			Jump();
-		}
+		HandleInput();
 	}
 
 	protected override void FixedUpdate()
 	{
 		base.FixedUpdate();
+	}
+
+	// ============================================================
+	// Handle all the input for the player. 
+	// ============================================================
+
+	private void HandleInput()
+	{
+		MovementDirection = Input.GetAxisRaw("Horizontal");
+
+		if(Input.GetKeyDown("down"))
+		{
+			stateMachine.SetState(new MorphToBallState(stateMachine, this));
+		}
+
+		if(Input.GetKeyDown("up") && !CantMorphIntoBlock)
+		{
+			Rigidbody2D.AddForce(transform.up * _upwardForce);
+			stateMachine.SetState(new MorphToBlockState(stateMachine, this));
+		}
+
+		if(Input.GetKeyDown(KeyCode.W) && IsGrounded)
+		{
+			HasJumped = true;
+		}
 	}
 }

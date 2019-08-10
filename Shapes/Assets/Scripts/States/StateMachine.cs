@@ -26,6 +26,8 @@ public class StateMachine : MonoBehaviour
 		this.currentState = state;
 	}
  
+	// Need to check if null as the ped won't be in any previous state
+	// when initially setting the state at the start. 
 	public void SetState (State newState)
 	{
 		if(currentState != null)
@@ -60,9 +62,6 @@ public class StateMachine : MonoBehaviour
 		}
 	}
 
-	// ============================================================
-	// Get current state.
-	// ============================================================
-
-	public State GetCurrentState(){ return currentState; }
+	// If other classes want to check what state this ped is in. 
+	public string GetCurrentState{ get {return currentState.ToString(); } }
 }

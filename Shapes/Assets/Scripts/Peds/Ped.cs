@@ -4,8 +4,9 @@
 * 2019
 * Notes: 
 * This is the core script for peds such as the Player, enemies, allies etc.
-* All peds inherit this script, where they can then access it's components
-* and the state machine.  
+* All peds inherit this script, where they can then access it's components,
+* methods, properties and their State Machine.  
+* Derived Ped > Ped (here) > Statemachine > State > SomeState
 */
 
 using System.Collections;
@@ -18,6 +19,10 @@ using UnityEngine;
 [RequireComponent(typeof(StateMachine))]
 public class Ped : MonoBehaviour
 {
+	// ============================================================
+	// Everything a healthy ped needs.
+	// ============================================================
+
 	// Classes
 	protected StateMachine stateMachine;
 
@@ -28,19 +33,34 @@ public class Ped : MonoBehaviour
 
 	// GameObjects / Transform
 	public LayerMask whatIsGround;
-	public Transform groundCheck, leftCheck, rightCheck, topCheck;
+	public Transform areaColliders;
+	public Transform groundCheck, leftCheck, rightCheck, topCheck, morphIntoBoxCheck;
 
 	// Global Variables
-	private float groundCheckRadius = 0.3f;
-	private bool _isGrounded, _hasJumped, _hasMorphed, _isAbleToMove, _isAbleToJump;
-	private string _name;
+	public string Name { get; protected set; }
+	public float Speed { get; set; }
+	public float JumpForce { get; set; }
+	private float groundCheckRadius = 0.1f, blockCheckRadius = 3.5f;
+	private Quaternion rotation;
 	private string _sound;
-	private float _speed;
-	private float _jumpForce;
 	private float _movementDirection;
+
+	// Detect collisions around the ped to prevent morphing in tight spaces.
+	public bool CollidedLeft { get { return Physics2D.OverlapCircle (leftCheck.position, groundCheckRadius, whatIsGround); } }
+	public bool CollidedRight { get { return Physics2D.OverlapCircle (rightCheck.position, groundCheckRadius, whatIsGround); } }
+	public bool CollidedTop { get { return Physics2D.OverlapCircle (topCheck.position, groundCheckRadius * 3, whatIsGround); } }
+	public bool IsGrounded { get { return Physics2D.OverlapCircle (groundCheck.position, groundCheckRadius, whatIsGround); } }
+	public bool CantMorphIntoBlock { get { return Physics2D.OverlapCircle (morphIntoBoxCheck.position, blockCheckRadius, whatIsGround); } }
+
+	public bool HasMorphed { get; set; }
+	public bool HasJumped { get; protected set; }
+	public bool IsAbleToMove { get; set; }
+	public bool IsAbleToJump {get; set; }
+	public bool HasHitTheGround {get; set; }
 
 	// *** JOE. If multiple peds are acting the same, create a constructor and use:
 	// Ped player = new ped(name, speed etc) ***
+
 	// ============================================================
 	// MonoBehaviour methods.
 	// ============================================================
@@ -51,28 +71,29 @@ public class Ped : MonoBehaviour
 		Collider2D = GetComponent<Collider2D>();
 		Animator = GetComponent<Animator>();
 		stateMachine = GetComponent<StateMachine>();
-		stateMachine.SetState(new IdleState(stateMachine, this));
 	}
 
 	protected virtual void Start()
 	{
 		Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
 		Rigidbody2D.bodyType = RigidbodyType2D.Dynamic;
+		rotation = areaColliders.transform.rotation;
 	}
 
 	protected virtual void Update()
 	{
-		Debug.Log(stateMachine.GetCurrentState());
 		stateMachine.UpdateState();
+		Debug.Log(stateMachine.GetCurrentState);
 		FlipSprite();
-		UpdateAirbornState();
+		UpdateAirbornAnim();
+		areaColliders.transform.rotation = rotation;
 	}
 
 	protected virtual void FixedUpdate()
 	{
 		stateMachine.FixedUpdateState();
-		_isGrounded = Physics2D.OverlapCircle (groundCheck.position, groundCheckRadius, whatIsGround);
 		Walk();
+		if(HasJumped) { Jump(); }
 	}
 
 	protected virtual void LateUpdate()
@@ -81,34 +102,17 @@ public class Ped : MonoBehaviour
 	}
 
 	// ============================================================
-	// Properties
+	// Properties with logic.
 	// ============================================================
 
-	public string Name { get { return _name; } protected set { _name = value; } }
-
-	public string Sound { get { return _sound; } protected set { _sound = value; } }
-
-	public float Speed { get { return _speed; } set { _speed = value; } }
-
-	public float JumpForce { get { return _jumpForce; } set { _jumpForce = value; } }
-
-	public bool HasJumped { get { return _hasJumped; } protected set { _hasJumped = value; } }
-
-	public bool IsGrounded { get { return _isGrounded; } protected set { _isGrounded = value; } }
-
-	public bool HasMorphed { get { return _hasMorphed; } set { _hasMorphed = value; } }
-
-	public bool IsAbleToMove { get { return _isAbleToMove; } set { _isAbleToMove = value; } }
-
-	public bool IsAbleToJump { get { return _isAbleToJump; } set { _isAbleToJump = value; } }
+	public string Sound { get { return _sound; } set { _sound = value; } }
 
 	// Set Movement Direction as a property so we only enter the
 	// walking & idle states once, and not every frame. 
 	public float MovementDirection 
 	{ 
 		get { return _movementDirection; }
-		set
-		{
+		set {
 			if(_movementDirection == value)
 			{
 				return;
@@ -129,25 +133,24 @@ public class Ped : MonoBehaviour
 	}
 
 	// ============================================================
-	// Ped Basic Tasks & States
+	// Ped Basic Tasks & Movement
 	// ============================================================
 
 	public void Jump()
 	{
-		if(_isAbleToJump)
+		if(IsAbleToJump)
 		{
-			_hasJumped = true;
 			Animator.SetTrigger("takeOff");
-			Rigidbody2D.velocity = Vector2.up * _jumpForce;
-			_hasJumped = false;
+			Rigidbody2D.velocity = Vector2.up * JumpForce;
+			HasJumped = false;
 		}
 	}
 
 	public void Walk()
 	{
-		if(_isAbleToMove)
+		if(IsAbleToMove)
 		{
-			Rigidbody2D.velocity = new Vector2(_movementDirection * _speed, Rigidbody2D.velocity.y);
+			Rigidbody2D.velocity = new Vector2(MovementDirection * Speed, Rigidbody2D.velocity.y);
 		}
 	}
 
@@ -163,15 +166,47 @@ public class Ped : MonoBehaviour
 		}
 	}
 
-	private void UpdateAirbornState()
+	private void UpdateAirbornAnim()
 	{
-		if(_isGrounded)
+		if(IsGrounded)
 		{
 			Animator.SetBool("isAirborn", false);
 		}
 		else
 		{
 			Animator.SetBool("isAirborn", true);
+		}
+	}
+
+	public void TransitionAfterExitingState()
+	{
+		if(MovementDirection == 0)
+		{
+			stateMachine.SetState(new IdleState(stateMachine, this));
+		}
+		else
+		{
+			stateMachine.SetState(new WalkingState(stateMachine, this));
+		}
+	}
+
+	// ============================================================
+	// Detect collisions
+	// ============================================================
+
+	private void OnCollisionEnter2D(Collision2D col)
+	{
+		if(col.gameObject.layer == LayerMask.NameToLayer("Ground") && HasMorphed)
+		{
+			HasHitTheGround = true;
+		}
+	}
+
+	private void OnCollisionExit2D(Collision2D col)
+	{
+		if(col.gameObject.layer == LayerMask.NameToLayer("Ground"))
+		{
+			HasHitTheGround = false;
 		}
 	}
 }
