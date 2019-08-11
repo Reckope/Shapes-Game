@@ -40,16 +40,18 @@ public class Ped : MonoBehaviour
 	public string Name { get; protected set; }
 	public float Speed { get; set; }
 	public float JumpForce { get; set; }
-	private float groundCheckRadius = 0.1f, blockCheckRadius = 3.5f;
+	public float GroundCheckRadius { get; set; }
+	[SerializeField]
+	private float blockCheckRadius = 3.5f;
 	private Quaternion rotation;
 	private string _sound;
 	private float _movementDirection;
 
 	// Detect collisions around the ped to prevent morphing in tight spaces.
-	public bool CollidedLeft { get { return Physics2D.OverlapCircle (leftCheck.position, groundCheckRadius, whatIsGround); } }
-	public bool CollidedRight { get { return Physics2D.OverlapCircle (rightCheck.position, groundCheckRadius, whatIsGround); } }
-	public bool CollidedTop { get { return Physics2D.OverlapCircle (topCheck.position, groundCheckRadius * 3, whatIsGround); } }
-	public bool IsGrounded { get { return Physics2D.OverlapCircle (groundCheck.position, groundCheckRadius, whatIsGround); } }
+	public bool CollidedLeft { get { return Physics2D.OverlapCircle (leftCheck.position, GroundCheckRadius, whatIsGround); } }
+	public bool CollidedRight { get { return Physics2D.OverlapCircle (rightCheck.position, GroundCheckRadius, whatIsGround); } }
+	public bool CollidedTop { get { return Physics2D.OverlapCircle (topCheck.position, GroundCheckRadius, whatIsGround); } }
+	public bool IsGrounded { get { return Physics2D.OverlapCircle (groundCheck.position, GroundCheckRadius, whatIsGround); } }
 	public bool CantMorphIntoBlock { get { return Physics2D.OverlapCircle (morphIntoBoxCheck.position, blockCheckRadius, whatIsGround); } }
 
 	public bool HasMorphed { get; set; }

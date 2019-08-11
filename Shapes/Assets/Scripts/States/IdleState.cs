@@ -11,6 +11,7 @@ public class IdleState : State
 
 	public override void EnterState()
 	{
+		ped.Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
 		ped.Animator.SetBool("isWalking", false);
 	}
 

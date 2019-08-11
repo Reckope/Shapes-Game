@@ -1,6 +1,7 @@
 ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
+    - EnemyOne
     - GameManager
     - Level
     - LevelController
@@ -21,8 +22,10 @@ ScriptsOnlyBuild:
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
     - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
     - UnityEditor.Graphs.AnimationStateMachine.Graph
     - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.StateNode
     - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
@@ -94,11 +97,11 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 10712}
     - Class: 114
-      Script: {instanceID: 11138}
+      Script: {instanceID: 11142}
     - Class: 114
-      Script: {instanceID: 11220}
+      Script: {instanceID: 11224}
     - Class: 114
-      Script: {instanceID: 11608}
+      Script: {instanceID: 11614}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -161,13 +164,13 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 10712}
     - Class: 114
-      Script: {instanceID: 10784}
+      Script: {instanceID: 10786}
     - Class: 114
-      Script: {instanceID: 11138}
+      Script: {instanceID: 11142}
     - Class: 114
-      Script: {instanceID: 11220}
+      Script: {instanceID: 11224}
     - Class: 114
-      Script: {instanceID: 11608}
+      Script: {instanceID: 11614}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -239,13 +242,15 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 594}
     - Class: 114
-      Script: {instanceID: 11000}
+      Script: {instanceID: 10740}
     - Class: 114
-      Script: {instanceID: 11050}
+      Script: {instanceID: 11004}
     - Class: 114
-      Script: {instanceID: 11138}
+      Script: {instanceID: 11054}
     - Class: 114
-      Script: {instanceID: 11538}
+      Script: {instanceID: 11142}
+    - Class: 114
+      Script: {instanceID: 11544}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 157
@@ -298,11 +303,11 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 10712}
     - Class: 114
-      Script: {instanceID: 11138}
+      Script: {instanceID: 11142}
     - Class: 114
-      Script: {instanceID: 11220}
+      Script: {instanceID: 11224}
     - Class: 114
-      Script: {instanceID: 11608}
+      Script: {instanceID: 11614}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -607,6 +612,12 @@ ScriptsOnlyBuild:
     className: RawImage
   - hash:
       serializedVersion: 2
+      Hash: f457fd3a7f44bb90996a10c76a41dbf5
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: EnemyOne
+  - hash:
+      serializedVersion: 2
       Hash: b328cfff70936fb63bff61dfbeb91f47
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
@@ -661,7 +672,7 @@ ScriptsOnlyBuild:
     className: Physics2DRaycaster
   - hash:
       serializedVersion: 2
-      Hash: 3fa3724f6981ece740ad4811de1c17a0
+      Hash: c8a0592d22db08771a0927af639f47ba
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Player
@@ -679,7 +690,7 @@ ScriptsOnlyBuild:
     className: StateMachine
   - hash:
       serializedVersion: 2
-      Hash: 1a5f6fb099b31acc43ed285b2b8bf163
+      Hash: f457fd3a7f44bb90996a10c76a41dbf5
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Ped

@@ -42,7 +42,6 @@ public class MorphToBlockState : State
 		ped.HasMorphed = false;
 		ped.transform.rotation = Quaternion.identity;
 		ped.Rigidbody2D.constraints = RigidbodyConstraints2D.None;
-		ped.Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
 		ped.Animator.SetBool("morphToBlock", false);
 	}
 }

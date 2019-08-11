@@ -14,7 +14,7 @@ using UnityEngine;
 
 public class MorphToBallState : State
 {
-	private float ballSpeed = 2f;
+	private float ballSpeed = 2.5f;
 
 	public MorphToBallState(StateMachine stateMachine, Ped ped) : base(stateMachine, ped) { }
 	
