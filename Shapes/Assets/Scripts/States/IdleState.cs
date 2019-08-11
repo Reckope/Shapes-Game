@@ -15,16 +15,6 @@ public class IdleState : State
 		ped.Animator.SetBool("isWalking", false);
 	}
 
-	public override void UpdateState()
-	{
-		
-	}
-
-	public override void FixedUpdateState()
-	{
-		//ped.Animator.SetBool("isWalking", false);
-	}
-
 	public override void ExitState()
 	{
 		

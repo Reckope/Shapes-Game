@@ -21,7 +21,7 @@ public class WalkingState : State
 
 	public override void FixedUpdateState()
 	{
-		//ped.Animator.SetBool("isWalking", true);
+		
 	}
 
 	public override void ExitState()

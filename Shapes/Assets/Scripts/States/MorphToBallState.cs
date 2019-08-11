@@ -30,9 +30,9 @@ public class MorphToBallState : State
 
 	public override void UpdateState()
 	{
-		if (!Input.GetKey("down") && !ped.CollidedTop)
+		if (!ped.MorphToBallInput && !ped.CollidedTop)
 		{
-			ped.TransitionAfterExitingState();
+			ped.ExitMorphState();
 		}
 	}
 

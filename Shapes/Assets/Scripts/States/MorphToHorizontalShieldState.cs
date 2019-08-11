@@ -17,9 +17,9 @@ public class MorphToHorizontalShieldState : State
 
 	public override void UpdateState()
 	{
-		if (!Input.GetKey("right"))
+		if (!ped.MorphToHorizontalShieldInput)
 		{
-			ped.TransitionAfterExitingState();
+			ped.ExitMorphState();
 		}
 
 		//if(ped.HasHitTheGround)

@@ -17,26 +17,22 @@ public class MorphToBlockState : State
 
 	public override void UpdateState()
 	{
-		if (!Input.GetKey("up") && ped.HasHitTheGround)
+		if (!ped.MorphToBlockInput && ped.HasHitTheGroundWhileMorphed)
 		{
-			ped.TransitionAfterExitingState();
+			ped.ExitMorphState();
 		}
 
-		if(ped.HasHitTheGround)
+		if(ped.HasHitTheGroundWhileMorphed)
 		{
-			ped.Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeAll;
+			//ped.Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeAll;
+			//Debug.Log("FROZEN");
 			// Do other stuff (camera shake, sound etc)
 		}
 	}
 
-	public override void FixedUpdateState()
-	{
-		
-	}
-
 	public override void ExitState()
 	{
-		ped.HasHitTheGround = false;
+		ped.HasHitTheGroundWhileMorphed = false;
 		ped.IsAbleToJump = true;
 		ped.IsAbleToMove = true;
 		ped.HasMorphed = false;

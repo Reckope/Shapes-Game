@@ -17,9 +17,9 @@ public class MorphToVerticalShieldState : State
 
 	public override void UpdateState()
 	{
-		if (!Input.GetKey("left"))
+		if (!ped.MorphToVerticalShieldInput)
 		{
-			ped.TransitionAfterExitingState();
+			ped.ExitMorphState();
 		}
 	}
 

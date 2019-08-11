@@ -55,16 +55,20 @@ public class Ped : MonoBehaviour
 	public bool CantMorphIntoBlock { get { return Physics2D.OverlapCircle (morphIntoBoxCheck.position, blockCheckRadius, whatIsGround); } }
 
 	public bool HasMorphed { get; set; }
+	public bool MorphToBallInput { get; set; }
+	public bool MorphToBlockInput { get; set; }
+	public bool MorphToHorizontalShieldInput { get; set; }
+	public bool MorphToVerticalShieldInput { get; set; }
 	public bool HasJumped { get; protected set; }
 	public bool IsAbleToMove { get; set; }
 	public bool IsAbleToJump {get; set; }
-	public bool HasHitTheGround {get; set; }
+	public bool HasHitTheGroundWhileMorphed {get; set; }
 
 	// *** JOE. If multiple peds are acting the same, create a constructor and use:
 	// Ped player = new ped(name, speed etc) ***
 
 	// ============================================================
-	// MonoBehaviour methods.
+	// MonoBehaviour methods
 	// ============================================================
 
 	protected virtual void Awake()
@@ -95,7 +99,10 @@ public class Ped : MonoBehaviour
 	{
 		stateMachine.FixedUpdateState();
 		Walk();
-		if(HasJumped) { Jump(); }
+		if(HasJumped)
+		{ 
+			Jump(); 
+		}
 	}
 
 	protected virtual void LateUpdate()
@@ -180,7 +187,7 @@ public class Ped : MonoBehaviour
 		}
 	}
 
-	public void TransitionAfterExitingState()
+	public void ExitMorphState()
 	{
 		if(MovementDirection == 0)
 		{
@@ -193,22 +200,23 @@ public class Ped : MonoBehaviour
 	}
 
 	// ============================================================
-	// Detect collisions
+	// Detect collisions 
+	// Collisions are detected here, then state classes can reference various bools to determine what to do.
 	// ============================================================
 
 	private void OnCollisionEnter2D(Collision2D col)
 	{
 		if(col.gameObject.layer == LayerMask.NameToLayer("Ground") && HasMorphed)
 		{
-			HasHitTheGround = true;
+			HasHitTheGroundWhileMorphed = true;
 		}
 	}
 
 	private void OnCollisionExit2D(Collision2D col)
 	{
-		if(col.gameObject.layer == LayerMask.NameToLayer("Ground"))
+		if(col.gameObject.layer == LayerMask.NameToLayer("Ground") && HasMorphed)
 		{
-			HasHitTheGround = false;
+			HasHitTheGroundWhileMorphed = false;
 		}
 	}
 }
