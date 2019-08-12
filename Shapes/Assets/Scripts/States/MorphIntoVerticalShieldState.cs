@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MorphToVerticalShieldState : State
+public class MorphIntoVerticalShieldState : State
 {
-	public MorphToVerticalShieldState(StateMachine stateMachine, Ped ped) : base(stateMachine, ped) { }
+	public MorphIntoVerticalShieldState(StateMachine stateMachine, Ped ped) : base(stateMachine, ped) { }
 	
 	public override void EnterState()
 	{

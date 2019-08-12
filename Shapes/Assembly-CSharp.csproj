@@ -2,8 +2,6 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
-    <CscToolPath>/Applications/Unity/Hub/Editor/2019.2.0f1/Unity.app/Contents/Tools/RoslynScripts</CscToolPath>
-    <CscToolExe>unity_csc.sh</CscToolExe>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -64,10 +62,10 @@
      <Compile Include="Assets\Scripts\SceneController.cs" />
      <Compile Include="Assets\Scripts\ScrollingBackground.cs" />
      <Compile Include="Assets\Scripts\States\IdleState.cs" />
-     <Compile Include="Assets\Scripts\States\MorphToBallState.cs" />
-     <Compile Include="Assets\Scripts\States\MorphToBlockState.cs" />
-     <Compile Include="Assets\Scripts\States\MorphToHorizontalShieldState.cs" />
-     <Compile Include="Assets\Scripts\States\MorphToVerticalShieldState.cs" />
+     <Compile Include="Assets\Scripts\States\MorphIntoBallState.cs" />
+     <Compile Include="Assets\Scripts\States\MorphIntoBlockState.cs" />
+     <Compile Include="Assets\Scripts\States\MorphIntoHorizontalShieldState.cs" />
+     <Compile Include="Assets\Scripts\States\MorphIntoVerticalShieldState.cs" />
      <Compile Include="Assets\Scripts\States\State.cs" />
      <Compile Include="Assets\Scripts\States\StateMachine.cs" />
      <Compile Include="Assets\Scripts\States\WalkingState.cs" />

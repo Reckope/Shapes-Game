@@ -300,7 +300,7 @@
 "Assets/Scripts/SceneController.cs"
 "Assets/Scripts/ScrollingBackground.cs"
 "Assets/Scripts/States/IdleState.cs"
-"Assets/Scripts/States/MorphToBallState.cs"
+"Assets/Scripts/States/MorphIntoBallState.cs"
 "Assets/Scripts/States/MorphToBlockState.cs"
 "Assets/Scripts/States/MorphToHorizontalShieldState.cs"
 "Assets/Scripts/States/MorphToVerticalShieldState.cs"

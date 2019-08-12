@@ -12,11 +12,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MorphToBallState : State
+public class MorphIntoBallState : State
 {
 	private float ballSpeed = 2.5f;
 
-	public MorphToBallState(StateMachine stateMachine, Ped ped) : base(stateMachine, ped) { }
+	public MorphIntoBallState(StateMachine stateMachine, Ped ped) : base(stateMachine, ped) { }
 	
 	public override void EnterState()
 	{

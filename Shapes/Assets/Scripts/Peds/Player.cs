@@ -19,7 +19,7 @@ public class Player : Ped
 	// ============================================================
 
 	[SerializeField][Range(0.1f, 10.0f)]
-	private float _speed = 0.1f, _jumpForce = 0.1f, _upwardForce = 180f, _groundCheckRadius = 0.1f;
+	private float _speed = 0.1f, _jumpForce = 0.1f, _groundCheckRadius = 0.1f;
 
 	// ============================================================
 	// MonoBehaviour methods
@@ -63,11 +63,6 @@ public class Player : Ped
 	{
 		MovementDirection = Input.GetAxisRaw("Horizontal");
 		float jump = Input.GetAxisRaw("Jump");
-		// Returns true during the frame it's pressed.
-		bool morphToBall = Input.GetKeyDown("down");
-		bool morphToBlock = Input.GetKeyDown("up");
-		bool morphToHorizontalShield = Input.GetKeyDown("right");
-		bool morphToVerticalShield = Input.GetKeyDown("left");
 
 		// Returns true every frame. This is used to detect when the 
 		// player has released the key associated with the state.
@@ -76,16 +71,16 @@ public class Player : Ped
 		MorphToHorizontalShieldInput = Input.GetKey("right");
 		MorphToVerticalShieldInput = Input.GetKey("left");
 
-		// The player can enter the following states whilst grounded. 
+		// The player can enter the following states.
 		if(IsGrounded)
 		{
-			if(morphToHorizontalShield)
+			if(MorphToHorizontalShieldInput)
 			{
-				stateMachine.SetState(new MorphToHorizontalShieldState(stateMachine, this));
+				SetMorphState(MorphStates.HorizontalShield);
 			}
-			if(morphToVerticalShield)
+			if(MorphToVerticalShieldInput)
 			{
-				stateMachine.SetState(new MorphToVerticalShieldState(stateMachine, this));
+				SetMorphState(MorphStates.VerticalShield);
 			}
 			if(jump > 0)
 			{
@@ -94,15 +89,14 @@ public class Player : Ped
 		}
 		else
 		{
-			if(morphToBlock && !CantMorphIntoBlock)
+			if(MorphToBlockInput && !CantMorphIntoBlock)
 			{
-				Rigidbody2D.AddForce(transform.up * _upwardForce);
-				stateMachine.SetState(new MorphToBlockState(stateMachine, this));
+				SetMorphState(MorphStates.Block);
 			}
 		}
-		if(morphToBall)
+		if(MorphToBallInput)
 		{
-			stateMachine.SetState(new MorphToBallState(stateMachine, this));
+			SetMorphState(MorphStates.Ball);
 		}
 	}
 }

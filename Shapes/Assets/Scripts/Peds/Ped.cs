@@ -9,6 +9,7 @@
 * Derived Ped > Ped (here) > Statemachine > State > SomeState
 */
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,6 +23,16 @@ public class Ped : MonoBehaviour
 	// ============================================================
 	// Everything a healthy ped needs.
 	// ============================================================
+
+	protected enum MorphStates
+	{
+		Ball,
+		Block,
+		HorizontalShield,
+		VerticalShield
+	};
+
+	MorphStates morphStates;
 
 	// Classes
 	protected StateMachine stateMachine;
@@ -55,14 +66,16 @@ public class Ped : MonoBehaviour
 	public bool CantMorphIntoBlock { get { return Physics2D.OverlapCircle (morphIntoBoxCheck.position, blockCheckRadius, whatIsGround); } }
 
 	public bool HasMorphed { get; set; }
-	public bool MorphToBallInput { get; set; }
-	public bool MorphToBlockInput { get; set; }
-	public bool MorphToHorizontalShieldInput { get; set; }
-	public bool MorphToVerticalShieldInput { get; set; }
 	public bool HasJumped { get; protected set; }
 	public bool IsAbleToMove { get; set; }
 	public bool IsAbleToJump {get; set; }
 	public bool HasHitTheGroundWhileMorphed {get; set; }
+
+	// Player Input
+	public bool MorphToBallInput { get; set; }
+	public bool MorphToBlockInput { get; set; }
+	public bool MorphToHorizontalShieldInput { get; set; }
+	public bool MorphToVerticalShieldInput { get; set; }
 
 	// *** JOE. If multiple peds are acting the same, create a constructor and use:
 	// Ped player = new ped(name, speed etc) ***
@@ -142,7 +155,7 @@ public class Ped : MonoBehaviour
 	}
 
 	// ============================================================
-	// Ped Basic Tasks & Movement
+	// Ped Basic Tasks, States & Movement
 	// ============================================================
 
 	public void Jump()
@@ -196,6 +209,37 @@ public class Ped : MonoBehaviour
 		else
 		{
 			stateMachine.SetState(new WalkingState(stateMachine, this));
+		}
+	}
+
+	// Any ped can call this method to set a state, and not have to worry about
+	// adding additional functionality to only call the state for one frame. 
+	protected void SetMorphState(MorphStates state)
+	{
+		float blockUpwardForce = 180f;
+
+		if(HasMorphed)
+		{
+			return;
+		}
+		else
+		{
+			switch(state)
+			{
+				case MorphStates.Ball: 
+				stateMachine.SetState(new MorphIntoBallState(stateMachine, this));
+				break;
+				case MorphStates.Block:
+				Rigidbody2D.AddForce(transform.up * blockUpwardForce);
+				stateMachine.SetState(new MorphIntoBlockState(stateMachine, this));
+				break;
+				case MorphStates.HorizontalShield:
+				stateMachine.SetState(new MorphIntoHorizontalShieldState(stateMachine, this));
+				break;
+				case MorphStates.VerticalShield:
+				stateMachine.SetState(new MorphIntoVerticalShieldState(stateMachine, this));
+				break;
+			}
 		}
 	}
 
