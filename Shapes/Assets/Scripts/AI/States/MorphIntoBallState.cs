@@ -14,7 +14,7 @@ using UnityEngine;
 
 public class MorphIntoBallState : State
 {
-	private float ballSpeed = 2.5f;
+	private float ballSpeed = 3f;
 
 	public MorphIntoBallState(StateMachine stateMachine, Ped ped) : base(stateMachine, ped) { }
 	
@@ -30,7 +30,7 @@ public class MorphIntoBallState : State
 
 	public override void UpdateState()
 	{
-		if (!ped.MorphToBallInput && !ped.CollidedTop)
+		if (!ped.MorphToBallInput && !ped.CollidedTop && !ped.CollidedLeft && !ped.CollidedRight)
 		{
 			ped.ExitMorphState();
 		}
@@ -38,7 +38,10 @@ public class MorphIntoBallState : State
 
 	public override void FixedUpdateState()
 	{
-		AddForce();
+		if(ped.HasHitTheGroundWhileMorphed)
+		{
+			AddForce();
+		}
 	}
 
 	public override void ExitState()

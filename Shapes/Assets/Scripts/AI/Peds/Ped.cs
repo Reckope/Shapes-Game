@@ -102,7 +102,7 @@ public class Ped : MonoBehaviour
 	protected virtual void Update()
 	{
 		stateMachine.UpdateState();
-		Debug.Log(stateMachine.GetCurrentState);
+		//Debug.Log(stateMachine.GetCurrentState);
 		FlipSprite();
 		UpdateAirbornAnim();
 		areaColliders.transform.rotation = rotation;
@@ -212,7 +212,7 @@ public class Ped : MonoBehaviour
 		}
 	}
 
-	// Any ped can call this method to set a state, and not have to worry about
+	// Any ped can call this method to set a morph state, and not have to worry about
 	// adding additional functionality to only call the state for one frame. 
 	protected void SetMorphState(MorphStates state)
 	{

@@ -11,6 +11,8 @@ public class WalkingState : State
 
 	public override void EnterState()
 	{
+		ped.IsAbleToJump = true;
+		ped.IsAbleToMove = true;
 		ped.Animator.SetBool("isWalking", true);
 	}
 

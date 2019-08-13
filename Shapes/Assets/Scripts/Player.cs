@@ -19,7 +19,7 @@ public class Player : Ped
 	// ============================================================
 
 	[SerializeField][Range(0.1f, 10.0f)]
-	private float _speed = 0.1f, _jumpForce = 0.1f, _groundCheckRadius = 0.1f;
+	private float _speed = 0.1f, _jumpForce = 0.1f, _groundCheckRadius = 0.2f;
 
 	// ============================================================
 	// MonoBehaviour methods
@@ -40,8 +40,6 @@ public class Player : Ped
 	{
 		base.Start();
 		stateMachine.SetState(new IdleState(stateMachine, this));
-		IsAbleToJump = true;
-		IsAbleToMove = true;
 	}
 
 	protected override void Update()
@@ -71,7 +69,7 @@ public class Player : Ped
 		MorphToHorizontalShieldInput = Input.GetKey("right");
 		MorphToVerticalShieldInput = Input.GetKey("left");
 
-		// The player can enter the following states.
+		// The player can enter the following morph states.
 		if(IsGrounded)
 		{
 			if(MorphToHorizontalShieldInput)

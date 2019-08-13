@@ -2,6 +2,8 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
+    <CscToolPath>/Applications/Unity/Hub/Editor/2019.2.0f1/Unity.app/Contents/Tools/RoslynScripts</CscToolPath>
+    <CscToolExe>unity_csc.sh</CscToolExe>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -53,22 +55,22 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\AI\Peds\EnemyOne.cs" />
+     <Compile Include="Assets\Scripts\AI\Peds\Ped.cs" />
+     <Compile Include="Assets\Scripts\AI\States\IdleState.cs" />
+     <Compile Include="Assets\Scripts\AI\States\MorphIntoBallState.cs" />
+     <Compile Include="Assets\Scripts\AI\States\MorphIntoBlockState.cs" />
+     <Compile Include="Assets\Scripts\AI\States\MorphIntoHorizontalShieldState.cs" />
+     <Compile Include="Assets\Scripts\AI\States\MorphIntoVerticalShieldState.cs" />
+     <Compile Include="Assets\Scripts\AI\States\State.cs" />
+     <Compile Include="Assets\Scripts\AI\States\StateMachine.cs" />
+     <Compile Include="Assets\Scripts\AI\States\WalkingState.cs" />
      <Compile Include="Assets\Scripts\GameManager.cs" />
      <Compile Include="Assets\Scripts\Level.cs" />
      <Compile Include="Assets\Scripts\LevelController.cs" />
-     <Compile Include="Assets\Scripts\Peds\EnemyOne.cs" />
-     <Compile Include="Assets\Scripts\Peds\Ped.cs" />
-     <Compile Include="Assets\Scripts\Peds\Player.cs" />
+     <Compile Include="Assets\Scripts\Player.cs" />
      <Compile Include="Assets\Scripts\SceneController.cs" />
      <Compile Include="Assets\Scripts\ScrollingBackground.cs" />
-     <Compile Include="Assets\Scripts\States\IdleState.cs" />
-     <Compile Include="Assets\Scripts\States\MorphIntoBallState.cs" />
-     <Compile Include="Assets\Scripts\States\MorphIntoBlockState.cs" />
-     <Compile Include="Assets\Scripts\States\MorphIntoHorizontalShieldState.cs" />
-     <Compile Include="Assets\Scripts\States\MorphIntoVerticalShieldState.cs" />
-     <Compile Include="Assets\Scripts\States\State.cs" />
-     <Compile Include="Assets\Scripts\States\StateMachine.cs" />
-     <Compile Include="Assets\Scripts\States\WalkingState.cs" />
      <None Include="Assets\BayatGames\Free Platform Game Assets\Readme.txt" />
  <Reference Include="Unity.Timeline.Editor">
  <HintPath>/Users/JoeDavis/Documents/Unity Projects/Shapes/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
