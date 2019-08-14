@@ -38,10 +38,14 @@ public class Ped : MonoBehaviour
 	protected StateMachine stateMachine;
 
 	// Components
+	[HideInInspector]
 	public Rigidbody2D Rigidbody2D;
+	[HideInInspector]
 	public Collider2D Collider2D;
+	[HideInInspector]
 	public Animator Animator;
 
+	[Header("Base Ped Components")]
 	// GameObjects / Transform
 	public LayerMask whatIsGround;
 	public Transform areaColliders;
@@ -53,7 +57,7 @@ public class Ped : MonoBehaviour
 	public float JumpForce { get; set; }
 	public float GroundCheckRadius { get; set; }
 	[SerializeField]
-	private float blockCheckRadius = 3.5f;
+	private float blockCheckRadius = 3.4f;
 	private Quaternion rotation;
 	private string _sound;
 	private float _movementDirection;
@@ -102,8 +106,8 @@ public class Ped : MonoBehaviour
 	protected virtual void Update()
 	{
 		stateMachine.UpdateState();
-		//Debug.Log(stateMachine.GetCurrentState);
-		FlipSprite();
+		//Debug.Log(Name + ": " + stateMachine.GetCurrentState());
+		FaceBodyInCorrectDirection();
 		UpdateAirbornAnim();
 		areaColliders.transform.rotation = rotation;
 	}
@@ -129,8 +133,8 @@ public class Ped : MonoBehaviour
 
 	public string Sound { get { return _sound; } set { _sound = value; } }
 
-	// Set Movement Direction as a property so we only enter the
-	// walking & idle states once, and not every frame. 
+	// Set Movement Direction as a property so the state is
+	// automatically applied when moving. 
 	public float MovementDirection 
 	{ 
 		get { return _movementDirection; }
@@ -176,15 +180,21 @@ public class Ped : MonoBehaviour
 		}
 	}
 
-	private void FlipSprite()
+	private void FaceBodyInCorrectDirection()
 	{
-		if(Rigidbody2D.velocity.x > 0 && !HasMorphed)
+		int rotationYAxis = 0;
+
+		if(!HasMorphed)
 		{
-			transform.eulerAngles = new Vector3(0, 0, 0);
-		}
-		else if(Rigidbody2D.velocity.x < 0 && !HasMorphed)
-		{
-			transform.eulerAngles = new Vector3(0, 180, 0);
+			if(Rigidbody2D.velocity.x > 0)
+			{
+				rotationYAxis= 0;
+			}
+			else if(Rigidbody2D.velocity.x < 0)
+			{
+				rotationYAxis = 180;
+			}
+			transform.eulerAngles = new Vector3(0, rotationYAxis, 0);
 		}
 	}
 

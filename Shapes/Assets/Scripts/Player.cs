@@ -39,7 +39,6 @@ public class Player : Ped
 	protected override void Start()
 	{
 		base.Start();
-		stateMachine.SetState(new IdleState(stateMachine, this));
 	}
 
 	protected override void Update()

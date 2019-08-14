@@ -14,7 +14,7 @@ using UnityEngine;
 
 public class MorphIntoBallState : State
 {
-	private float ballSpeed = 3f;
+	private float ballSpeed = 4f;
 
 	public MorphIntoBallState(StateMachine stateMachine, Ped ped) : base(stateMachine, ped) { }
 	
@@ -26,19 +26,26 @@ public class MorphIntoBallState : State
 		ped.Speed += ballSpeed;
 		ped.Rigidbody2D.constraints = RigidbodyConstraints2D.None;
 		ped.Animator.SetBool("morphToBall", true);
+		Debug.Log(ped.Name + "Morphed");
 	}
 
 	public override void UpdateState()
 	{
-		if (!ped.MorphToBallInput && !ped.CollidedTop && !ped.CollidedLeft && !ped.CollidedRight)
+		if (ped.gameObject.tag == "Player")
 		{
-			ped.ExitMorphState();
+			Debug.Log("Im a player!");
+			PlayerControls();
+		}
+		else
+		{
+			Debug.Log("Im NOT a player!");
+			AIControls();
 		}
 	}
 
 	public override void FixedUpdateState()
 	{
-		if(ped.HasHitTheGroundWhileMorphed)
+		if(ped.IsGrounded)
 		{
 			AddForce();
 		}
@@ -60,5 +67,18 @@ public class MorphIntoBallState : State
 	{
 		Vector2 movement = new Vector2 (ped.MovementDirection, 0);
 		ped.Rigidbody2D.AddForce(movement * ballSpeed);
+	}
+
+	private void PlayerControls()
+	{
+		if (!ped.MorphToBallInput && !ped.CollidedTop && !ped.CollidedLeft && !ped.CollidedRight)
+		{
+			ped.ExitMorphState();
+		}
+	}
+
+	private void AIControls()
+	{
+
 	}
 }
