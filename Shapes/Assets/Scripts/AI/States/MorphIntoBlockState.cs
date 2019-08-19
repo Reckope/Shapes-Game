@@ -17,12 +17,12 @@ public class MorphIntoBlockState : State
 
 	public override void UpdateState()
 	{
-		if (!ped.MorphToBlockInput && ped.HasHitTheGroundWhileMorphed)
+		if (!ped.MorphToBlockInput && ped.HasHitGround)
 		{
 			ped.ExitMorphState();
 		}
 
-		if(ped.HasHitTheGroundWhileMorphed)
+		if(ped.HasHitGround)
 		{
 			//ped.Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeAll;
 			//Debug.Log("FROZEN");
@@ -32,7 +32,7 @@ public class MorphIntoBlockState : State
 
 	public override void ExitState()
 	{
-		ped.HasHitTheGroundWhileMorphed = false;
+		ped.HasHitGround = false;
 		ped.IsAbleToJump = true;
 		ped.IsAbleToMove = true;
 		ped.HasMorphed = false;

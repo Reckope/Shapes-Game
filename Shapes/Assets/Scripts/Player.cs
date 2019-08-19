@@ -18,8 +18,16 @@ public class Player : Ped
 	// Player Variables
 	// ============================================================
 
+	[Header("Player Settings")]
+	[SerializeField]
+	private string _name = "Morphy";
 	[SerializeField][Range(0.1f, 10.0f)]
-	private float _speed = 0.1f, _jumpForce = 0.1f, _groundCheckRadius = 0.2f;
+	private float _speed = 0.1f, _jumpForce = 0.1f, _groundCheckRadius = 0.2f, blockCheckRadius = 3.4f;
+
+	[Header("Player Components & GameObjects")]
+	public Transform morphIntoBlockCheck;
+	public GameObject blockFeedback;
+	public bool CantMorphIntoBlock { get { return Physics2D.OverlapCircle (morphIntoBlockCheck.position, blockCheckRadius, whatIsGround); } }
 
 	// ============================================================
 	// MonoBehaviour methods
@@ -30,15 +38,18 @@ public class Player : Ped
 	protected override void Awake()
 	{
 		base.Awake();
-		Name = "Morphy";
+		pedType = PedType.Player;
+		Name = _name;
 		Speed = _speed;
 		JumpForce = _jumpForce;
 		GroundCheckRadius = _groundCheckRadius;
+		blockFeedback.SetActive(false);
 	}
 
 	protected override void Start()
 	{
 		base.Start();
+		stateMachine.SetState(new IdleState(stateMachine, this));
 	}
 
 	protected override void Update()
@@ -52,12 +63,19 @@ public class Player : Ped
 		base.FixedUpdate();
 	}
 
+	protected override void LateUpdate()
+	{
+		base.LateUpdate();
+	}
+
 	// ============================================================
 	// Other Player Methods
 	// ============================================================
 
 	private void HandlePlayerInput()
 	{
+		bool test = Input.GetKeyDown("up");
+
 		MovementDirection = Input.GetAxisRaw("Horizontal");
 		float jump = Input.GetAxisRaw("Jump");
 
@@ -91,9 +109,30 @@ public class Player : Ped
 				SetMorphState(MorphStates.Block);
 			}
 		}
+
 		if(MorphToBallInput)
 		{
 			SetMorphState(MorphStates.Ball);
 		}
+
+		if(test && CantMorphIntoBlock)
+		{
+			StartCoroutine(UnableToMorphToBlock());
+		}
+	}
+
+	private IEnumerator UnableToMorphToBlock()
+	{
+		Debug.Log("Test1");
+		//this.gameObject.GetComponentInChildren<SpriteRenderer>().color = new Color(255, 180, 180, 255);
+		blockFeedback.SetActive(true);
+		yield return new WaitForSeconds(0.1f);
+		blockFeedback.SetActive(false);
+		yield return new WaitForSeconds(0.1f);
+		blockFeedback.SetActive(true);
+		yield return new WaitForSeconds(0.1f);
+		blockFeedback.SetActive(false);
+		//this.gameObject.GetComponentInChildren<SpriteRenderer>().color = new Color(255, 255, 255, 255);
+		Debug.Log("Test2");
 	}
 }

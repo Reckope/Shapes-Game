@@ -8,6 +8,7 @@
 * Derived Ped > Ped > Statemachine > State > SomeState (Here)
 */
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,11 +16,14 @@ using UnityEngine;
 public class MorphIntoBallState : State
 {
 	private float ballSpeed = 4f;
+	private bool isAbleToAddForce;
 
 	public MorphIntoBallState(StateMachine stateMachine, Ped ped) : base(stateMachine, ped) { }
 	
 	public override void EnterState()
 	{
+		ped.gameObject.layer = LayerMask.NameToLayer("Ball");
+		isAbleToAddForce = true;
 		ped.IsAbleToJump = false;
 		ped.IsAbleToMove = false;
 		ped.HasMorphed = true;
@@ -33,13 +37,18 @@ public class MorphIntoBallState : State
 	{
 		if (ped.gameObject.tag == "Player")
 		{
-			Debug.Log("Im a player!");
 			PlayerControls();
 		}
 		else
 		{
-			Debug.Log("Im NOT a player!");
-			AIControls();
+			MoveTowardsPlayer();
+		}
+
+		if(ped.HasHitVerticalShieldState)
+		{
+			isAbleToAddForce = false;
+			ped.IsDead = true;
+			HandleBallDeaths();
 		}
 	}
 
@@ -53,6 +62,7 @@ public class MorphIntoBallState : State
 
 	public override void ExitState()
 	{
+		ped.RevertLayerMask();
 		ped.IsAbleToJump = true;
 		ped.IsAbleToMove = true;
 		ped.HasMorphed = false;
@@ -62,23 +72,56 @@ public class MorphIntoBallState : State
 		ped.Animator.SetBool("morphToBall", false);
 	}
 
-	// Give the player / ped some sort of control whist morphed into a ball. 
+	// ============================================================
+	// Private Methods for when the ped has morphed into a ball.
+	// ============================================================
+
+	// Give the player / ped some sort of control, but not as much as walking normally.
 	private void AddForce()
 	{
-		Vector2 movement = new Vector2 (ped.MovementDirection, 0);
-		ped.Rigidbody2D.AddForce(movement * ballSpeed);
+		if(isAbleToAddForce && !ped.IsDead)
+		{
+			Vector2 movement = new Vector2 (ped.MovementDirection, 0);
+			ped.Rigidbody2D.AddForce(movement * ballSpeed);
+		}
 	}
 
 	private void PlayerControls()
 	{
-		if (!ped.MorphToBallInput && !ped.CollidedTop && !ped.CollidedLeft && !ped.CollidedRight)
+		if(!ped.MorphToBallInput && !ped.CollidedTop && (!ped.CollidedLeft || !ped.CollidedRight))
 		{
 			ped.ExitMorphState();
 		}
 	}
 
-	private void AIControls()
+	private void MoveTowardsPlayer()
 	{
+		if(ped.player.transform.position.x < ped.transform.position.x)
+		{
+			ped.MovementDirection = -1;
+		}
+		else if(ped.player.transform.position.x > ped.transform.position.x)
+		{
+			ped.MovementDirection = 1;
+		}
+	}
 
+	private void HandleBallDeaths()
+	{
+		if(ped.HasHitVerticalShieldState)
+		{
+			ped.StartCoroutine(DeathByShield());
+		}
+	}
+
+	private IEnumerator DeathByShield()
+	{
+		ped.Animator.enabled = false;
+		foreach(Collider2D collider in ped.GetComponentsInChildren<Collider2D>())
+		{
+			collider.enabled = false;
+		}
+		yield return new WaitForSeconds(2);
+		ped.Destroy();
 	}
 }

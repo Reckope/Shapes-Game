@@ -24,6 +24,12 @@ public class Ped : MonoBehaviour
 	// Everything a healthy ped needs.
 	// ============================================================
 
+	public enum PedType
+	{
+		Player,
+		Enemy
+	}
+
 	protected enum MorphStates
 	{
 		Ball,
@@ -31,8 +37,6 @@ public class Ped : MonoBehaviour
 		HorizontalShield,
 		VerticalShield
 	};
-
-	MorphStates morphStates;
 
 	// Classes
 	protected StateMachine stateMachine;
@@ -46,18 +50,20 @@ public class Ped : MonoBehaviour
 	public Animator Animator;
 
 	[Header("Base Ped Components")]
-	// GameObjects / Transform
+	// GameObjects / Transforms
+	[HideInInspector]
+	public GameObject player;
 	public LayerMask whatIsGround;
 	public Transform areaColliders;
-	public Transform groundCheck, leftCheck, rightCheck, topCheck, morphIntoBoxCheck;
+	public Transform groundCheck, leftCheck, rightCheck, topCheck;
 
 	// Global Variables
+	protected PedType pedType { get; set; }
 	public string Name { get; protected set; }
 	public float Speed { get; set; }
 	public float JumpForce { get; set; }
 	public float GroundCheckRadius { get; set; }
 	[SerializeField]
-	private float blockCheckRadius = 3.4f;
 	private Quaternion rotation;
 	private string _sound;
 	private float _movementDirection;
@@ -67,13 +73,21 @@ public class Ped : MonoBehaviour
 	public bool CollidedRight { get { return Physics2D.OverlapCircle (rightCheck.position, GroundCheckRadius, whatIsGround); } }
 	public bool CollidedTop { get { return Physics2D.OverlapCircle (topCheck.position, GroundCheckRadius, whatIsGround); } }
 	public bool IsGrounded { get { return Physics2D.OverlapCircle (groundCheck.position, GroundCheckRadius, whatIsGround); } }
-	public bool CantMorphIntoBlock { get { return Physics2D.OverlapCircle (morphIntoBoxCheck.position, blockCheckRadius, whatIsGround); } }
 
 	public bool HasMorphed { get; set; }
 	public bool HasJumped { get; protected set; }
 	public bool IsAbleToMove { get; set; }
-	public bool IsAbleToJump {get; set; }
-	public bool HasHitTheGroundWhileMorphed {get; set; }
+	public bool IsAbleToJump { get; set; }
+	public bool IsDead { get; set; }
+
+	public bool HasHitGround { get; set; }
+	public bool HasHitWater { get; set; }
+	public bool HasHitPlayer { get; set; }
+	public bool HasHitEnemy { get; set; }
+	public bool HasHitBlockState { get; set; }
+	public bool HasHitBallState { get; set; }
+	public bool HasHitHorizontalShieldState { get; set; }
+	public bool HasHitVerticalShieldState { get; set; }
 
 	// Player Input
 	public bool MorphToBallInput { get; set; }
@@ -90,6 +104,7 @@ public class Ped : MonoBehaviour
 
 	protected virtual void Awake()
 	{
+		player = GameObject.FindGameObjectWithTag("Player");
 		Rigidbody2D = GetComponent<Rigidbody2D>();
 		Collider2D = GetComponent<Collider2D>();
 		Animator = GetComponent<Animator>();
@@ -182,19 +197,16 @@ public class Ped : MonoBehaviour
 
 	private void FaceBodyInCorrectDirection()
 	{
-		int rotationYAxis = 0;
-
 		if(!HasMorphed)
 		{
 			if(Rigidbody2D.velocity.x > 0)
 			{
-				rotationYAxis= 0;
+				transform.eulerAngles = new Vector3(0, 0, 0);
 			}
 			else if(Rigidbody2D.velocity.x < 0)
 			{
-				rotationYAxis = 180;
+				transform.eulerAngles = new Vector3(0, 180, 0);
 			}
-			transform.eulerAngles = new Vector3(0, rotationYAxis, 0);
 		}
 	}
 
@@ -260,17 +272,70 @@ public class Ped : MonoBehaviour
 
 	private void OnCollisionEnter2D(Collision2D col)
 	{
-		if(col.gameObject.layer == LayerMask.NameToLayer("Ground") && HasMorphed)
-		{
-			HasHitTheGroundWhileMorphed = true;
-		}
+		HandleCollisions(col, true);
 	}
 
 	private void OnCollisionExit2D(Collision2D col)
 	{
-		if(col.gameObject.layer == LayerMask.NameToLayer("Ground") && HasMorphed)
+		HandleCollisions(col, false);
+	}
+
+	private void HandleCollisions(Collision2D col, bool boolValue)
+	{
+		if(col.gameObject.tag == "Player")
 		{
-			HasHitTheGroundWhileMorphed = false;
+			HasHitPlayer = boolValue;
 		}
+		else if(col.gameObject.tag == "Enemy")
+		{
+			HasHitEnemy = boolValue;
+		}
+
+		if(col.gameObject.layer == LayerMask.NameToLayer("Ground"))
+		{
+			HasHitGround = boolValue;
+		}
+		else if(col.gameObject.layer == LayerMask.NameToLayer("Water"))
+		{
+			HasHitWater = boolValue;
+		}
+		else if(col.gameObject.layer == LayerMask.NameToLayer("Ball"))
+		{
+			HasHitBallState = boolValue;
+		}
+		else if(col.gameObject.layer == LayerMask.NameToLayer("Block"))
+		{
+			HasHitBlockState = boolValue;
+		}
+		else if(col.gameObject.layer == LayerMask.NameToLayer("VerticalShield"))
+		{
+			HasHitVerticalShieldState = boolValue;
+		}
+		else if(col.gameObject.layer == LayerMask.NameToLayer("HorizontalShield"))
+		{
+			HasHitHorizontalShieldState = boolValue;
+		}
+	}
+
+	public void RevertLayerMask()
+	{
+		switch(this.pedType)
+		{
+			case PedType.Player:
+			this.gameObject.layer = LayerMask.NameToLayer("Player");
+			break;
+			case PedType.Enemy:
+			this.gameObject.layer = LayerMask.NameToLayer("Enemy");
+			break;
+		}
+	}
+
+	// ============================================================
+	// What happens when the ped dies? :/ 
+	// ============================================================
+
+	public void Destroy()
+	{
+		Destroy(gameObject);
 	}
 }
