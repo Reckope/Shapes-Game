@@ -65,13 +65,13 @@ public class StateMachine : MonoBehaviour
 	// If other classes want to check what state this ped is in. 
 	public string GetCurrentState()
 	{ 
-			if(currentState != null)
-			{
-				return currentState.ToString();
-			}
-			else
-			{
-				return "NULL";
-			}
+		if(currentState != null)
+		{
+			return currentState.ToString();
+		}
+		else
+		{
+			return "NULL";
+		}
 	}
 }

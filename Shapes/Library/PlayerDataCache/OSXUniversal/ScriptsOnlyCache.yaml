@@ -1,7 +1,8 @@
 ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
-    - EnemyOne
+    - AI
+    - DynamoScript
     - GameManager
     - Level
     - LevelController
@@ -22,8 +23,10 @@ ScriptsOnlyBuild:
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
     - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
     - UnityEditor.Graphs.AnimationStateMachine.Graph
     - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.StateNode
     - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
@@ -249,6 +252,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 11144}
     - Class: 114
       Script: {instanceID: 11546}
+    - Class: 114
+      Script: {instanceID: 11678}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 157
@@ -610,10 +615,10 @@ ScriptsOnlyBuild:
     className: RawImage
   - hash:
       serializedVersion: 2
-      Hash: f457fd3a7f44bb90996a10c76a41dbf5
+      Hash: ce2aade39ac2e9901bc7e0b3f96b1392
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
-    className: EnemyOne
+    className: DynamoScript
   - hash:
       serializedVersion: 2
       Hash: b328cfff70936fb63bff61dfbeb91f47
@@ -670,7 +675,7 @@ ScriptsOnlyBuild:
     className: Physics2DRaycaster
   - hash:
       serializedVersion: 2
-      Hash: c8a0592d22db08771a0927af639f47ba
+      Hash: e75c06a6a451d15b92b010050310c1f7
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Player
@@ -688,7 +693,7 @@ ScriptsOnlyBuild:
     className: StateMachine
   - hash:
       serializedVersion: 2
-      Hash: f457fd3a7f44bb90996a10c76a41dbf5
+      Hash: 1be2d7597df6f255dafbf104d40664bb
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Ped
@@ -824,6 +829,12 @@ ScriptsOnlyBuild:
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.UI
     className: ToggleGroup
+  - hash:
+      serializedVersion: 2
+      Hash: 9681b7f94f2e2e5bd2621ed74bdf7f1c
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: AI
   - hash:
       serializedVersion: 2
       Hash: c3d3430df9e3ea95e3e3d587961390fb

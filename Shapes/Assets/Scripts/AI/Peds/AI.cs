@@ -16,13 +16,6 @@ public class AI : MonoBehaviour
 {
 	Ped ped;
 
-	private enum Direction
-	{
-		left = -1,
-		right = 1
-	}
-	Direction direction;
-
 	public Transform leftLedgeCheck;
 	public Transform rightLedgeCheck;
 
@@ -40,13 +33,13 @@ public class AI : MonoBehaviour
 	protected void Start()
 	{
 		ped = GetComponent<Ped>();
-		ped.MovementDirection = (int)Direction.left;
 	}
 
 	protected void Update()
 	{
 		if(!ped.HasMorphed)
 		{
+			DetectPlayer();
 			AvoidLedgesAndWalls();
 		}
 	}
@@ -64,11 +57,11 @@ public class AI : MonoBehaviour
 	{
 		if((ped.CollidedLeft && !ped.CollidedRight) || (!NoLeftLedgeDetected && NoRightLedgeDetected))
 		{
-			ped.MovementDirection = (int)Direction.right;
+			ped.MovementDirection = (int)Ped.Direction.Right;
 		}
 		else if((ped.CollidedRight && !ped.CollidedLeft) || (!NoRightLedgeDetected && NoLeftLedgeDetected))
 		{
-			ped.MovementDirection = (int)Direction.left;
+			ped.MovementDirection = (int)Ped.Direction.Left;
 		}
 	}
 
@@ -76,21 +69,43 @@ public class AI : MonoBehaviour
 	// Player Related tasks.
 	// ============================================================
 
-	public bool CanSeePlayer()
+	public bool DetectPlayer()
 	{
-		return true;
+		Vector2 lookDirection;
+		var raySpawn = transform.position;
+		var left = ped.leftCheck.transform.position;
+		var right = ped.rightCheck.transform.position;
+
+		if(ped.MovementDirection == (int)Ped.Direction.Left)
+		{
+			lookDirection = Vector2.left;
+			raySpawn = left;
+		}
+		else
+		{
+			lookDirection = Vector2.right;
+			raySpawn = right;
+		}
+		RaycastHit2D lineOfSight = Physics2D.Raycast(raySpawn, lookDirection, 10);
+
+		if(lineOfSight.collider != null && lineOfSight.collider.name == "Player"){
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	public void MoveTowardsPlayer()
 	{
 		if(ped.player.transform.position.x < transform.position.x)
 		{
-			ped.MovementDirection = (int)Direction.left;
+			ped.MovementDirection = (int)Ped.Direction.Left;
 		}
 		else if(ped.player.transform.position.x > transform.position.x)
 		{
-			ped.MovementDirection = (int)Direction.right;
+			ped.MovementDirection = (int)Ped.Direction.Right;
 		}
 	}
-
 }

@@ -30,7 +30,6 @@ public class MorphIntoBallState : State
 		ped.Speed += ballSpeed;
 		ped.Rigidbody2D.constraints = RigidbodyConstraints2D.None;
 		ped.Animator.SetBool("morphToBall", true);
-		Debug.Log(ped.Name + "Morphed");
 	}
 
 	public override void UpdateState()

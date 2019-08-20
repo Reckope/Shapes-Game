@@ -30,7 +30,14 @@ public class Ped : MonoBehaviour
 		Enemy
 	}
 
-	protected enum MorphStates
+	public enum Direction
+	{
+		Left = -1,
+		Idle = 0,
+		Right = 1
+	}
+
+	public enum MorphStates
 	{
 		Ball,
 		Block,
@@ -71,7 +78,7 @@ public class Ped : MonoBehaviour
 	// Detect collisions around the ped to prevent morphing in tight spaces.
 	public bool CollidedLeft { get { return Physics2D.OverlapCircle (leftCheck.position, GroundCheckRadius, whatIsGround); } }
 	public bool CollidedRight { get { return Physics2D.OverlapCircle (rightCheck.position, GroundCheckRadius, whatIsGround); } }
-	public bool CollidedTop { get { return Physics2D.OverlapCircle (topCheck.position, GroundCheckRadius, whatIsGround); } }
+	public bool CollidedTop { get { return Physics2D.OverlapCircle (topCheck.position, GroundCheckRadius * 3, whatIsGround); } }
 	public bool IsGrounded { get { return Physics2D.OverlapCircle (groundCheck.position, GroundCheckRadius, whatIsGround); } }
 
 	public bool HasMorphed { get; set; }
@@ -236,7 +243,7 @@ public class Ped : MonoBehaviour
 
 	// Any ped can call this method to set a morph state, and not have to worry about
 	// adding additional functionality to only call the state for one frame. 
-	protected void SetMorphState(MorphStates state)
+	public void SetMorphState(MorphStates state)
 	{
 		float blockUpwardForce = 180f;
 
