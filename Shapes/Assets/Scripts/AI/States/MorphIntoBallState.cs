@@ -109,7 +109,9 @@ public class MorphIntoBallState : State
 	{
 		if(ped.HasHitVerticalShieldState)
 		{
-			ped.StartCoroutine(DeathByShield());
+			//ped.StartCoroutine(DeathByShield());
+			ped.Die();
+
 		}
 	}
 
@@ -121,6 +123,6 @@ public class MorphIntoBallState : State
 			collider.enabled = false;
 		}
 		yield return new WaitForSeconds(2);
-		ped.Destroy();
+		
 	}
 }

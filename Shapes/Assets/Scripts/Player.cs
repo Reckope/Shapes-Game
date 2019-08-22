@@ -74,7 +74,7 @@ public class Player : Ped
 
 	private void HandlePlayerInput()
 	{
-		bool test = Input.GetKeyDown("up");
+		bool MorphToBlockFeedback = Input.GetKeyDown("up");
 
 		MovementDirection = Input.GetAxisRaw("Horizontal");
 		float jump = Input.GetAxisRaw("Jump");
@@ -91,11 +91,11 @@ public class Player : Ped
 		{
 			if(MorphToHorizontalShieldInput)
 			{
-				SetMorphState(MorphStates.HorizontalShield);
+				SetPedState(States.HorizontalShield);
 			}
 			if(MorphToVerticalShieldInput)
 			{
-				SetMorphState(MorphStates.VerticalShield);
+				SetPedState(States.VerticalShield);
 			}
 			if(jump > 0)
 			{
@@ -106,16 +106,16 @@ public class Player : Ped
 		{
 			if(MorphToBlockInput && !CantMorphIntoBlock)
 			{
-				SetMorphState(MorphStates.Block);
+				SetPedState(States.Block);
 			}
 		}
 
 		if(MorphToBallInput)
 		{
-			SetMorphState(MorphStates.Ball);
+			SetPedState(States.Ball);
 		}
 
-		if(test && CantMorphIntoBlock)
+		if(MorphToBlockFeedback && CantMorphIntoBlock && !HasMorphed)
 		{
 			StartCoroutine(UnableToMorphToBlock());
 		}
@@ -123,7 +123,6 @@ public class Player : Ped
 
 	private IEnumerator UnableToMorphToBlock()
 	{
-		Debug.Log("Test1");
 		//this.gameObject.GetComponentInChildren<SpriteRenderer>().color = new Color(255, 180, 180, 255);
 		blockFeedback.SetActive(true);
 		yield return new WaitForSeconds(0.1f);
@@ -133,6 +132,5 @@ public class Player : Ped
 		yield return new WaitForSeconds(0.1f);
 		blockFeedback.SetActive(false);
 		//this.gameObject.GetComponentInChildren<SpriteRenderer>().color = new Color(255, 255, 255, 255);
-		Debug.Log("Test2");
 	}
 }

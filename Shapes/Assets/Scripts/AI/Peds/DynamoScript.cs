@@ -61,11 +61,11 @@ public class DynamoScript : Ped
 			if(CollidedRight)
 			{
 				Debug.Log("Collided?");
-				SetMorphState(MorphStates.Ball);
+				SetPedState(States.Ball);
 			}
 			else if(DistanceBetweenPlayerAndEnemy() <= 5.8)
 			{
-				SetMorphState(MorphStates.Ball);
+				SetPedState(States.Ball);
 			}
 		}
 	}

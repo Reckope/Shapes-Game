@@ -37,8 +37,11 @@ public class Ped : MonoBehaviour
 		Right = 1
 	}
 
-	public enum MorphStates
+	public enum States
 	{
+		Dead,
+		Walk,
+		Idle,
 		Ball,
 		Block,
 		HorizontalShield,
@@ -65,7 +68,7 @@ public class Ped : MonoBehaviour
 	public Transform groundCheck, leftCheck, rightCheck, topCheck;
 
 	// Global Variables
-	protected PedType pedType { get; set; }
+	public PedType pedType { get; set; }
 	public string Name { get; protected set; }
 	public float Speed { get; set; }
 	public float JumpForce { get; set; }
@@ -168,13 +171,13 @@ public class Ped : MonoBehaviour
 			_movementDirection = value;
 			if(!HasMorphed)
 			{
-				if(_movementDirection != 0)
+				if(_movementDirection != (float)Direction.Idle)
 				{
-					stateMachine.SetState(new WalkingState(stateMachine, this));
+					SetPedState(States.Walk);
 				}
 				else
 				{
-					stateMachine.SetState(new IdleState(stateMachine, this));
+					SetPedState(States.Idle);
 				}
 			}
 		}
@@ -243,11 +246,11 @@ public class Ped : MonoBehaviour
 
 	// Any ped can call this method to set a morph state, and not have to worry about
 	// adding additional functionality to only call the state for one frame. 
-	public void SetMorphState(MorphStates state)
+	public void SetPedState(States state)
 	{
 		float blockUpwardForce = 180f;
 
-		if(HasMorphed)
+		if(HasMorphed && !IsDead)
 		{
 			return;
 		}
@@ -255,17 +258,26 @@ public class Ped : MonoBehaviour
 		{
 			switch(state)
 			{
-				case MorphStates.Ball: 
+				case States.Dead:
+				stateMachine.SetState(new DeadState(stateMachine, this));
+				break;
+				case States.Walk:
+				stateMachine.SetState(new WalkingState(stateMachine, this));
+				break;
+				case States.Idle:
+				stateMachine.SetState(new IdleState(stateMachine, this));
+				break;
+				case States.Ball: 
 				stateMachine.SetState(new MorphIntoBallState(stateMachine, this));
 				break;
-				case MorphStates.Block:
+				case States.Block:
 				Rigidbody2D.AddForce(transform.up * blockUpwardForce);
 				stateMachine.SetState(new MorphIntoBlockState(stateMachine, this));
 				break;
-				case MorphStates.HorizontalShield:
+				case States.HorizontalShield:
 				stateMachine.SetState(new MorphIntoHorizontalShieldState(stateMachine, this));
 				break;
-				case MorphStates.VerticalShield:
+				case States.VerticalShield:
 				stateMachine.SetState(new MorphIntoVerticalShieldState(stateMachine, this));
 				break;
 			}
@@ -341,8 +353,14 @@ public class Ped : MonoBehaviour
 	// What happens when the ped dies? :/ 
 	// ============================================================
 
+	public void Die()
+	{
+		IsDead = true;
+		SetPedState(States.Dead);
+	}
+
 	public void Destroy()
 	{
-		Destroy(gameObject);
+		Destroy(this.gameObject);
 	}
 }
