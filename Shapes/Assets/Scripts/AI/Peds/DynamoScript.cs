@@ -22,7 +22,7 @@ public class DynamoScript : Ped
 	private bool blockAI = false;
 	private bool alerted;
 	[SerializeField][Range(0.1f, 10.0f)]
-	private float _speed = 0.1f, _jumpForce = 0.1f, _groundCheckRadius = 0.2f;
+	private float _speed = 0.1f, _jumpForce = 0.1f, _groundCheckRadius = 0.2f, increasedSpeed = 5;
 
 	protected override void Awake()
 	{
@@ -53,18 +53,16 @@ public class DynamoScript : Ped
 	protected override void Update()
 	{
 		base.Update();
-		Debug.Log(CollidedRight);
-		if(dynamoAI.DetectPlayer() && !blockAI)
+		if(IsAlerted && !blockAI)
 		{
-			Speed = 5;
-			Debug.Log("Can See you");
-			if(CollidedRight)
+			Speed = increasedSpeed;
+			if(DistanceBetweenPlayerAndEnemy() <= 5.8)
 			{
-				Debug.Log("Collided?");
 				SetPedState(States.Ball);
 			}
-			else if(DistanceBetweenPlayerAndEnemy() <= 5.8)
+			else if(CollidedLeft || CollidedRight || dynamoAI.ReachedLedgeOnLeftSide || dynamoAI.ReachedLedgeOnRightSide)
 			{
+				Debug.Log("DUCK!");
 				SetPedState(States.Ball);
 			}
 		}

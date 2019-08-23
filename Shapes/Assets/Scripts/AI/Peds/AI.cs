@@ -19,15 +19,18 @@ public class AI : MonoBehaviour
 	public Transform leftLedgeCheck;
 	public Transform rightLedgeCheck;
 
+	[SerializeField][Range(5f, 15.0f)]
+	private float visionDistance = 10;
 
-	private bool NoLeftLedgeDetected 
+
+	public bool ReachedLedgeOnLeftSide
 	{ 
-		get { return Physics2D.OverlapCircle (leftLedgeCheck.position, ped.GroundCheckRadius, ped.whatIsGround); } 
+		get { return !Physics2D.OverlapCircle (leftLedgeCheck.position, ped.GroundCheckRadius, ped.whatIsGround); } 
 	}
 
-	private bool NoRightLedgeDetected
+	public bool ReachedLedgeOnRightSide
 	{ 
-		get { return Physics2D.OverlapCircle (rightLedgeCheck.position, ped.GroundCheckRadius, ped.whatIsGround); } 
+		get { return !Physics2D.OverlapCircle (rightLedgeCheck.position, ped.GroundCheckRadius, ped.whatIsGround); } 
 	}
 
 	protected void Start()
@@ -55,11 +58,11 @@ public class AI : MonoBehaviour
 
 	private void AvoidLedgesAndWalls()
 	{
-		if((ped.CollidedLeft && !ped.CollidedRight) || (!NoLeftLedgeDetected && NoRightLedgeDetected))
+		if((ped.CollidedLeft && !ped.CollidedRight) || (ReachedLedgeOnLeftSide && !ReachedLedgeOnRightSide) && !ped.IsAlerted)
 		{
 			ped.MovementDirection = (int)Ped.Direction.Right;
 		}
-		else if((ped.CollidedRight && !ped.CollidedLeft) || (!NoRightLedgeDetected && NoLeftLedgeDetected))
+		else if((ped.CollidedRight && !ped.CollidedLeft) || (ReachedLedgeOnRightSide && !ReachedLedgeOnLeftSide) && !ped.IsAlerted)
 		{
 			ped.MovementDirection = (int)Ped.Direction.Left;
 		}
@@ -69,7 +72,7 @@ public class AI : MonoBehaviour
 	// Player Related tasks.
 	// ============================================================
 
-	public bool DetectPlayer()
+	public void DetectPlayer()
 	{
 		Vector2 lookDirection;
 		var raySpawn = transform.position;
@@ -89,11 +92,11 @@ public class AI : MonoBehaviour
 		RaycastHit2D lineOfSight = Physics2D.Raycast(raySpawn, lookDirection, 10);
 
 		if(lineOfSight.collider != null && lineOfSight.collider.name == "Player"){
-			return true;
+			ped.IsAlerted = true;
 		}
 		else
 		{
-			return false;
+			ped.IsAlerted = false;
 		}
 	}
 

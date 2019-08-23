@@ -89,6 +89,7 @@ public class Ped : MonoBehaviour
 	public bool IsAbleToMove { get; set; }
 	public bool IsAbleToJump { get; set; }
 	public bool IsDead { get; set; }
+	public bool IsAlerted { get; set; }
 
 	public bool HasHitGround { get; set; }
 	public bool HasHitWater { get; set; }
