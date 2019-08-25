@@ -19,6 +19,8 @@ public class Player : Ped
 	// ============================================================
 
 	[Header("Player Settings")]
+	[HideInInspector]
+	public bool isDead;
 	[SerializeField]
 	private string _name = "Morphy";
 	[SerializeField][Range(0.1f, 15.0f)]
@@ -57,9 +59,16 @@ public class Player : Ped
 	protected override void Update()
 	{
 		base.Update();
+
+		Debug.Log(Name + ": " + stateMachine.GetCurrentState());
+		Debug.Log(Name + ": " + HasHitBallState);
+		isDead = IsDead;
 		Speed = _speed;
 		JumpForce = _jumpForce;
-		HandlePlayerInput();
+		if(!isDead)
+		{
+			HandlePlayerInput();
+		}
 	}
 
 	protected override void FixedUpdate()

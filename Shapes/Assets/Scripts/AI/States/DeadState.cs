@@ -13,18 +13,10 @@ public class DeadState : State
 	public override void EnterState()
 	{
 		ped.IsAbleToMove = false;
-		if(ped.pedType == Ped.PedType.Enemy)
+
+		if(ped.HasHitBlockState)
 		{
-			//EnemyDie();
-			if(ped.HasHitBlockState)
-			{
-				Debug.Log("SQUAH");
-				ped.Destroy();
-			}
-			else
-			{
-				ped.StartCoroutine(FallOffScreen());
-			}
+			ped.Destroy();
 		}
 		else
 		{
@@ -50,6 +42,7 @@ public class DeadState : State
 	private IEnumerator FallOffScreen()
 	{
 		ped.Animator.enabled = false;
+		//ped.Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
 		yield return new WaitForEndOfFrame();	// Detect 'OnCollisionExit2D' before disabling the colliders. 
 		foreach(Collider2D collider in ped.GetComponentsInChildren<Collider2D>())
 		{

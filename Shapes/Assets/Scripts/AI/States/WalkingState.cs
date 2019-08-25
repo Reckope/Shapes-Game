@@ -33,6 +33,10 @@ public class WalkingState : State
 			ped.Rigidbody2D.AddForce(ped.transform.up * 180f);
 			ped.Die();
 		}
+		else if(ped.HasHitHorizontalShieldState)
+		{
+			ped.Animator.SetTrigger("takeOff");
+		}
 	}
 
 	public override void FixedUpdateState()

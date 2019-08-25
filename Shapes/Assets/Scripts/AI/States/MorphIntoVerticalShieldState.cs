@@ -8,7 +8,7 @@ public class MorphIntoVerticalShieldState : State
 	
 	public override void EnterState()
 	{
-		ped.gameObject.layer = LayerMask.NameToLayer("VerticalShield");
+		ped.ChangeLayerMask(Ped.States.VerticalShield);
 		ped.IsAbleToJump = false;
 		ped.IsAbleToMove = false;
 		ped.HasMorphed = true;
@@ -31,7 +31,10 @@ public class MorphIntoVerticalShieldState : State
 
 	public override void ExitState()
 	{
-		ped.RevertLayerMask();
+		if(!ped.IsDead)
+		{
+			ped.RevertLayerMask();
+		}
 		ped.IsAbleToJump = true;
 		ped.IsAbleToMove = true;
 		ped.HasMorphed = false;

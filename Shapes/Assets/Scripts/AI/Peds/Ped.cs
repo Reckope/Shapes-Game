@@ -90,8 +90,15 @@ public class Ped : MonoBehaviour
 
 	public float DistanceBetweenPedAndPlayer 
 	{ 
-		get { return Vector2.Distance(player.transform.position, gameObject.transform.position); } 
+		get 
+		{ 
+			if(player != null)
+			return Vector2.Distance(player.transform.position, gameObject.transform.position);
+			else
+			return 999; 
+		} 
 	}
+
 	public bool BlockAI { get; set; }
 
 	public bool HasMorphed { get; set; }
@@ -344,16 +351,23 @@ public class Ped : MonoBehaviour
 		}
 	}
 
+	public void ChangeLayerMask(States stateLayer)
+	{
+		string layer = stateLayer.ToString();
+		this.gameObject.layer = LayerMask.NameToLayer(layer);
+		foreach(Transform child in this.gameObject.transform)
+		{
+			child.gameObject.layer = LayerMask.NameToLayer(layer);
+		}
+	}
+
 	public void RevertLayerMask()
 	{
-		switch(this.pedType)
+		string ped = this.pedType.ToString();
+		this.gameObject.layer = LayerMask.NameToLayer(ped);
+		foreach(Transform child in this.gameObject.transform)
 		{
-			case PedType.Player:
-			this.gameObject.layer = LayerMask.NameToLayer("Player");
-			break;
-			case PedType.Enemy:
-			this.gameObject.layer = LayerMask.NameToLayer("Enemy");
-			break;
+			child.gameObject.layer = LayerMask.NameToLayer(ped);
 		}
 	}
 

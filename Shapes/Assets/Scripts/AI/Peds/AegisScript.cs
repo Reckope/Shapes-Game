@@ -12,7 +12,7 @@ public class AegisScript : Ped
 	[SerializeField]
 	private bool _blockAI = false;
 	[SerializeField][Range(0.1f, 7.0f)]
-	private float _speed = 0.1f, _alertedSpeed = 5, _morphToPlayerRange = 5.8f;
+	private float _speed = 0.1f, _alertedRange = 5.8f;
 	private float _groundCheckRadius = 0.2f;
 	private float _sideCheckRadius = 0.4f;
 
@@ -46,28 +46,33 @@ public class AegisScript : Ped
 	protected override void Update()
 	{
 		base.Update();
-		Speed = _speed;
 
+		Speed = _speed;
 		if(!BlockAI)
 		{
 			if(!HasMorphed)
 			{
-				dynamoAI.DetectPlayer(AI.LookDirection.StraightAhead);
+				//dynamoAI.DetectPlayer(AI.LookDirection.Up);
 				dynamoAI.AvoidLedgesAndWalls();
 			}
 			
-			if(IsAlerted)
-			{
-				Speed = _alertedSpeed;
-				if(DistanceBetweenPedAndPlayer <= _morphToPlayerRange)
+			//if(IsAlerted)
+			//{
+				if(DistanceBetweenPedAndPlayer <= _alertedRange)
 				{
-					SetPedState(States.Idle);
+					IsAlerted = true;
+					SetPedState(States.HorizontalShield);
 				}
-				else if(CollidedLeft || CollidedRight || dynamoAI.HasReachedLedgeOnLeftSide || dynamoAI.HasReachedLedgeOnRightSide)
+				else
 				{
-					SetPedState(States.Idle);
+					IsAlerted = false;
 				}
-			}
+			//}
 		}
+	}
+
+	protected override void FixedUpdate()
+	{
+		base.FixedUpdate();
 	}
 }

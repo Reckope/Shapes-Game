@@ -22,7 +22,7 @@ public class MorphIntoBallState : State
 	
 	public override void EnterState()
 	{
-		ped.gameObject.layer = LayerMask.NameToLayer("Ball");
+		ped.ChangeLayerMask(Ped.States.Ball);
 		isAbleToAddForce = true;
 		ped.IsAbleToJump = false;
 		ped.IsAbleToMove = false;
@@ -34,6 +34,12 @@ public class MorphIntoBallState : State
 
 	public override void UpdateState()
 	{
+		if(ped.HasHitVerticalShieldState || ped.HasHitBlockState || (ped.HasHitHorizontalShieldState && !ped.IsGrounded))
+		{
+			isAbleToAddForce = false;
+			ped.Die();
+		}
+		
 		if(ped.pedType == Ped.PedType.Player)
 		{
 			PlayerControls();
@@ -41,13 +47,6 @@ public class MorphIntoBallState : State
 		else
 		{
 			MoveTowardsPlayer();
-		}
-
-		if(ped.HasHitVerticalShieldState || ped.HasHitBlockState || (ped.HasHitHorizontalShieldState && !ped.IsGrounded))
-		{
-			isAbleToAddForce = false;
-			ped.IsDead = true;
-			ped.Die();
 		}
 	}
 
@@ -61,7 +60,10 @@ public class MorphIntoBallState : State
 
 	public override void ExitState()
 	{
-		ped.RevertLayerMask();
+		if(!ped.IsDead)
+		{
+			ped.RevertLayerMask();
+		}
 		ped.IsAbleToJump = true;
 		ped.IsAbleToMove = true;
 		ped.HasMorphed = false;

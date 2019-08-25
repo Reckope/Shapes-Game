@@ -23,7 +23,7 @@ public abstract class State
 	public virtual void LateUpdateState(){}		// Optional
 	public abstract void ExitState();
 
-	// We take the state machine in the constructor of our state class and keep it in 
+	// We take the state machine and ped in the constructor of our state class and keep it in 
 	// a protected variable so it’s available to our state classes.
 	public State(StateMachine stateMachine, Ped ped)
 	{

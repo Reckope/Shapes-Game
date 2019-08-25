@@ -8,7 +8,7 @@ public class MorphIntoBlockState : State
 	
 	public override void EnterState()
 	{
-		ped.gameObject.layer = LayerMask.NameToLayer("Block");
+		ped.ChangeLayerMask(Ped.States.Block);
 		ped.IsAbleToJump = false;
 		ped.IsAbleToMove = false;
 		ped.HasMorphed = true;
@@ -19,7 +19,12 @@ public class MorphIntoBlockState : State
 	public override void UpdateState()
 	{
 		ped.transform.rotation = Quaternion.identity;
-		Debug.Log(ped.Rigidbody2D.constraints);
+
+		if(ped.HasHitHorizontalShieldState)
+		{
+			ped.Die();
+		}
+		
 		if(ped.pedType == Ped.PedType.Player)
 		{
 			PlayerControls();
@@ -28,16 +33,14 @@ public class MorphIntoBlockState : State
 		{
 			EnemyControls();
 		}
-
-		if(ped.HasHitHorizontalShieldState)
-		{
-			ped.IsDead = true;
-			ped.Die();
-		}
 	}
 
 	public override void ExitState()
 	{
+		if(!ped.IsDead)
+		{
+			ped.RevertLayerMask();
+		}
 		ped.HasHitGround = false;
 		ped.IsAbleToJump = true;
 		ped.IsAbleToMove = true;
@@ -61,11 +64,10 @@ public class MorphIntoBlockState : State
 	private void EnemyControls()
 	{
 
-		if(ped.HasHitGround)
+		if(ped.HasHitGround && !ped.IsDead)
 		{
-			//ped.Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeAll;
-			//Debug.Log("FROZEN");
 			// Do other stuff (camera shake, sound etc)
+			Debug.Log("HIT GROUND");
 			ped.Die();
 		}
 	}

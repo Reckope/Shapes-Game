@@ -21,9 +21,17 @@ public class IdleState : State
 	{
 		if(ped.HasHitBallState)
 		{
-			ped.IsDead = true;
 			ped.Rigidbody2D.AddForce(ped.transform.up * 180f);
 			ped.Die();
+		}
+		else if(ped.HasHitBlockState)
+		{
+			Debug.Log("Ht by block");
+			ped.Die();
+		}
+		else if(ped.HasHitHorizontalShieldState)
+		{
+			ped.Animator.SetTrigger("takeOff");
 		}
 	}
 

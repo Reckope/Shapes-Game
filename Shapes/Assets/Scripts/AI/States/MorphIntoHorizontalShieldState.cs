@@ -8,7 +8,7 @@ public class MorphIntoHorizontalShieldState : State
 	
 	public override void EnterState()
 	{
-		ped.gameObject.layer = LayerMask.NameToLayer("HorizontalShield");
+		ped.ChangeLayerMask(Ped.States.HorizontalShield);
 		ped.IsAbleToJump = false;
 		ped.IsAbleToMove = false;
 		ped.HasMorphed = true;
@@ -18,16 +18,14 @@ public class MorphIntoHorizontalShieldState : State
 
 	public override void UpdateState()
 	{
-		if (!ped.MorphToHorizontalShieldInput)
+		if(ped.pedType == Ped.PedType.Player)
 		{
-			ped.ExitMorphState();
+			PlayerControls();
 		}
-
-		//if(ped.HasHitTheGround)
-		//{
-		//	ped.Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeAll;
-			// Do other stuff (camera shake, sound etc)
-		//}
+		else
+		{
+			EnemyControls();
+		}
 	}
 
 	public override void FixedUpdateState()
@@ -37,12 +35,31 @@ public class MorphIntoHorizontalShieldState : State
 
 	public override void ExitState()
 	{
-		ped.RevertLayerMask();
+		if(!ped.IsDead)
+		{
+			ped.RevertLayerMask();
+		}
 		ped.IsAbleToJump = true;
 		ped.IsAbleToMove = true;
 		ped.HasMorphed = false;
 		ped.transform.rotation = Quaternion.identity;
 		ped.Rigidbody2D.constraints = RigidbodyConstraints2D.None;
 		ped.Animator.SetBool("morphToHorizontalShield", false);
+	}
+
+	private void PlayerControls()
+	{
+		if (!ped.MorphToHorizontalShieldInput)
+		{
+			ped.ExitMorphState();
+		}
+	}
+
+	private void EnemyControls()
+	{
+		if(!ped.IsAlerted)
+		{
+			ped.ExitMorphState();
+		}
 	}
 }
