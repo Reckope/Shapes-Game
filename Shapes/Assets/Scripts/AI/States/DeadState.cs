@@ -12,16 +12,23 @@ public class DeadState : State
 
 	public override void EnterState()
 	{
-		ped.IsAbleToJump = false;
 		ped.IsAbleToMove = false;
 		if(ped.pedType == Ped.PedType.Enemy)
 		{
 			//EnemyDie();
-			ped.StartCoroutine(EnemyDie());
+			if(ped.HasHitBlockState)
+			{
+				Debug.Log("SQUAH");
+				ped.Destroy();
+			}
+			else
+			{
+				ped.StartCoroutine(FallOffScreen());
+			}
 		}
 		else
 		{
-			// Do player stuff
+			ped.StartCoroutine(FallOffScreen());
 		}
 	}
 
@@ -40,14 +47,21 @@ public class DeadState : State
 		
 	}
 
-	private IEnumerator EnemyDie()
+	private IEnumerator FallOffScreen()
 	{
 		ped.Animator.enabled = false;
+		yield return new WaitForEndOfFrame();	// Detect 'OnCollisionExit2D' before disabling the colliders. 
 		foreach(Collider2D collider in ped.GetComponentsInChildren<Collider2D>())
 		{
 			collider.enabled = false;
 		}
-		yield return new WaitForSeconds(2);
+		yield return new WaitForSeconds(4);
+		ped.Destroy();
+	}
+
+	private void Vanish()
+	{
+		// Play Sound
 		ped.Destroy();
 	}
 }

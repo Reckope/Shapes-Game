@@ -21,8 +21,11 @@ public class Player : Ped
 	[Header("Player Settings")]
 	[SerializeField]
 	private string _name = "Morphy";
-	[SerializeField][Range(0.1f, 10.0f)]
-	private float _speed = 0.1f, _jumpForce = 0.1f, _groundCheckRadius = 0.2f, blockCheckRadius = 3.4f;
+	[SerializeField][Range(0.1f, 15.0f)]
+	private float _speed = 0.1f, _jumpForce = 0.1f, _groundCheckRadius = 0.2f, blockCheckRadius = 1.4f;
+
+	[SerializeField][Range(0.1f, 0.5f)]
+	private float _sideCheckRadius = 0.1f;
 
 	[Header("Player Components & GameObjects")]
 	public Transform morphIntoBlockCheck;
@@ -40,9 +43,8 @@ public class Player : Ped
 		base.Awake();
 		pedType = PedType.Player;
 		Name = _name;
-		Speed = _speed;
-		JumpForce = _jumpForce;
 		GroundCheckRadius = _groundCheckRadius;
+		SideCheckRadius = _sideCheckRadius;
 		blockFeedback.SetActive(false);
 	}
 
@@ -55,6 +57,8 @@ public class Player : Ped
 	protected override void Update()
 	{
 		base.Update();
+		Speed = _speed;
+		JumpForce = _jumpForce;
 		HandlePlayerInput();
 	}
 
@@ -106,6 +110,7 @@ public class Player : Ped
 		{
 			if(MorphToBlockInput && !CantMorphIntoBlock)
 			{
+				blockFeedback.SetActive(false);
 				SetPedState(States.Block);
 			}
 		}
@@ -117,20 +122,12 @@ public class Player : Ped
 
 		if(MorphToBlockFeedback && CantMorphIntoBlock && !HasMorphed)
 		{
-			StartCoroutine(UnableToMorphToBlock());
+			blockFeedback.SetActive(true);
 		}
-	}
 
-	private IEnumerator UnableToMorphToBlock()
-	{
-		//this.gameObject.GetComponentInChildren<SpriteRenderer>().color = new Color(255, 180, 180, 255);
-		blockFeedback.SetActive(true);
-		yield return new WaitForSeconds(0.1f);
-		blockFeedback.SetActive(false);
-		yield return new WaitForSeconds(0.1f);
-		blockFeedback.SetActive(true);
-		yield return new WaitForSeconds(0.1f);
-		blockFeedback.SetActive(false);
-		//this.gameObject.GetComponentInChildren<SpriteRenderer>().color = new Color(255, 255, 255, 255);
+		if(!MorphToBlockInput)
+		{
+			blockFeedback.SetActive(false);
+		}
 	}
 }

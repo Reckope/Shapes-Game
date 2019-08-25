@@ -17,6 +17,16 @@ public class IdleState : State
 		ped.Animator.SetBool("isWalking", false);
 	}
 
+	public override void UpdateState()
+	{
+		if(ped.HasHitBallState)
+		{
+			ped.IsDead = true;
+			ped.Rigidbody2D.AddForce(ped.transform.up * 180f);
+			ped.Die();
+		}
+	}
+
 	public override void ExitState()
 	{
 

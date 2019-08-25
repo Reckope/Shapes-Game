@@ -34,7 +34,7 @@ public class MorphIntoBallState : State
 
 	public override void UpdateState()
 	{
-		if (ped.gameObject.tag == "Player")
+		if(ped.pedType == Ped.PedType.Player)
 		{
 			PlayerControls();
 		}
@@ -43,11 +43,11 @@ public class MorphIntoBallState : State
 			MoveTowardsPlayer();
 		}
 
-		if(ped.HasHitVerticalShieldState)
+		if(ped.HasHitVerticalShieldState || ped.HasHitBlockState || (ped.HasHitHorizontalShieldState && !ped.IsGrounded))
 		{
 			isAbleToAddForce = false;
 			ped.IsDead = true;
-			HandleBallDeaths();
+			ped.Die();
 		}
 	}
 
@@ -66,8 +66,12 @@ public class MorphIntoBallState : State
 		ped.IsAbleToMove = true;
 		ped.HasMorphed = false;
 		ped.Speed -= ballSpeed;
-		ped.transform.rotation = Quaternion.identity;
-		ped.Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
+		if(!ped.IsDead)
+		{
+			ped.transform.rotation = Quaternion.identity;
+			ped.Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
+		}
+
 		ped.Animator.SetBool("morphToBall", false);
 	}
 
@@ -103,26 +107,5 @@ public class MorphIntoBallState : State
 		{
 			ped.MovementDirection = 1;
 		}
-	}
-
-	private void HandleBallDeaths()
-	{
-		if(ped.HasHitVerticalShieldState)
-		{
-			//ped.StartCoroutine(DeathByShield());
-			ped.Die();
-
-		}
-	}
-
-	private IEnumerator DeathByShield()
-	{
-		ped.Animator.enabled = false;
-		foreach(Collider2D collider in ped.GetComponentsInChildren<Collider2D>())
-		{
-			collider.enabled = false;
-		}
-		yield return new WaitForSeconds(2);
-		
 	}
 }

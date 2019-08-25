@@ -6,6 +6,7 @@
 * This is the core script for peds such as the Player, enemies, allies etc.
 * All peds inherit this script, where they can then access it's components,
 * methods, properties and their State Machine.  
+* Ai class is also here so everything's in 1 place. 
 * Derived Ped > Ped (here) > Statemachine > State > SomeState
 */
 
@@ -58,6 +59,8 @@ public class Ped : MonoBehaviour
 	public Collider2D Collider2D;
 	[HideInInspector]
 	public Animator Animator;
+	[HideInInspector]
+	public Animation Animation;
 
 	[Header("Base Ped Components")]
 	// GameObjects / Transforms
@@ -73,16 +76,23 @@ public class Ped : MonoBehaviour
 	public float Speed { get; set; }
 	public float JumpForce { get; set; }
 	public float GroundCheckRadius { get; set; }
+	public float SideCheckRadius { get; set; }
 	[SerializeField]
 	private Quaternion rotation;
 	private string _sound;
 	private float _movementDirection;
 
 	// Detect collisions around the ped to prevent morphing in tight spaces.
-	public bool CollidedLeft { get { return Physics2D.OverlapCircle (leftCheck.position, GroundCheckRadius, whatIsGround); } }
-	public bool CollidedRight { get { return Physics2D.OverlapCircle (rightCheck.position, GroundCheckRadius, whatIsGround); } }
+	public bool CollidedLeft { get { return Physics2D.OverlapCircle (leftCheck.position, SideCheckRadius, whatIsGround); } }
+	public bool CollidedRight { get { return Physics2D.OverlapCircle (rightCheck.position, SideCheckRadius, whatIsGround); } }
 	public bool CollidedTop { get { return Physics2D.OverlapCircle (topCheck.position, GroundCheckRadius * 3, whatIsGround); } }
 	public bool IsGrounded { get { return Physics2D.OverlapCircle (groundCheck.position, GroundCheckRadius, whatIsGround); } }
+
+	public float DistanceBetweenPedAndPlayer 
+	{ 
+		get { return Vector2.Distance(player.transform.position, gameObject.transform.position); } 
+	}
+	public bool BlockAI { get; set; }
 
 	public bool HasMorphed { get; set; }
 	public bool HasJumped { get; protected set; }
@@ -144,7 +154,7 @@ public class Ped : MonoBehaviour
 		Walk();
 		if(HasJumped)
 		{ 
-			Jump(); 
+			Jump();
 		}
 	}
 
@@ -249,8 +259,6 @@ public class Ped : MonoBehaviour
 	// adding additional functionality to only call the state for one frame. 
 	public void SetPedState(States state)
 	{
-		float blockUpwardForce = 180f;
-
 		if(HasMorphed && !IsDead)
 		{
 			return;
@@ -272,7 +280,6 @@ public class Ped : MonoBehaviour
 				stateMachine.SetState(new MorphIntoBallState(stateMachine, this));
 				break;
 				case States.Block:
-				Rigidbody2D.AddForce(transform.up * blockUpwardForce);
 				stateMachine.SetState(new MorphIntoBlockState(stateMachine, this));
 				break;
 				case States.HorizontalShield:
@@ -300,7 +307,7 @@ public class Ped : MonoBehaviour
 		HandleCollisions(col, false);
 	}
 
-	private void HandleCollisions(Collision2D col, bool boolValue)
+	public void HandleCollisions(Collision2D col, bool boolValue)
 	{
 		if(col.gameObject.tag == "Player")
 		{

@@ -14,21 +14,29 @@ using UnityEngine;
 [RequireComponent(typeof(Ped))]
 public class AI : MonoBehaviour
 {
+	public enum LookDirection
+	{
+		Up,
+		StraightAhead,
+		Down
+	}
+
 	Ped ped;
 
 	public Transform leftLedgeCheck;
 	public Transform rightLedgeCheck;
 
+	[Header("AI Settings")]
 	[SerializeField][Range(5f, 15.0f)]
 	private float visionDistance = 10;
 
 
-	public bool ReachedLedgeOnLeftSide
+	public bool HasReachedLedgeOnLeftSide
 	{ 
 		get { return !Physics2D.OverlapCircle (leftLedgeCheck.position, ped.GroundCheckRadius, ped.whatIsGround); } 
 	}
 
-	public bool ReachedLedgeOnRightSide
+	public bool HasReachedLedgeOnRightSide
 	{ 
 		get { return !Physics2D.OverlapCircle (rightLedgeCheck.position, ped.GroundCheckRadius, ped.whatIsGround); } 
 	}
@@ -40,11 +48,7 @@ public class AI : MonoBehaviour
 
 	protected void Update()
 	{
-		if(!ped.HasMorphed)
-		{
-			DetectPlayer();
-			AvoidLedgesAndWalls();
-		}
+
 	}
 
 	protected void FixedUpdate()
@@ -56,13 +60,13 @@ public class AI : MonoBehaviour
 	// Basic Tasks
 	// ============================================================
 
-	private void AvoidLedgesAndWalls()
+	public void AvoidLedgesAndWalls()
 	{
-		if((ped.CollidedLeft && !ped.CollidedRight) || (ReachedLedgeOnLeftSide && !ReachedLedgeOnRightSide) && !ped.IsAlerted)
+		if((ped.CollidedLeft && !ped.CollidedRight) || (HasReachedLedgeOnLeftSide && !HasReachedLedgeOnRightSide) && !ped.IsAlerted)
 		{
 			ped.MovementDirection = (int)Ped.Direction.Right;
 		}
-		else if((ped.CollidedRight && !ped.CollidedLeft) || (ReachedLedgeOnRightSide && !ReachedLedgeOnLeftSide) && !ped.IsAlerted)
+		else if((ped.CollidedRight && !ped.CollidedLeft) || (HasReachedLedgeOnRightSide && !HasReachedLedgeOnLeftSide) && !ped.IsAlerted)
 		{
 			ped.MovementDirection = (int)Ped.Direction.Left;
 		}
@@ -72,31 +76,47 @@ public class AI : MonoBehaviour
 	// Player Related tasks.
 	// ============================================================
 
-	public void DetectPlayer()
+	public void DetectPlayer(LookDirection requestedDirection)
 	{
-		Vector2 lookDirection;
-		var raySpawn = transform.position;
+		Vector2 visionDirection = Vector2.zero;
+		var visionSpawn = transform.position;
 		var left = ped.leftCheck.transform.position;
 		var right = ped.rightCheck.transform.position;
 
 		if(ped.MovementDirection == (int)Ped.Direction.Left)
 		{
-			lookDirection = Vector2.left;
-			raySpawn = left;
+			visionSpawn = left;
 		}
 		else
 		{
-			lookDirection = Vector2.right;
-			raySpawn = right;
+			visionSpawn = right;
 		}
-		RaycastHit2D lineOfSight = Physics2D.Raycast(raySpawn, lookDirection, 10);
 
-		if(lineOfSight.collider != null && lineOfSight.collider.name == "Player"){
-			ped.IsAlerted = true;
-		}
-		else
+		switch(requestedDirection)
 		{
-			ped.IsAlerted = false;
+			case LookDirection.StraightAhead:
+				if(visionSpawn == left)
+				{
+					visionDirection = Vector2.left;
+				}
+				else if(visionSpawn == right)
+				{
+					visionDirection = Vector2.right;
+				}
+			break;
+
+			case LookDirection.Up:
+				visionDirection = Vector2.up;
+			break;
+
+			case LookDirection.Down:
+				visionDirection = Vector2.down;
+			break;
+		}
+		RaycastHit2D lineOfSight = Physics2D.Raycast(visionSpawn, visionDirection, visionDistance);
+
+		if(lineOfSight.collider != null && lineOfSight.collider.tag == "Player"){
+			ped.IsAlerted = true;
 		}
 	}
 

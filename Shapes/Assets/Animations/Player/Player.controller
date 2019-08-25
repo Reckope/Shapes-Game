@@ -94,6 +94,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 2
     m_ConditionEvent: morphToVerticalShield
     m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: morphToHorizontalShield
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -760446538074863965}
   m_Solo: 0

@@ -19,10 +19,11 @@ public class DynamoScript : Ped
 	[SerializeField]
 	private string _name = "Dynamo";
 	[SerializeField]
-	private bool blockAI = false;
-	private bool alerted;
-	[SerializeField][Range(0.1f, 10.0f)]
-	private float _speed = 0.1f, _jumpForce = 0.1f, _groundCheckRadius = 0.2f, increasedSpeed = 5;
+	private bool _blockAI = false;
+	[SerializeField][Range(0.1f, 7.0f)]
+	private float _speed = 0.1f, _alertedSpeed = 5, _morphToPlayerRange = 5.8f;
+	private float _groundCheckRadius = 0.2f;
+	private float _sideCheckRadius = 0.4f;
 
 	protected override void Awake()
 	{
@@ -35,13 +36,14 @@ public class DynamoScript : Ped
 		base.Start();
 		pedType = PedType.Enemy;
 		Name = _name;
-		Speed = _speed;
-		JumpForce = _jumpForce;
+		SideCheckRadius = _sideCheckRadius;
 		GroundCheckRadius = _groundCheckRadius;
+		BlockAI = _blockAI;
 		dynamoAI = GetComponent<AI>();
-		if(blockAI)
+		if(BlockAI)
 		{
-			MovementDirection = (int)Direction.Idle;
+			SetPedState(States.Idle);
+			dynamoAI.enabled = false;
 		}
 		else
 		{
@@ -53,34 +55,28 @@ public class DynamoScript : Ped
 	protected override void Update()
 	{
 		base.Update();
-		if(IsAlerted && !blockAI)
+		Speed = _speed;
+
+		if(!BlockAI)
 		{
-			Speed = increasedSpeed;
-			if(DistanceBetweenPlayerAndEnemy() <= 5.8)
+			if(!HasMorphed)
 			{
-				SetPedState(States.Ball);
+				dynamoAI.DetectPlayer(AI.LookDirection.StraightAhead);
+				dynamoAI.AvoidLedgesAndWalls();
 			}
-			else if(CollidedLeft || CollidedRight || dynamoAI.ReachedLedgeOnLeftSide || dynamoAI.ReachedLedgeOnRightSide)
+			
+			if(IsAlerted)
 			{
-				Debug.Log("DUCK!");
-				SetPedState(States.Ball);
+				Speed = _alertedSpeed;
+				if(DistanceBetweenPedAndPlayer <= _morphToPlayerRange)
+				{
+					SetPedState(States.Ball);
+				}
+				else if(CollidedLeft || CollidedRight || dynamoAI.HasReachedLedgeOnLeftSide || dynamoAI.HasReachedLedgeOnRightSide)
+				{
+					SetPedState(States.Ball);
+				}
 			}
 		}
 	}
-
-	protected override void FixedUpdate()
-	{
-		base.FixedUpdate();
-	}
-
-	private float DistanceBetweenPlayerAndEnemy(){
-        float distance;
-        if(player != null){
-            distance = Vector2.Distance(player.transform.position, gameObject.transform.position);
-        }
-        else{
-            distance = 0;
-        }
-        return distance;
-    }
 }
