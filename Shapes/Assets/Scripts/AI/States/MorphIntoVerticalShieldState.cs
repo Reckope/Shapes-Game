@@ -8,7 +8,8 @@ public class MorphIntoVerticalShieldState : State
 	
 	public override void EnterState()
 	{
-		ped.ChangeLayerMask(Ped.States.VerticalShield);
+		ped.ChangeTag(Ped.States.VerticalShield);
+		SubscribeToPedInteractionEvents();
 		ped.IsAbleToJump = false;
 		ped.IsAbleToMove = false;
 		ped.HasMorphed = true;
@@ -38,8 +39,9 @@ public class MorphIntoVerticalShieldState : State
 	{
 		if(!ped.IsDead)
 		{
-			ped.RevertLayerMask();
+			ped.RevertTag();
 		}
+		UnsubscribeToPedInteractionEvents();
 		//ped.Rigidbody2D.bodyType = RigidbodyType2D.Dynamic;
 		ped.IsAbleToJump = true;
 		ped.IsAbleToMove = true;
@@ -63,5 +65,24 @@ public class MorphIntoVerticalShieldState : State
 		{
 			ped.ExitMorphState();
 		}
+	}
+
+	private void SubscribeToPedInteractionEvents()
+	{
+		//ped.HasHitPedInBallState += HandleHasHitTheBall;
+	}
+
+	private void UnsubscribeToPedInteractionEvents()
+	{
+		//ped.HasHitPedInBallState -= HandleHasHitTheBall;
+	}
+
+	// ==============================================================
+	// Events - What happens when an event triggers during this state? 
+	// ==============================================================
+
+	private void HandleHasHitTheBall()
+	{
+		Debug.Log("HIT BY EVENT ");
 	}
 }

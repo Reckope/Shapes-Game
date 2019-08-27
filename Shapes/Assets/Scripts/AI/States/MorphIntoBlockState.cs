@@ -8,7 +8,8 @@ public class MorphIntoBlockState : State
 	
 	public override void EnterState()
 	{
-		ped.ChangeLayerMask(Ped.States.Block);
+		SubscribeToInteractionEvents();
+		ped.ChangeTag(Ped.States.Block);
 		ped.IsAbleToJump = false;
 		ped.IsAbleToMove = false;
 		ped.HasMorphed = true;
@@ -19,33 +20,15 @@ public class MorphIntoBlockState : State
 	public override void UpdateState()
 	{
 		ped.transform.rotation = Quaternion.identity;
-
-		if(ped.HasHitVerticalShieldState)
-		{
-			ped.StartCoroutine(ExitBlockState());
-		}
-		if(ped.HasHitHorizontalShieldState)
-		{
-			ped.Die();
-		}
-		
-		if(ped.pedType == Ped.PedType.Player)
-		{
-			PlayerControls();
-		}
-		else
-		{
-			EnemyControls();
-		}
 	}
 
 	public override void ExitState()
 	{
 		if(!ped.IsDead)
 		{
-			ped.RevertLayerMask();
+			ped.RevertTag();
 		}
-		ped.HasHitGround = false;
+		UnsubscribeToInteractionEvents();
 		ped.IsAbleToJump = true;
 		ped.IsAbleToMove = true;
 		ped.HasMorphed = false;
@@ -54,21 +37,56 @@ public class MorphIntoBlockState : State
 		ped.Animator.SetBool("morphToBlock", false);
 	}
 
+	private void SubscribeToInteractionEvents()
+	{
+		ped.HasHitBlockState += ped.Die;
+		ped.HasHitHorizontalShieldState += ped.Die;
+		ped.HasHitVerticalShieldState += HitByVerticalShield;
+		ped.HasHitGround += HasHitTheGround;
+	}
+
+	private void UnsubscribeToInteractionEvents()
+	{
+		ped.HasHitHorizontalShieldState -= ped.Die;
+		ped.HasHitVerticalShieldState -= HitByVerticalShield;
+		ped.HasHitGround -= HasHitTheGround;
+	}
+
+	// ==============================================================
+	// Methods that events subscribe to.
+	// ==============================================================
+
+	private void HitByVerticalShield()
+	{
+		ped.StartCoroutine(ExitBlockState());
+	}
+
 	private void PlayerControls()
 	{
-		if(ped.HasHitGround)
+		if(!ped.MorphToBlockInput)
 		{
-			if(!ped.MorphToBlockInput)
-			{
-				ped.ExitMorphState();
-			}
+			ped.ExitMorphState();
+		}
+	}
+
+	private void HasHitTheGround()
+	{
+		if(!ped.IsDead && ped.pedType == Ped.PedType.Enemy)
+		{
+			// Do other stuff (camera shake, sound etc)
+			Debug.Log("HIT GROUND");
+			ped.Die();
+		}
+		else if(ped.pedType == Ped.PedType.Player)
+		{
+			ped.StartCoroutine(ExitBlockState());
 		}
 	}
 
 	private void EnemyControls()
 	{
 
-		if(ped.HasHitGround && !ped.IsDead)
+		if(!ped.IsDead)
 		{
 			// Do other stuff (camera shake, sound etc)
 			Debug.Log("HIT GROUND");

@@ -22,7 +22,8 @@ public class MorphIntoBallState : State
 	
 	public override void EnterState()
 	{
-		ped.ChangeLayerMask(Ped.States.Ball);
+		ped.ChangeTag(Ped.States.Ball);
+		SubscribeToInteractionEvents();
 		isAbleToAddForce = true;
 		ped.IsAbleToJump = false;
 		ped.IsAbleToMove = false;
@@ -34,19 +35,22 @@ public class MorphIntoBallState : State
 
 	public override void UpdateState()
 	{
-		if(ped.HasHitVerticalShieldState || ped.HasHitBlockState || (ped.HasHitHorizontalShieldState && !ped.IsGrounded))
+		/*if(ped.HasHitVerticalShieldState || ped.HasHitBlockState || (ped.HasHitHorizontalShieldState && !ped.IsGrounded))
 		{
 			isAbleToAddForce = false;
 			ped.Die();
-		}
+		}*/
 		
-		if(ped.pedType == Ped.PedType.Player)
+		if(!ped.IsDead)
 		{
-			PlayerControls();
-		}
-		else
-		{
-			MoveTowardsPlayer();
+			if(ped.pedType == Ped.PedType.Player)
+			{
+				PlayerControls();
+			}
+			else
+			{
+				MoveTowardsPlayer();
+			}
 		}
 	}
 
@@ -62,8 +66,9 @@ public class MorphIntoBallState : State
 	{
 		if(!ped.IsDead)
 		{
-			ped.RevertLayerMask();
+			ped.RevertTag();
 		}
+		UnsubscribeToInteractionEvents();
 		ped.IsAbleToJump = true;
 		ped.IsAbleToMove = true;
 		ped.HasMorphed = false;
@@ -75,6 +80,57 @@ public class MorphIntoBallState : State
 		}
 
 		ped.Animator.SetBool("morphToBall", false);
+	}
+
+	// ==============================================================
+	// Events - What happens when an event triggers during this state? 
+	// ==============================================================
+
+	private void SubscribeToInteractionEvents()
+	{
+		ped.HasHitBlockState += Die;
+		//ped.HasHitBallState += Die;
+		ped.HasHitHorizontalShieldState += HitByHorizontalShield;
+		ped.HasHitVerticalShieldState += Die;
+	}
+
+	private void UnsubscribeToInteractionEvents()
+	{
+		ped.HasHitBlockState -= Die;
+		//ped.HasHitBallState -= Die;
+		ped.HasHitHorizontalShieldState -= HitByHorizontalShield;
+		ped.HasHitVerticalShieldState -= Die;
+	}
+
+	// ==============================================================
+	// Methods that events subscribe to.
+	// ==============================================================
+
+	private void HitByBall()
+	{
+		
+	}
+
+	private void HitByBlock()
+	{
+		
+	}
+
+	private void HitByHorizontalShield()
+	{
+		Debug.Log("Ouch");
+	}
+
+	private void HitByVerticalShield()
+	{
+
+	}
+
+	private void Die()
+	{
+		//ped.HasHitVerticalShieldState -= Die;
+		isAbleToAddForce = false;
+		ped.Die();
 	}
 
 	// ============================================================

@@ -108,14 +108,15 @@ public class Ped : MonoBehaviour
 	public bool IsDead { get; set; }
 	public bool IsAlerted { get; set; }
 
-	public bool HasHitGround { get; set; }
-	public bool HasHitWater { get; set; }
-	public bool HasHitPlayer { get; set; }
-	public bool HasHitEnemy { get; set; }
-	public bool HasHitBlockState { get; set; }
-	public bool HasHitBallState { get; set; }
-	public bool HasHitHorizontalShieldState { get; set; }
-	public bool HasHitVerticalShieldState { get; set; }
+	// Interaction Events
+	public event Action HasHitGround;
+	public event Action HasHitWater;
+	public event Action HasHitPlayer;
+	public event Action HasHitEnemy;
+	public event Action HasHitBallState;
+	public event Action HasHitBlockState;
+	public event Action HasHitHorizontalShieldState;
+	public event Action HasHitVerticalShieldState;
 
 	// Player Input
 	public bool MorphToBallInput { get; set; }
@@ -309,69 +310,66 @@ public class Ped : MonoBehaviour
 		HandleCollisions(col, true);
 	}
 
-	private void OnCollisionExit2D(Collision2D col)
-	{
-		for(int i = 0; i < 2; i++)
-		{
-			HandleCollisions(col, false);
-		}
+	//private void OnCollisionExit2D(Collision2D col)
+	//{
+	//	HandleCollisions(col, false);
 		//HandleCollisions(col, false);
-	}
+	//}
 
 	public void HandleCollisions(Collision2D col, bool boolValue)
 	{
-		if(col.gameObject.tag == "Player")
+		if(col.gameObject.tag == "Player" && HasHitPlayer != null)
 		{
-			HasHitPlayer = boolValue;
+			HasHitPlayer();
 		}
-		else if(col.gameObject.tag == "Enemy")
+		else if(col.gameObject.tag == "Enemy" && HasHitEnemy != null)
 		{
-			HasHitEnemy = boolValue;
+			HasHitEnemy();
+		}
+		else if(col.gameObject.tag == "Ball" && HasHitBallState != null)
+		{
+			HasHitBallState();
+		}
+		else if(col.gameObject.tag == "Block" && HasHitBlockState != null)
+		{
+			HasHitBlockState();
+		}
+		else if(col.gameObject.tag == "VerticalShield" && HasHitVerticalShieldState != null)
+		{
+			HasHitVerticalShieldState();
+		}
+		else if(col.gameObject.tag == "HorizontalShield" && HasHitHorizontalShieldState != null)
+		{
+			HasHitHorizontalShieldState();
 		}
 
-		if(col.gameObject.layer == LayerMask.NameToLayer("Ground"))
+		if(col.gameObject.layer == LayerMask.NameToLayer("Ground") && HasHitGround != null)
 		{
-			HasHitGround = boolValue;
+			HasHitGround();
 		}
-		else if(col.gameObject.layer == LayerMask.NameToLayer("Water"))
+		else if(col.gameObject.layer == LayerMask.NameToLayer("Water") && HasHitWater != null)
 		{
-			HasHitWater = boolValue;
-		}
-		else if(col.gameObject.layer == LayerMask.NameToLayer("Ball"))
-		{
-			HasHitBallState = boolValue;
-		}
-		else if(col.gameObject.layer == LayerMask.NameToLayer("Block"))
-		{
-			HasHitBlockState = boolValue;
-		}
-		else if(col.gameObject.layer == LayerMask.NameToLayer("VerticalShield"))
-		{
-			HasHitVerticalShieldState = boolValue;
-		}
-		else if(col.gameObject.layer == LayerMask.NameToLayer("HorizontalShield"))
-		{
-			HasHitHorizontalShieldState = boolValue;
+			HasHitWater();
 		}
 	}
 
-	public void ChangeLayerMask(States stateLayer)
+	public void ChangeTag(States stateTag)
 	{
-		string layer = stateLayer.ToString();
-		this.gameObject.layer = LayerMask.NameToLayer(layer);
+		string tag = stateTag.ToString();
+		this.gameObject.tag = tag;
 		foreach(Transform child in this.gameObject.transform)
 		{
-			child.gameObject.layer = LayerMask.NameToLayer(layer);
+			child.gameObject.tag = tag;
 		}
 	}
 
-	public void RevertLayerMask()
+	public void RevertTag()
 	{
 		string ped = this.pedType.ToString();
-		this.gameObject.layer = LayerMask.NameToLayer(ped);
+		this.gameObject.tag = ped;
 		foreach(Transform child in this.gameObject.transform)
 		{
-			child.gameObject.layer = LayerMask.NameToLayer(ped);
+			this.gameObject.tag = ped;
 		}
 	}
 
@@ -381,6 +379,7 @@ public class Ped : MonoBehaviour
 
 	public void Die()
 	{
+		Debug.Log(Name + " is dead");
 		IsDead = true;
 		SetPedState(States.Dead);
 	}

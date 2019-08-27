@@ -8,7 +8,7 @@ public class MorphIntoHorizontalShieldState : State
 	
 	public override void EnterState()
 	{
-		ped.ChangeLayerMask(Ped.States.HorizontalShield);
+		ped.ChangeTag(Ped.States.HorizontalShield);
 		ped.IsAbleToJump = false;
 		ped.IsAbleToMove = false;
 		ped.HasMorphed = true;
@@ -37,7 +37,7 @@ public class MorphIntoHorizontalShieldState : State
 	{
 		if(!ped.IsDead)
 		{
-			ped.RevertLayerMask();
+			ped.RevertTag();
 		}
 		ped.IsAbleToJump = true;
 		ped.IsAbleToMove = true;

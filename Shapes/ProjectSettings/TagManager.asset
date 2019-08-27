@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - Enemy
+  - Ball
+  - Block
+  - HorizontalShield
+  - VerticalShield
   layers:
   - Default
   - TransparentFX

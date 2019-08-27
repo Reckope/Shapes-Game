@@ -291,11 +291,11 @@
 /define:ENABLE_TIMELINE
 /define:CSHARP_7_OR_LATER
 /define:CSHARP_7_3_OR_NEWER
-"Assets/Scripts/AI/Peds/AegisScript.cs"
 "Assets/Scripts/AI/Peds/AI.cs"
 "Assets/Scripts/AI/Peds/CinderScript.cs"
 "Assets/Scripts/AI/Peds/DynamoScript.cs"
 "Assets/Scripts/AI/Peds/Ped.cs"
+"Assets/Scripts/AI/Peds/ShieldsScript.cs"
 "Assets/Scripts/AI/States/DeadState.cs"
 "Assets/Scripts/AI/States/IdleState.cs"
 "Assets/Scripts/AI/States/MorphIntoBallState.cs"
