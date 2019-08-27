@@ -60,8 +60,6 @@ public class Player : Ped
 	{
 		base.Update();
 
-		Debug.Log(Name + ": " + stateMachine.GetCurrentState());
-		Debug.Log(Name + ": " + HasHitBallState);
 		isDead = IsDead;
 		Speed = _speed;
 		JumpForce = _jumpForce;

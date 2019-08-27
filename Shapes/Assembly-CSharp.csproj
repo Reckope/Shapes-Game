@@ -2,8 +2,6 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
-    <CscToolPath>/Applications/Unity/Hub/Editor/2019.2.0f1/Unity.app/Contents/Tools/RoslynScripts</CscToolPath>
-    <CscToolExe>unity_csc.sh</CscToolExe>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -55,11 +53,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\AI\Peds\AegisScript.cs" />
      <Compile Include="Assets\Scripts\AI\Peds\AI.cs" />
      <Compile Include="Assets\Scripts\AI\Peds\CinderScript.cs" />
      <Compile Include="Assets\Scripts\AI\Peds\DynamoScript.cs" />
      <Compile Include="Assets\Scripts\AI\Peds\Ped.cs" />
+     <Compile Include="Assets\Scripts\AI\Peds\ShieldsScript.cs" />
      <Compile Include="Assets\Scripts\AI\States\DeadState.cs" />
      <Compile Include="Assets\Scripts\AI\States\IdleState.cs" />
      <Compile Include="Assets\Scripts\AI\States\MorphIntoBallState.cs" />

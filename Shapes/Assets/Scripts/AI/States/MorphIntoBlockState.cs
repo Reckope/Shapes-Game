@@ -20,6 +20,10 @@ public class MorphIntoBlockState : State
 	{
 		ped.transform.rotation = Quaternion.identity;
 
+		if(ped.HasHitVerticalShieldState)
+		{
+			ped.StartCoroutine(ExitBlockState());
+		}
 		if(ped.HasHitHorizontalShieldState)
 		{
 			ped.Die();
@@ -70,5 +74,12 @@ public class MorphIntoBlockState : State
 			Debug.Log("HIT GROUND");
 			ped.Die();
 		}
+	}
+
+	private IEnumerator ExitBlockState()
+	{
+		//ped.Rigidbody2D.AddForce(Vector2.up * 20);
+		yield return new WaitForSeconds(0.5f);
+		ped.ExitMorphState();
 	}
 }

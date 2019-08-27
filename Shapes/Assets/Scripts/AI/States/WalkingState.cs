@@ -26,22 +26,20 @@ public class WalkingState : State
 		{
 			ped.Animator.speed = 1;
 		}
+	}
 
+	public override void FixedUpdateState()
+	{
 		if(ped.HasHitBallState || ped.HasHitBlockState)
 		{
 			ped.IsDead = true;
 			ped.Rigidbody2D.AddForce(ped.transform.up * 180f);
 			ped.Die();
 		}
-		else if(ped.HasHitHorizontalShieldState)
+		else if(ped.HasHitHorizontalShieldState && !ped.IsGrounded)
 		{
 			ped.Animator.SetTrigger("takeOff");
 		}
-	}
-
-	public override void FixedUpdateState()
-	{
-		
 	}
 
 	public override void ExitState()

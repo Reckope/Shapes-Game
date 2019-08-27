@@ -311,7 +311,11 @@ public class Ped : MonoBehaviour
 
 	private void OnCollisionExit2D(Collision2D col)
 	{
-		HandleCollisions(col, false);
+		for(int i = 0; i < 2; i++)
+		{
+			HandleCollisions(col, false);
+		}
+		//HandleCollisions(col, false);
 	}
 
 	public void HandleCollisions(Collision2D col, bool boolValue)

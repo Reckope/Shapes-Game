@@ -26,10 +26,9 @@ public class IdleState : State
 		}
 		else if(ped.HasHitBlockState)
 		{
-			Debug.Log("Ht by block");
 			ped.Die();
 		}
-		else if(ped.HasHitHorizontalShieldState)
+		else if(ped.HasHitHorizontalShieldState && !ped.IsGrounded)
 		{
 			ped.Animator.SetTrigger("takeOff");
 		}

@@ -51,3 +51,18 @@ TagManager:
   - name: Front
     uniqueID: 756613949
     locked: 0
+  - name: Aegis
+    uniqueID: 242290345
+    locked: 0
+  - name: Priwen
+    uniqueID: 1828997115
+    locked: 0
+  - name: Dynamo
+    uniqueID: 421649143
+    locked: 0
+  - name: Cinder
+    uniqueID: 3010978445
+    locked: 0
+  - name: Player
+    uniqueID: 3467850471
+    locked: 0
