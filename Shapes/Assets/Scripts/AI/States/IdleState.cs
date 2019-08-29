@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class IdleState : State
 {
-	public IdleState(StateMachine stateMachine, Ped ped) : base(stateMachine, ped)
-	{
+	public IdleState(StateMachine stateMachine, Ped ped) : base(stateMachine, ped){}
 
-	}
+	private float flinchUpwardsForce = 180f;
 
 	public override void EnterState()
 	{
@@ -16,23 +15,6 @@ public class IdleState : State
 		ped.IsAbleToMove = true;
 		ped.Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
 		ped.Animator.SetBool("isWalking", false);
-	}
-
-	public override void UpdateState()
-	{
-		/*if(ped.HasHitBallState)
-		{
-			ped.Rigidbody2D.AddForce(ped.transform.up * 180f);
-			ped.Die();
-		}
-		else if(ped.HasHitBlockState)
-		{
-			ped.Die();
-		}
-		else if(ped.HasHitHorizontalShieldState && !ped.IsGrounded)
-		{
-			ped.Animator.SetTrigger("takeOff");
-		}*/
 	}
 
 	public override void ExitState()
@@ -47,14 +29,14 @@ public class IdleState : State
 	private void SubscribeToInteractionEvents()
 	{
 		ped.HasHitBlockState += ped.Destroy;
-		ped.HasHitBallState += ped.Die;
+		ped.HasHitBallState += ped.TakeDamage;
 		ped.HasHitHorizontalShieldState += HitByHorizontalShield;
 	}
 
 	private void UnsubscribeFromInteractionEvents()
 	{
 		ped.HasHitBlockState -= ped.Destroy;
-		ped.HasHitBallState -= ped.Die;
+		ped.HasHitBallState -= ped.TakeDamage;
 		ped.HasHitHorizontalShieldState -= HitByHorizontalShield;
 	}
 
@@ -64,14 +46,14 @@ public class IdleState : State
 
 	private void HitByBall()
 	{
-		ped.Rigidbody2D.AddForce(ped.transform.up * 180f);
-		ped.Die();
+		ped.Rigidbody2D.AddForce(ped.transform.up * flinchUpwardsForce);
+		ped.TakeDamage();
 	}
 
 	private void HitByBlock()
 	{
 		// Sound
-		ped.Die();
+		ped.TakeDamage();
 	}
 
 	private void HitByHorizontalShield()

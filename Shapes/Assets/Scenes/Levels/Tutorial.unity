@@ -694,7 +694,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!58 &413463797
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -770,7 +770,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 1
-  m_Mass: 0.5698075
+  m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0
   m_GravityScale: 1.5
@@ -804,9 +804,8 @@ MonoBehaviour:
   leftCheck: {fileID: 1266749655}
   rightCheck: {fileID: 1351775014}
   topCheck: {fileID: 372412351}
-  rotation: {x: 0, y: 0, z: 0, w: 0}
   _name: Cinder
-  blockAI: 1
+  blockAI: 0
   _speed: 2.72
   _alertedSpeed: 3.64
   _jumpForce: 7
@@ -833,7 +832,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 413463796}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.13, y: 0.8, z: 0}
+  m_LocalPosition: {x: 2.39, y: 0.49, z: 0}
   m_LocalScale: {x: 1, y: 1.1, z: 1}
   m_Children:
   - {fileID: 1570007330}
@@ -1608,7 +1607,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 816507206}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.06, y: -2.33, z: 0}
+  m_LocalPosition: {x: -2.15, y: -2.33, z: 0}
   m_LocalScale: {x: 1, y: 1.1, z: 1}
   m_Children:
   - {fileID: 831293692}
@@ -1643,10 +1642,9 @@ MonoBehaviour:
   leftCheck: {fileID: 909099933}
   rightCheck: {fileID: 1747317693}
   topCheck: {fileID: 2017124720}
-  rotation: {x: 0, y: 0, z: 0, w: 0}
   _name: Dynamo
-  _blockAI: 0
-  _speed: 3.18
+  blockAI: 0
+  _speed: 3.07
   _alertedSpeed: 5
   _morphToPlayerRange: 5.8
 --- !u!1 &831293691
@@ -2349,7 +2347,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1126675595}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.93, y: -2.28, z: 0}
+  m_LocalPosition: {x: 2.71, y: -2.18, z: 0}
   m_LocalScale: {x: 1, y: 1.1, z: 1}
   m_Children:
   - {fileID: 1946867254}
@@ -2423,14 +2421,12 @@ MonoBehaviour:
   leftCheck: {fileID: 1416342482}
   rightCheck: {fileID: 1672471915}
   topCheck: {fileID: 422126845}
-  rotation: {x: 0, y: 0, z: 0, w: 0}
-  isDead: 0
   _name: Morphy
   _speed: 4.01
   _jumpForce: 11.3
-  _groundCheckRadius: 0.2
-  blockCheckRadius: 1.82
+  blockCheckRadius: 2.6
   _sideCheckRadius: 0.239
+  _groundCheckRadius: 0.2
   morphIntoBlockCheck: {fileID: 1782345900}
   blockFeedback: {fileID: 1987900923}
 --- !u!114 &1126675601
@@ -2552,7 +2548,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!61 &1212402831
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2654,7 +2650,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 1
-  m_Mass: 0.5698075
+  m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0
   m_GravityScale: 2
@@ -2703,10 +2699,9 @@ MonoBehaviour:
   leftCheck: {fileID: 519906525}
   rightCheck: {fileID: 704654799}
   topCheck: {fileID: 1156815550}
-  rotation: {x: 0, y: 0, z: 0, w: 0}
   _name: Priwen
-  _blockAI: 0
-  _speed: 1.01
+  blockAI: 0
+  _speed: 2.15
   _alertedRange: 2.99
 --- !u!4 &1212402839
 Transform:
@@ -2716,7 +2711,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1212402830}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.01, y: -2.44, z: 0}
+  m_LocalPosition: {x: -3.62, y: -2.41, z: 0}
   m_LocalScale: {x: 1, y: 1.1, z: 1}
   m_Children:
   - {fileID: 39222231}
@@ -4529,7 +4524,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!58 &1630500755
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -4605,7 +4600,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 1
-  m_Mass: 0.5698075
+  m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0
   m_GravityScale: 2
@@ -4622,7 +4617,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1630500754}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.93, y: -2.37, z: 0}
+  m_LocalPosition: {x: -3.19, y: -2.25, z: 0}
   m_LocalScale: {x: 1, y: 1.1, z: 1}
   m_Children:
   - {fileID: 2038280453}
@@ -4672,10 +4667,9 @@ MonoBehaviour:
   leftCheck: {fileID: 98763980}
   rightCheck: {fileID: 2092348684}
   topCheck: {fileID: 1518132422}
-  rotation: {x: 0, y: 0, z: 0, w: 0}
   _name: Aegis
-  _blockAI: 0
-  _speed: 1.53
+  blockAI: 0
+  _speed: 2.1
   _alertedRange: 2.99
 --- !u!61 &1630500763
 BoxCollider2D:

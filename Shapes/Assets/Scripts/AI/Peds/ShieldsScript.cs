@@ -8,9 +8,9 @@ public class ShieldsScript : Ped
 
 	[Header("Aegis Settings")]
 	[SerializeField]
-	private string _name;
+	private string _name = null;
 	[SerializeField]
-	private bool _blockAI = false;
+	private bool blockAI = false;
 	[SerializeField][Range(0.1f, 7.0f)]
 	private float _speed = 0.1f, _alertedRange = 5.8f;
 	private float _groundCheckRadius = 0.2f;
@@ -29,9 +29,8 @@ public class ShieldsScript : Ped
 		Name = _name;
 		SideCheckRadius = _sideCheckRadius;
 		GroundCheckRadius = _groundCheckRadius;
-		BlockAI = _blockAI;
 		shieldAI = GetComponent<AI>();
-		if(BlockAI)
+		if(blockAI)
 		{
 			SetPedState(States.Idle);
 			shieldAI.enabled = false;
@@ -48,7 +47,7 @@ public class ShieldsScript : Ped
 		base.Update();
 
 		Speed = _speed;
-		if(!BlockAI)
+		if(!blockAI)
 		{
 			if(!HasMorphed)
 			{

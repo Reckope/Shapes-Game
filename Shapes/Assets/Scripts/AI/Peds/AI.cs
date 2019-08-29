@@ -79,9 +79,9 @@ public class AI : MonoBehaviour
 	public void DetectPlayer(LookDirection requestedDirection)
 	{
 		Vector2 visionDirection = Vector2.zero;
-		var visionSpawn = transform.position;
-		var left = ped.leftCheck.transform.position;
-		var right = ped.rightCheck.transform.position;
+		Vector2 visionSpawn = transform.position;
+		Vector2 left = ped.leftCheck.transform.position;
+		Vector2 right = ped.rightCheck.transform.position;
 
 		if(ped.MovementDirection == (int)Ped.Direction.Left)
 		{
@@ -115,7 +115,7 @@ public class AI : MonoBehaviour
 		}
 		RaycastHit2D lineOfSight = Physics2D.Raycast(visionSpawn, visionDirection, visionDistance);
 
-		if(lineOfSight.collider != null && lineOfSight.collider.tag == "Player"){
+		if(lineOfSight.collider != null && lineOfSight.collider.gameObject.layer == LayerMask.NameToLayer("Player")){
 			ped.IsAlerted = true;
 		}
 	}

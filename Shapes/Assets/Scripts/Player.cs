@@ -8,31 +8,41 @@
 * Derived Ped (here) > Ped > Statemachine > State > SomeState
 */
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : Ped
 {
+	// There can only ever be one instance of a player.
+	public static Player Instance { get { return _instance; } }
+	private static Player _instance;
+
 	// ============================================================
 	// Player Variables
 	// ============================================================
 
 	[Header("Player Settings")]
-	[HideInInspector]
-	public bool isDead;
 	[SerializeField]
 	private string _name = "Morphy";
 	[SerializeField][Range(0.1f, 15.0f)]
-	private float _speed = 0.1f, _jumpForce = 0.1f, _groundCheckRadius = 0.2f, blockCheckRadius = 1.4f;
+	private float _speed = 0.1f, _jumpForce = 0.1f, blockCheckRadius = 1.4f;
+	private bool isDead;
 
 	[SerializeField][Range(0.1f, 0.5f)]
-	private float _sideCheckRadius = 0.1f;
+	private float _sideCheckRadius = 0.1f, _groundCheckRadius = 0.2f;
 
 	[Header("Player Components & GameObjects")]
 	public Transform morphIntoBlockCheck;
 	public GameObject blockFeedback;
-	public bool CantMorphIntoBlock { get { return Physics2D.OverlapCircle (morphIntoBlockCheck.position, blockCheckRadius, whatIsGround); } }
+	public bool CanMorphIntoBlock 
+	{ 
+		get { return !Physics2D.OverlapCircle (morphIntoBlockCheck.position, blockCheckRadius, whatIsGround); } 
+	}
+
+	public int Lives { get; set; }
+	public event Action<int> OnLivesChanged;
 
 	// ============================================================
 	// MonoBehaviour methods
@@ -43,6 +53,17 @@ public class Player : Ped
 	protected override void Awake()
 	{
 		base.Awake();
+
+		if(_instance != null && _instance != this)
+		{
+			Debug.LogError("Error: Another instance of Player has been found in scene " + " '" + SceneController.GetActiveScene() + "'.");
+			Destroy(this.gameObject);
+		} 
+		else
+		{
+			_instance = this;
+		}
+
 		pedType = PedType.Player;
 		Name = _name;
 		GroundCheckRadius = _groundCheckRadius;
@@ -54,12 +75,14 @@ public class Player : Ped
 	{
 		base.Start();
 		stateMachine.SetState(new IdleState(stateMachine, this));
+		Lives = 3;
 	}
 
 	protected override void Update()
 	{
 		base.Update();
 
+		Debug.Log(_name + ": " + Lives);
 		isDead = IsDead;
 		Speed = _speed;
 		JumpForce = _jumpForce;
@@ -110,12 +133,12 @@ public class Player : Ped
 			}
 			if(jump > 0)
 			{
-				HasJumped = true;
+				Jumped = true;
 			}
 		}
 		else
 		{
-			if(MorphToBlockInput && !CantMorphIntoBlock)
+			if(MorphToBlockInput && DistanceFromGround() > 3f && CanMorphIntoBlock)
 			{
 				blockFeedback.SetActive(false);
 				SetPedState(States.Block);
@@ -127,7 +150,7 @@ public class Player : Ped
 			SetPedState(States.Ball);
 		}
 
-		if(MorphToBlockFeedback && CantMorphIntoBlock && !HasMorphed)
+		if(MorphToBlockFeedback && !CanMorphIntoBlock && !HasMorphed)
 		{
 			blockFeedback.SetActive(true);
 		}
@@ -135,6 +158,37 @@ public class Player : Ped
 		if(!MorphToBlockInput)
 		{
 			blockFeedback.SetActive(false);
+		}
+	}
+
+	public void LoseLives(int life)
+	{
+		if (Lives - life > 0) 
+		{
+			Lives -= life;
+			if (OnLivesChanged != null)
+			{
+				Debug.Log("Lost life3");
+				OnLivesChanged(Lives);
+			}
+		}
+		else
+		{
+			Lives = 0;
+			IsDead = true;
+			stateMachine.SetState(new DeadState(stateMachine, this));
+		}
+	}
+
+	public void IncreaseLives(int life)
+	{
+		if (Lives + life > 0) 
+		{
+			Lives += life;
+			if (OnLivesChanged != null)
+			{
+				OnLivesChanged(Lives);
+			}
 		}
 	}
 }

@@ -15,7 +15,6 @@ public class CinderScript : Ped
 	private float _speed = 0.1f, _alertedSpeed = 5, _jumpForce = 6;
 	private float _groundCheckRadius = 0.1f;
 	private float _sideCheckRadius = 0.4f;
-	private bool _jumped = false;
 
 	protected override void Awake()
 	{
@@ -41,7 +40,7 @@ public class CinderScript : Ped
 		base.Update();
 		Speed = _speed;
 
-		if(!BlockAI && !IsDead)
+		if(!blockAI && !IsDead)
 		{
 			if(!HasMorphed && !IsAlerted)
 			{
@@ -56,11 +55,6 @@ public class CinderScript : Ped
 		}
 	}
 
-	protected override void FixedUpdate()
-	{
-		base.FixedUpdate();
-	}
-
 	private IEnumerator AttemptToSquashPlayer()
 	{
 		Speed = _alertedSpeed;
@@ -71,7 +65,7 @@ public class CinderScript : Ped
 			&& IsGrounded
 		)
 		{
-			HasJumped = true;
+			Jumped = true;
 			yield return new WaitForSeconds(0.7f);
 			SetPedState(States.Block);
 		}

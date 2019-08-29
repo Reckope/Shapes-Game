@@ -34,13 +34,7 @@ public class MorphIntoBallState : State
 	}
 
 	public override void UpdateState()
-	{
-		/*if(ped.HasHitVerticalShieldState || ped.HasHitBlockState || (ped.HasHitHorizontalShieldState && !ped.IsGrounded))
-		{
-			isAbleToAddForce = false;
-			ped.Die();
-		}*/
-		
+	{	
 		if(!ped.IsDead)
 		{
 			if(ped.pedType == Ped.PedType.Player)
@@ -49,7 +43,10 @@ public class MorphIntoBallState : State
 			}
 			else
 			{
-				MoveTowardsPlayer();
+				if(ped.player != null)
+				{
+					MoveTowardsPlayer();
+				}
 			}
 		}
 	}
@@ -88,18 +85,18 @@ public class MorphIntoBallState : State
 
 	private void SubscribeToInteractionEvents()
 	{
-		ped.HasHitBlockState += Die;
-		//ped.HasHitBallState += Die;
+		ped.HasHitBlockState += ped.Destroy;
+		//ped.HasHitBallState += ped.TakeDamage;
 		ped.HasHitHorizontalShieldState += HitByHorizontalShield;
-		ped.HasHitVerticalShieldState += Die;
+		ped.HasHitVerticalShieldState += ped.TakeDamage;
 	}
 
 	private void UnsubscribeToInteractionEvents()
 	{
-		ped.HasHitBlockState -= Die;
-		//ped.HasHitBallState -= Die;
+		ped.HasHitBlockState -= ped.Destroy;
+		//ped.HasHitBallState -= ped.TakeDamage;
 		ped.HasHitHorizontalShieldState -= HitByHorizontalShield;
-		ped.HasHitVerticalShieldState -= Die;
+		ped.HasHitVerticalShieldState -= ped.TakeDamage;
 	}
 
 	// ==============================================================
@@ -118,19 +115,19 @@ public class MorphIntoBallState : State
 
 	private void HitByHorizontalShield()
 	{
-		Debug.Log("Ouch");
+		if(!ped.IsGrounded)
+		{
+			ped.TakeDamage();
+		}
+		else
+		{
+			ped.BounceAway();
+		}
 	}
 
 	private void HitByVerticalShield()
 	{
 
-	}
-
-	private void Die()
-	{
-		//ped.HasHitVerticalShieldState -= Die;
-		isAbleToAddForce = false;
-		ped.Die();
 	}
 
 	// ============================================================

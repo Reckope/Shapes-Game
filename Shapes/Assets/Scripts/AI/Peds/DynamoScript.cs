@@ -19,7 +19,7 @@ public class DynamoScript : Ped
 	[SerializeField]
 	private string _name = "Dynamo";
 	[SerializeField]
-	private bool _blockAI = false;
+	private bool blockAI = false;
 	[SerializeField][Range(0.1f, 7.0f)]
 	private float _speed = 0.1f, _alertedSpeed = 5, _morphToPlayerRange = 5.8f;
 	private float _groundCheckRadius = 0.2f;
@@ -38,9 +38,8 @@ public class DynamoScript : Ped
 		Name = _name;
 		SideCheckRadius = _sideCheckRadius;
 		GroundCheckRadius = _groundCheckRadius;
-		BlockAI = _blockAI;
 		dynamoAI = GetComponent<AI>();
-		if(BlockAI)
+		if(blockAI)
 		{
 			SetPedState(States.Idle);
 			dynamoAI.enabled = false;
@@ -57,7 +56,7 @@ public class DynamoScript : Ped
 		base.Update();
 		Speed = _speed;
 
-		if(!BlockAI)
+		if(!blockAI)
 		{
 			if(!HasMorphed)
 			{

@@ -62,10 +62,10 @@ public class Ped : MonoBehaviour
 	[HideInInspector]
 	public Animation Animation;
 
-	[Header("Base Ped Components")]
 	// GameObjects / Transforms
 	[HideInInspector]
 	public GameObject player;
+	[Header("Base Ped Components")]
 	public LayerMask whatIsGround;
 	public Transform areaColliders;
 	public Transform groundCheck, leftCheck, rightCheck, topCheck;
@@ -77,7 +77,6 @@ public class Ped : MonoBehaviour
 	public float JumpForce { get; set; }
 	public float GroundCheckRadius { get; set; }
 	public float SideCheckRadius { get; set; }
-	[SerializeField]
 	private Quaternion rotation;
 	private string _sound;
 	private float _movementDirection;
@@ -99,10 +98,8 @@ public class Ped : MonoBehaviour
 		} 
 	}
 
-	public bool BlockAI { get; set; }
-
 	public bool HasMorphed { get; set; }
-	public bool HasJumped { get; protected set; }
+	public bool Jumped { get; protected set; }
 	public bool IsAbleToMove { get; set; }
 	public bool IsAbleToJump { get; set; }
 	public bool IsDead { get; set; }
@@ -119,13 +116,10 @@ public class Ped : MonoBehaviour
 	public event Action HasHitVerticalShieldState;
 
 	// Player Input
-	public bool MorphToBallInput { get; set; }
-	public bool MorphToBlockInput { get; set; }
-	public bool MorphToHorizontalShieldInput { get; set; }
-	public bool MorphToVerticalShieldInput { get; set; }
-
-	// *** JOE. If multiple peds are acting the same, create a constructor and use:
-	// Ped player = new ped(name, speed etc) ***
+	public bool MorphToBallInput { get; protected set; }
+	public bool MorphToBlockInput { get; protected set; }
+	public bool MorphToHorizontalShieldInput { get; protected set; }
+	public bool MorphToVerticalShieldInput { get; protected set; }
 
 	// ============================================================
 	// MonoBehaviour methods
@@ -151,6 +145,7 @@ public class Ped : MonoBehaviour
 	{
 		stateMachine.UpdateState();
 		//Debug.Log(Name + ": " + stateMachine.GetCurrentState());
+		DistanceFromGround();
 		FaceBodyInCorrectDirection();
 		UpdateAirbornAnim();
 		areaColliders.transform.rotation = rotation;
@@ -160,7 +155,7 @@ public class Ped : MonoBehaviour
 	{
 		stateMachine.FixedUpdateState();
 		Walk();
-		if(HasJumped)
+		if(Jumped)
 		{ 
 			Jump();
 		}
@@ -192,18 +187,18 @@ public class Ped : MonoBehaviour
 			{
 				if(_movementDirection != (float)Direction.Idle)
 				{
-					SetPedState(States.Walk);
+					stateMachine.SetState(new WalkingState(stateMachine, this));
 				}
 				else
 				{
-					SetPedState(States.Idle);
+					stateMachine.SetState(new IdleState(stateMachine, this));
 				}
 			}
 		}
 	}
 
 	// ============================================================
-	// Ped Basic Tasks, States & Movement
+	// Ped Basic Tasks, States & Movement.
 	// ============================================================
 
 	public void Jump()
@@ -212,7 +207,7 @@ public class Ped : MonoBehaviour
 		{
 			Animator.SetTrigger("takeOff");
 			Rigidbody2D.velocity = Vector2.up * JumpForce;
-			HasJumped = false;
+			Jumped = false;
 		}
 	}
 
@@ -275,15 +270,6 @@ public class Ped : MonoBehaviour
 		{
 			switch(state)
 			{
-				case States.Dead:
-				stateMachine.SetState(new DeadState(stateMachine, this));
-				break;
-				case States.Walk:
-				stateMachine.SetState(new WalkingState(stateMachine, this));
-				break;
-				case States.Idle:
-				stateMachine.SetState(new IdleState(stateMachine, this));
-				break;
 				case States.Ball: 
 				stateMachine.SetState(new MorphIntoBallState(stateMachine, this));
 				break;
@@ -310,35 +296,29 @@ public class Ped : MonoBehaviour
 		HandleCollisions(col, true);
 	}
 
-	//private void OnCollisionExit2D(Collision2D col)
-	//{
-	//	HandleCollisions(col, false);
-		//HandleCollisions(col, false);
-	//}
-
 	public void HandleCollisions(Collision2D col, bool boolValue)
 	{
-		if(col.gameObject.tag == "Player" && HasHitPlayer != null)
+		if(col.gameObject.CompareTag("Player") && HasHitPlayer != null)
 		{
 			HasHitPlayer();
 		}
-		else if(col.gameObject.tag == "Enemy" && HasHitEnemy != null)
+		else if(col.gameObject.CompareTag("Enemy" ) && HasHitEnemy != null)
 		{
 			HasHitEnemy();
 		}
-		else if(col.gameObject.tag == "Ball" && HasHitBallState != null)
+		else if(col.gameObject.CompareTag("Ball") && HasHitBallState != null)
 		{
 			HasHitBallState();
 		}
-		else if(col.gameObject.tag == "Block" && HasHitBlockState != null)
+		else if(col.gameObject.CompareTag("Block") && HasHitBlockState != null)
 		{
 			HasHitBlockState();
 		}
-		else if(col.gameObject.tag == "VerticalShield" && HasHitVerticalShieldState != null)
+		else if(col.gameObject.CompareTag("VerticalShield") && HasHitVerticalShieldState != null)
 		{
 			HasHitVerticalShieldState();
 		}
-		else if(col.gameObject.tag == "HorizontalShield" && HasHitHorizontalShieldState != null)
+		else if(col.gameObject.CompareTag("HorizontalShield") && HasHitHorizontalShieldState != null)
 		{
 			HasHitHorizontalShieldState();
 		}
@@ -356,6 +336,7 @@ public class Ped : MonoBehaviour
 	public void ChangeTag(States stateTag)
 	{
 		string tag = stateTag.ToString();
+
 		this.gameObject.tag = tag;
 		foreach(Transform child in this.gameObject.transform)
 		{
@@ -366,6 +347,7 @@ public class Ped : MonoBehaviour
 	public void RevertTag()
 	{
 		string ped = this.pedType.ToString();
+
 		this.gameObject.tag = ped;
 		foreach(Transform child in this.gameObject.transform)
 		{
@@ -377,15 +359,70 @@ public class Ped : MonoBehaviour
 	// What happens when the ped dies? :/ 
 	// ============================================================
 
+	public void TakeDamage()
+	{
+		if(pedType == Ped.PedType.Player)
+		{
+			Player.Instance.LoseLives(1);
+		}
+		else
+		{
+			Die();
+		}
+	}
+
 	public void Die()
 	{
-		Debug.Log(Name + " is dead");
 		IsDead = true;
-		SetPedState(States.Dead);
+		stateMachine.SetState(new DeadState(stateMachine, this));
 	}
 
 	public void Destroy()
 	{
+		//Player.Instance.Lives = 0;
 		Destroy(this.gameObject);
+	}
+
+	// ============================================================
+	// Useful ped info and actions other class can access
+	// ============================================================
+
+	public float DistanceFromGround()
+	{
+		Vector2 visionSpawn;
+
+		if(groundCheck != null)
+		{
+			visionSpawn = groundCheck.transform.position;
+		}
+		else
+		{
+			Debug.LogError("GroundCheck is missing. Can't determine distance from ground");
+			return 0;
+		}
+
+		Vector2 visionDirection = Vector2.down;
+		float visionDistance = 9999f;
+
+		RaycastHit2D distanceFromGround = Physics2D.Raycast(visionSpawn, visionDirection, visionDistance);
+
+		return distanceFromGround.distance;
+	}
+
+	// Bounce away from objects. 
+	public void BounceAway()
+	{
+		StartCoroutine(Bounce());
+	}
+
+	private IEnumerator Bounce()
+	{
+		Vector2 bounceDirection = new Vector2(-(int)MovementDirection, 0);
+		float bounceAwayForce = 120f;
+
+		IsAbleToMove = false;
+		Rigidbody2D.AddForce(bounceDirection * bounceAwayForce);
+		yield return new WaitForSeconds(0.5f);
+		IsAbleToMove = true;
 	}
 }

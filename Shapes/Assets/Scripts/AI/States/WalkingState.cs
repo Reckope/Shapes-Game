@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class WalkingState : State
 {
-	private float flinchUpwardsForce = 280f;
-	private float bounceBackForce = 120f;
+	private float walkingAnimationSpeed = 11f;
 
 	public WalkingState(StateMachine stateMachine, Ped ped) : base(stateMachine, ped)
 	{
@@ -24,7 +23,7 @@ public class WalkingState : State
 	{
 		if(ped.IsGrounded)
 		{
-			ped.Animator.speed = ped.Speed - (ped.Speed / 11f);
+			ped.Animator.speed = ped.Speed - (ped.Speed / walkingAnimationSpeed);
 		}
 		else
 		{
@@ -50,18 +49,18 @@ public class WalkingState : State
 
 	private void SubscribeToPedInteractionEvents()
 	{
-		ped.HasHitBallState += ped.Die;
+		ped.HasHitBallState += ped.TakeDamage;
 		ped.HasHitBlockState += ped.Destroy;
 		ped.HasHitHorizontalShieldState += TakeOff;
-		ped.HasHitVerticalShieldState += BounceBack;
+		ped.HasHitVerticalShieldState += TakeOff;
 	}
 
 	private void UnsubscribeToPedInteractionEvents()
 	{
-		ped.HasHitBallState -= ped.Die;
+		ped.HasHitBallState -= ped.TakeDamage;
 		ped.HasHitBlockState -= ped.Destroy;
 		ped.HasHitHorizontalShieldState -= TakeOff;
-		ped.HasHitVerticalShieldState -= BounceBack;
+		ped.HasHitVerticalShieldState -= TakeOff;
 	}
 
 	private void TakeOff()
@@ -72,27 +71,7 @@ public class WalkingState : State
 		}
 		else
 		{
-			BounceBack();
+			ped.BounceAway();
 		}
-	}
-
-	private void BounceBack()
-	{
-		ped.StartCoroutine(Bounce());
-	}
-
-	private IEnumerator Bounce()
-	{
-		ped.IsAbleToMove = false;
-		if(ped.MovementDirection == (int)Ped.Direction.Left)
-		{
-			ped.Rigidbody2D.AddForce(Vector2.right * bounceBackForce);
-		}
-		else if(ped.MovementDirection == (int)Ped.Direction.Right)
-		{
-			ped.Rigidbody2D.AddForce(Vector2.left * bounceBackForce);
-		}
-		yield return new WaitForSeconds(0.5f);
-		ped.IsAbleToMove = true;
 	}
 }

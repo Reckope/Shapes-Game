@@ -5,6 +5,11 @@ using UnityEngine;
 public class MorphIntoBlockState : State
 {
 	public MorphIntoBlockState(StateMachine stateMachine, Ped ped) : base(stateMachine, ped) { }
+
+	private float pos;
+	private float downwardForce = 0.1f;
+	private float maxForce = 15f;
+	private bool hitShield;
 	
 	public override void EnterState()
 	{
@@ -15,11 +20,26 @@ public class MorphIntoBlockState : State
 		ped.HasMorphed = true;
 		ped.Rigidbody2D.constraints = RigidbodyConstraints2D.FreezePositionX;
 		ped.Animator.SetBool("morphToBlock", true);
+		pos = ped.transform.position.x;
 	}
 
 	public override void UpdateState()
 	{
 		ped.transform.rotation = Quaternion.identity;
+		ped.transform.position = new Vector2(pos, ped.transform.position.y);
+	}
+
+	public override void FixedUpdateState()
+	{
+		ped.transform.rotation = Quaternion.identity;
+		if(!hitShield)
+		{
+			ped.Rigidbody2D.velocity = Vector2.down * downwardForce;
+			if(downwardForce < maxForce)
+			{
+				downwardForce ++;
+			}
+		}
 	}
 
 	public override void ExitState()
@@ -39,24 +59,25 @@ public class MorphIntoBlockState : State
 
 	private void SubscribeToInteractionEvents()
 	{
-		ped.HasHitBlockState += ped.Die;
-		ped.HasHitHorizontalShieldState += ped.Die;
-		ped.HasHitVerticalShieldState += HitByVerticalShield;
-		ped.HasHitGround += HasHitTheGround;
+		ped.HasHitBlockState += ped.TakeDamage;
+		ped.HasHitHorizontalShieldState += HandleTakenDamage;
+		ped.HasHitVerticalShieldState += Exit;
+		ped.HasHitGround += HandleHitGround;
 	}
 
 	private void UnsubscribeToInteractionEvents()
 	{
-		ped.HasHitHorizontalShieldState -= ped.Die;
-		ped.HasHitVerticalShieldState -= HitByVerticalShield;
-		ped.HasHitGround -= HasHitTheGround;
+		ped.HasHitBlockState -= ped.TakeDamage;
+		ped.HasHitHorizontalShieldState -= HandleTakenDamage;
+		ped.HasHitVerticalShieldState -= Exit;
+		ped.HasHitGround -= HandleHitGround;
 	}
 
 	// ==============================================================
 	// Methods that events subscribe to.
 	// ==============================================================
 
-	private void HitByVerticalShield()
+	private void Exit()
 	{
 		ped.StartCoroutine(ExitBlockState());
 	}
@@ -69,12 +90,26 @@ public class MorphIntoBlockState : State
 		}
 	}
 
-	private void HasHitTheGround()
+	private void HandleTakenDamage()
+	{
+		hitShield = true;
+		if(!ped.IsDead && ped.pedType == Ped.PedType.Enemy)
+		{
+			// Do other stuff (camera shake, sound etc)
+			ped.Die();
+		}
+		else if(ped.pedType == Ped.PedType.Player)
+		{
+			ped.TakeDamage();
+			ped.StartCoroutine(ExitBlockState());
+		}
+	}
+
+	private void HandleHitGround()
 	{
 		if(!ped.IsDead && ped.pedType == Ped.PedType.Enemy)
 		{
 			// Do other stuff (camera shake, sound etc)
-			Debug.Log("HIT GROUND");
 			ped.Die();
 		}
 		else if(ped.pedType == Ped.PedType.Player)
@@ -85,18 +120,15 @@ public class MorphIntoBlockState : State
 
 	private void EnemyControls()
 	{
-
 		if(!ped.IsDead)
 		{
 			// Do other stuff (camera shake, sound etc)
-			Debug.Log("HIT GROUND");
-			ped.Die();
+			ped.TakeDamage();
 		}
 	}
 
 	private IEnumerator ExitBlockState()
 	{
-		//ped.Rigidbody2D.AddForce(Vector2.up * 20);
 		yield return new WaitForSeconds(0.5f);
 		ped.ExitMorphState();
 	}

@@ -69,12 +69,12 @@ public class MorphIntoVerticalShieldState : State
 
 	private void SubscribeToPedInteractionEvents()
 	{
-		//ped.HasHitPedInBallState += HandleHasHitTheBall;
+		ped.HasHitBlockState += ped.Destroy;
 	}
 
 	private void UnsubscribeToPedInteractionEvents()
 	{
-		//ped.HasHitPedInBallState -= HandleHasHitTheBall;
+		ped.HasHitBlockState -= ped.Destroy;
 	}
 
 	// ==============================================================
