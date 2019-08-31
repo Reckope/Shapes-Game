@@ -3,7 +3,7 @@
 * Project: Shapes
 * 2019
 * Notes: 
-* Here we can change / set what happens when the player has
+* Here we can change / set what happens when peds have
 * morphed into a ball.
 * Derived Ped > Ped > Statemachine > State > SomeState (Here)
 */
@@ -15,15 +15,21 @@ using UnityEngine;
 
 public class MorphIntoBallState : State
 {
+	// Global Variables
 	private float ballSpeed = 4f;
 	private bool isAbleToAddForce;
 
+	// Call the constructure from SetState (StateMachine.cs), then override all of the peds Monobehaviour methods (Ped.cs).
 	public MorphIntoBallState(StateMachine stateMachine, Ped ped) : base(stateMachine, ped) { }
+
+	// ==============================================================
+	// Abstract and virtual methods from State.cs
+	// ==============================================================
 	
 	public override void EnterState()
 	{
-		ped.ChangeTag(Ped.States.Ball);
 		SubscribeToInteractionEvents();
+		ped.ChangeTag(Ped.States.Ball);
 		isAbleToAddForce = true;
 		ped.IsAbleToJump = false;
 		ped.IsAbleToMove = false;
@@ -61,59 +67,57 @@ public class MorphIntoBallState : State
 
 	public override void ExitState()
 	{
-		if(!ped.IsDead)
-		{
-			ped.RevertTag();
-		}
 		UnsubscribeToInteractionEvents();
-		ped.IsAbleToJump = true;
-		ped.IsAbleToMove = true;
-		ped.HasMorphed = false;
-		ped.Speed -= ballSpeed;
 		if(!ped.IsDead)
 		{
+			ped.IsAbleToJump = true;
+			ped.IsAbleToMove = true;
+			ped.HasMorphed = false;
+			ped.Speed -= ballSpeed;
 			ped.transform.rotation = Quaternion.identity;
 			ped.Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
+			ped.RevertTag();
+			ped.Animator.SetBool("morphToBall", false);
 		}
-
-		ped.Animator.SetBool("morphToBall", false);
 	}
 
 	// ==============================================================
-	// Events - What happens when an event triggers during this state? 
+	// Events trigger certain methods exclusive to the ball.
 	// ==============================================================
 
 	private void SubscribeToInteractionEvents()
 	{
-		ped.HasHitBlockState += ped.Destroy;
-		//ped.HasHitBallState += ped.TakeDamage;
-		ped.HasHitHorizontalShieldState += HitByHorizontalShield;
-		ped.HasHitVerticalShieldState += ped.TakeDamage;
+		ped.HasHitBlockState += HitBlock;
+		ped.HasHitBallState += HitBall;;
+		ped.HasHitHorizontalShieldState += HitHorizontalShield;
+		ped.HasHitVerticalShieldState += HitVerticalShield;
 	}
 
 	private void UnsubscribeToInteractionEvents()
 	{
-		ped.HasHitBlockState -= ped.Destroy;
-		//ped.HasHitBallState -= ped.TakeDamage;
-		ped.HasHitHorizontalShieldState -= HitByHorizontalShield;
-		ped.HasHitVerticalShieldState -= ped.TakeDamage;
+		ped.HasHitBlockState -= HitBlock;
+		ped.HasHitBallState -= HitBall;
+		ped.HasHitHorizontalShieldState -= HitHorizontalShield;
+		ped.HasHitVerticalShieldState -= HitVerticalShield;
 	}
 
 	// ==============================================================
 	// Methods that events subscribe to.
 	// ==============================================================
 
-	private void HitByBall()
+	private void HitBall()
 	{
-		
+		// Sound
+		// Public event: Name + died.
+		BounceBack();
 	}
 
-	private void HitByBlock()
+	private void HitBlock()
 	{
-		
+		ped.Destroy();
 	}
 
-	private void HitByHorizontalShield()
+	private void HitHorizontalShield()
 	{
 		if(!ped.IsGrounded)
 		{
@@ -121,17 +125,17 @@ public class MorphIntoBallState : State
 		}
 		else
 		{
-			ped.BounceAway();
+			BounceBack();
 		}
 	}
 
-	private void HitByVerticalShield()
+	private void HitVerticalShield()
 	{
-
+		ped.TakeDamage();
 	}
 
 	// ============================================================
-	// Private Methods for when the ped has morphed into a ball.
+	// Private Methods used by this state.
 	// ============================================================
 
 	// Give the player / ped some sort of control, but not as much as walking normally.
@@ -156,11 +160,19 @@ public class MorphIntoBallState : State
 	{
 		if(ped.player.transform.position.x < ped.transform.position.x)
 		{
-			ped.MovementDirection = -1;
+			ped.MovementDirection = (int)Ped.Direction.Left;
 		}
 		else if(ped.player.transform.position.x > ped.transform.position.x)
 		{
-			ped.MovementDirection = 1;
+			ped.MovementDirection = (int)Ped.Direction.Right;
 		}
+	}
+
+	private void BounceBack()
+	{
+		Vector2 bounceDirection = new Vector2(-(int)ped.MovementDirection, 0);
+		float bounceAwayForce = 120f;
+
+		ped.Rigidbody2D.AddForce(bounceDirection * bounceAwayForce);
 	}
 }

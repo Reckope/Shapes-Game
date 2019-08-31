@@ -4,12 +4,16 @@ using UnityEngine;
 
 public class WalkingState : State
 {
+	// Global Variables
 	private float walkingAnimationSpeed = 11f;
+	private float flinchUpwardsForce = 230f;
 
-	public WalkingState(StateMachine stateMachine, Ped ped) : base(stateMachine, ped)
-	{
-		
-	}
+	// Call the constructure from SetState (StateMachine.cs), then override all of the peds Monobehaviour methods (Ped.cs).
+	public WalkingState(StateMachine stateMachine, Ped ped) : base(stateMachine, ped) { }
+
+	// ==============================================================
+	// Abstract and virtual methods from State.cs
+	// ==============================================================
 
 	public override void EnterState()
 	{
@@ -31,11 +35,6 @@ public class WalkingState : State
 		}
 	}
 
-	public override void FixedUpdateState()
-	{
-
-	}
-
 	public override void ExitState()
 	{
 		UnsubscribeToPedInteractionEvents();
@@ -44,24 +43,56 @@ public class WalkingState : State
 	}
 
 	// ==============================================================
-	// Events - What happens when an event triggers during this state? 
+	// Events trigger certain methods exclusive to walking.
 	// ==============================================================
 
 	private void SubscribeToPedInteractionEvents()
 	{
-		ped.HasHitBallState += ped.TakeDamage;
-		ped.HasHitBlockState += ped.Destroy;
-		ped.HasHitHorizontalShieldState += TakeOff;
-		ped.HasHitVerticalShieldState += TakeOff;
+		ped.HasHitBallState += HitBall;
+		ped.HasHitBlockState += HitBlock;
+		ped.HasHitHorizontalShieldState += HitHorizontalShield;
+		ped.HasHitVerticalShieldState += HitVerticalShield;
 	}
 
 	private void UnsubscribeToPedInteractionEvents()
 	{
-		ped.HasHitBallState -= ped.TakeDamage;
-		ped.HasHitBlockState -= ped.Destroy;
-		ped.HasHitHorizontalShieldState -= TakeOff;
-		ped.HasHitVerticalShieldState -= TakeOff;
+		ped.HasHitBallState -= HitBall;
+		ped.HasHitBlockState -= HitBlock;
+		ped.HasHitHorizontalShieldState -= HitHorizontalShield;
+		ped.HasHitVerticalShieldState -= HitVerticalShield;
 	}
+
+	// ==============================================================
+	// Methods that events subscribe to.
+	// ==============================================================
+
+	private void HitBall()
+	{
+		// Sound
+		// Public event: Name + died.
+		ped.Rigidbody2D.AddForce(ped.transform.up * flinchUpwardsForce);
+		ped.BounceAway();
+		ped.TakeDamage();
+	}
+
+	private void HitBlock()
+	{
+		ped.Destroy();
+	}
+
+	private void HitHorizontalShield()
+	{
+		TakeOff();
+	}
+
+	private void HitVerticalShield()
+	{
+		TakeOff();
+	}
+
+	// ============================================================
+	// Private Methods used by this state.
+	// ============================================================
 
 	private void TakeOff()
 	{

@@ -82,7 +82,7 @@ public class Player : Ped
 	{
 		base.Update();
 
-		Debug.Log(_name + ": " + Lives);
+		Debug.Log(_name + "'s Lives: " + Lives);
 		isDead = IsDead;
 		Speed = _speed;
 		JumpForce = _jumpForce;

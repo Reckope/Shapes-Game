@@ -2,6 +2,7 @@ ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
     - AI
+    - CinderScript
     - DynamoScript
     - GameManager
     - Level
@@ -9,6 +10,7 @@ ScriptsOnlyBuild:
     - Player
     - SceneController
     - ScrollingBackground
+    - ShieldsScript
     - StateMachine
     Unity.2D.Tilemap.Editor.dll:
     - UnityEditor.Tilemaps.GridBrush
@@ -23,10 +25,8 @@ ScriptsOnlyBuild:
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
     - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
-    - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
     - UnityEditor.Graphs.AnimationStateMachine.Graph
     - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
-    - UnityEditor.Graphs.AnimationStateMachine.StateNode
     - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
@@ -88,21 +88,21 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 9874}
     - Class: 114
-      Script: {instanceID: 10062}
+      Script: {instanceID: 10066}
     - Class: 114
-      Script: {instanceID: 10152}
+      Script: {instanceID: 10156}
     - Class: 114
-      Script: {instanceID: 10230}
+      Script: {instanceID: 10234}
     - Class: 114
-      Script: {instanceID: 10316}
+      Script: {instanceID: 10320}
     - Class: 114
-      Script: {instanceID: 10714}
+      Script: {instanceID: 10718}
     - Class: 114
-      Script: {instanceID: 11144}
+      Script: {instanceID: 11150}
     - Class: 114
-      Script: {instanceID: 11226}
+      Script: {instanceID: 11232}
     - Class: 114
-      Script: {instanceID: 11616}
+      Script: {instanceID: 11622}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -149,29 +149,29 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 9934}
     - Class: 114
-      Script: {instanceID: 9984}
+      Script: {instanceID: 9988}
     - Class: 114
-      Script: {instanceID: 10062}
+      Script: {instanceID: 10066}
     - Class: 114
-      Script: {instanceID: 10092}
+      Script: {instanceID: 10096}
     - Class: 114
-      Script: {instanceID: 10152}
+      Script: {instanceID: 10156}
     - Class: 114
-      Script: {instanceID: 10316}
+      Script: {instanceID: 10320}
     - Class: 114
-      Script: {instanceID: 10506}
+      Script: {instanceID: 10510}
     - Class: 114
-      Script: {instanceID: 10650}
+      Script: {instanceID: 10654}
     - Class: 114
-      Script: {instanceID: 10714}
+      Script: {instanceID: 10718}
     - Class: 114
-      Script: {instanceID: 10788}
+      Script: {instanceID: 10792}
     - Class: 114
-      Script: {instanceID: 11144}
+      Script: {instanceID: 11150}
     - Class: 114
-      Script: {instanceID: 11226}
+      Script: {instanceID: 11232}
     - Class: 114
-      Script: {instanceID: 11616}
+      Script: {instanceID: 11622}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -243,17 +243,21 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 594}
     - Class: 114
-      Script: {instanceID: 10742}
+      Script: {instanceID: 9948}
     - Class: 114
-      Script: {instanceID: 11006}
+      Script: {instanceID: 10746}
     - Class: 114
-      Script: {instanceID: 11056}
+      Script: {instanceID: 10820}
     - Class: 114
-      Script: {instanceID: 11144}
+      Script: {instanceID: 11012}
     - Class: 114
-      Script: {instanceID: 11546}
+      Script: {instanceID: 11062}
     - Class: 114
-      Script: {instanceID: 11678}
+      Script: {instanceID: 11150}
+    - Class: 114
+      Script: {instanceID: 11552}
+    - Class: 114
+      Script: {instanceID: 11684}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 157
@@ -298,19 +302,19 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 9874}
     - Class: 114
-      Script: {instanceID: 10062}
+      Script: {instanceID: 10066}
     - Class: 114
-      Script: {instanceID: 10152}
+      Script: {instanceID: 10156}
     - Class: 114
-      Script: {instanceID: 10316}
+      Script: {instanceID: 10320}
     - Class: 114
-      Script: {instanceID: 10714}
+      Script: {instanceID: 10718}
     - Class: 114
-      Script: {instanceID: 11144}
+      Script: {instanceID: 11150}
     - Class: 114
-      Script: {instanceID: 11226}
+      Script: {instanceID: 11232}
     - Class: 114
-      Script: {instanceID: 11616}
+      Script: {instanceID: 11622}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -433,6 +437,12 @@ ScriptsOnlyBuild:
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.UI
     className: GridLayoutGroup
+  - hash:
+      serializedVersion: 2
+      Hash: 172dffeaa9b16d5970b09631b0d97336
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: CinderScript
   - hash:
       serializedVersion: 2
       Hash: 8aa3d6ccbcb54ee8db6c1229854adaaa
@@ -615,7 +625,7 @@ ScriptsOnlyBuild:
     className: RawImage
   - hash:
       serializedVersion: 2
-      Hash: ce2aade39ac2e9901bc7e0b3f96b1392
+      Hash: 9c587ee5e42d59fc768289f9f2b1010a
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: DynamoScript
@@ -631,6 +641,12 @@ ScriptsOnlyBuild:
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.UI
     className: VerticalLayoutGroup
+  - hash:
+      serializedVersion: 2
+      Hash: 7409f8582281f844546422d89bce8cf8
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: ShieldsScript
   - hash:
       serializedVersion: 2
       Hash: 12e64d607873da15ad3f833620350d51
@@ -675,7 +691,7 @@ ScriptsOnlyBuild:
     className: Physics2DRaycaster
   - hash:
       serializedVersion: 2
-      Hash: e75c06a6a451d15b92b010050310c1f7
+      Hash: 06671d6713c3606ef93aea2c2a96ae13
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Player
@@ -693,7 +709,7 @@ ScriptsOnlyBuild:
     className: StateMachine
   - hash:
       serializedVersion: 2
-      Hash: 1be2d7597df6f255dafbf104d40664bb
+      Hash: 2b5a44471e67a006465c66adfeeeb5a4
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Ped
@@ -831,7 +847,7 @@ ScriptsOnlyBuild:
     className: ToggleGroup
   - hash:
       serializedVersion: 2
-      Hash: 9681b7f94f2e2e5bd2621ed74bdf7f1c
+      Hash: d7be09d4137c5063a4c543c1d3e6e1bb
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: AI

@@ -1,21 +1,35 @@
-﻿using System.Collections;
+﻿/* 
+* Author: Joe Davis
+* Project: Shapes
+* 2019
+* Notes: 
+* Here we can change / set what happens when peds have
+* morphed into a vertical shield.
+* Derived Ped > Ped > Statemachine > State > SomeState (Here)
+*/
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class MorphIntoVerticalShieldState : State
 {
+	// Call the constructure from SetState (StateMachine.cs), then override all of the peds Monobehaviour methods (Ped.cs).
 	public MorphIntoVerticalShieldState(StateMachine stateMachine, Ped ped) : base(stateMachine, ped) { }
+
+	// ==============================================================
+	// Abstract and virtual methods from State.cs
+	// ==============================================================
 	
 	public override void EnterState()
 	{
-		ped.ChangeTag(Ped.States.VerticalShield);
 		SubscribeToPedInteractionEvents();
+		ped.ChangeTag(Ped.States.VerticalShield);
 		ped.IsAbleToJump = false;
 		ped.IsAbleToMove = false;
 		ped.HasMorphed = true;
 		ped.Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
 		ped.Animator.SetBool("morphToVerticalShield", true);
-		//ped.Rigidbody2D.bodyType = RigidbodyType2D.Static;
 	}
 
 	public override void UpdateState()
@@ -30,26 +44,48 @@ public class MorphIntoVerticalShieldState : State
 		}
 	}
 
-	public override void FixedUpdateState()
-	{
-		
-	}
-
 	public override void ExitState()
 	{
+		UnsubscribeToPedInteractionEvents();
 		if(!ped.IsDead)
 		{
 			ped.RevertTag();
+			ped.IsAbleToJump = true;
+			ped.IsAbleToMove = true;
+			ped.HasMorphed = false;
+			ped.transform.rotation = Quaternion.identity;
+			ped.Rigidbody2D.constraints = RigidbodyConstraints2D.None;
+			ped.Animator.SetBool("morphToVerticalShield", false);
 		}
-		UnsubscribeToPedInteractionEvents();
-		//ped.Rigidbody2D.bodyType = RigidbodyType2D.Dynamic;
-		ped.IsAbleToJump = true;
-		ped.IsAbleToMove = true;
-		ped.HasMorphed = false;
-		ped.transform.rotation = Quaternion.identity;
-		ped.Rigidbody2D.constraints = RigidbodyConstraints2D.None;
-		ped.Animator.SetBool("morphToVerticalShield", false);
 	}
+
+	// ==============================================================
+	// Events trigger certain methods exclusive to the Vertical Shield.
+	// ==============================================================
+
+	private void SubscribeToPedInteractionEvents()
+	{
+		ped.HasHitBlockState += HitBlock;
+	}
+
+	private void UnsubscribeToPedInteractionEvents()
+	{
+		ped.HasHitBlockState -= HitBlock;
+	}
+
+	// ==============================================================
+	// Methods that events subscribe to.
+	// ==============================================================
+
+	private void HitBlock()
+	{
+		// Data
+		ped.Destroy();
+	}
+
+	// ============================================================
+	// Private Methods used by this state.
+	// ============================================================
 
 	private void PlayerControls()
 	{
@@ -65,24 +101,5 @@ public class MorphIntoVerticalShieldState : State
 		{
 			ped.ExitMorphState();
 		}
-	}
-
-	private void SubscribeToPedInteractionEvents()
-	{
-		ped.HasHitBlockState += ped.Destroy;
-	}
-
-	private void UnsubscribeToPedInteractionEvents()
-	{
-		ped.HasHitBlockState -= ped.Destroy;
-	}
-
-	// ==============================================================
-	// Events - What happens when an event triggers during this state? 
-	// ==============================================================
-
-	private void HandleHasHitTheBall()
-	{
-		Debug.Log("HIT BY EVENT ");
 	}
 }

@@ -1,13 +1,29 @@
-﻿using System.Collections;
+﻿/* 
+* Author: Joe Davis
+* Project: Shapes
+* 2019
+* Notes: 
+* Here we can change / set what happens when peds have
+* morphed into a horizontal shield.
+* Derived Ped > Ped > Statemachine > State > SomeState (Here)
+*/
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class MorphIntoHorizontalShieldState : State
 {
+	// Call the constructure from SetState (StateMachine.cs), then override all of the peds Monobehaviour methods (Ped.cs).
 	public MorphIntoHorizontalShieldState(StateMachine stateMachine, Ped ped) : base(stateMachine, ped) { }
+
+	// ==============================================================
+	// Abstract and virtual methods from State.cs
+	// ==============================================================
 	
 	public override void EnterState()
 	{
+		SubscribeToInteractionEvents();
 		ped.ChangeTag(Ped.States.HorizontalShield);
 		ped.IsAbleToJump = false;
 		ped.IsAbleToMove = false;
@@ -28,13 +44,9 @@ public class MorphIntoHorizontalShieldState : State
 		}
 	}
 
-	public override void FixedUpdateState()
-	{
-		
-	}
-
 	public override void ExitState()
 	{
+		UnsubscribeToInteractionEvents();
 		if(!ped.IsDead)
 		{
 			ped.RevertTag();
@@ -46,6 +58,48 @@ public class MorphIntoHorizontalShieldState : State
 		ped.Rigidbody2D.constraints = RigidbodyConstraints2D.None;
 		ped.Animator.SetBool("morphToHorizontalShield", false);
 	}
+
+	// ==============================================================
+	// Events trigger certain methods exclusive to the Horizontal Shield.
+	// ==============================================================
+
+	private void SubscribeToInteractionEvents()
+	{
+		ped.HasHitBlockState += HitBlock;
+		ped.HasHitBallState += HitBall;
+	}
+
+	private void UnsubscribeToInteractionEvents()
+	{
+		ped.HasHitBlockState -= HitBlock;
+		ped.HasHitBallState -= HitBall;
+	}
+
+	// ==============================================================
+	// Methods that events subscribe to.
+	// ==============================================================
+
+	private void HitBlock()
+	{
+		// Event Data
+	}
+
+	private void HitBall()
+	{
+		if(ped.EnemyCollidedTop && (!ped.EnemyCollidedLeft || !ped.EnemyCollidedRight))
+		{
+			// Data
+			// Sound
+		}
+		else
+		{
+			ped.TakeDamage();
+		}
+	}
+
+	// ============================================================
+	// Private Methods used by this state.
+	// ============================================================
 
 	private void PlayerControls()
 	{

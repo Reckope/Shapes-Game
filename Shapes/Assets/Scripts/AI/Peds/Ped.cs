@@ -31,6 +31,14 @@ public class Ped : MonoBehaviour
 		Enemy
 	}
 
+	public enum EnemyNames
+	{
+		Dynamo,
+		Cinder,
+		Aegis,
+		Priwen
+	}
+
 	public enum Direction
 	{
 		Left = -1,
@@ -86,6 +94,10 @@ public class Ped : MonoBehaviour
 	public bool CollidedRight { get { return Physics2D.OverlapCircle (rightCheck.position, SideCheckRadius, whatIsGround); } }
 	public bool CollidedTop { get { return Physics2D.OverlapCircle (topCheck.position, GroundCheckRadius * 3, whatIsGround); } }
 	public bool IsGrounded { get { return Physics2D.OverlapCircle (groundCheck.position, GroundCheckRadius, whatIsGround); } }
+
+	public bool EnemyCollidedLeft { get; set; }
+	public bool EnemyCollidedRight { get; set; }
+	public bool EnemyCollidedTop { get; set; }
 
 	public float DistanceBetweenPedAndPlayer 
 	{ 
@@ -144,7 +156,7 @@ public class Ped : MonoBehaviour
 	protected virtual void Update()
 	{
 		stateMachine.UpdateState();
-		//Debug.Log(Name + ": " + stateMachine.GetCurrentState());
+		//Debug.Log(Name + ": " + stateMachine.CurrentState);
 		DistanceFromGround();
 		FaceBodyInCorrectDirection();
 		UpdateAirbornAnim();
@@ -293,34 +305,49 @@ public class Ped : MonoBehaviour
 
 	private void OnCollisionEnter2D(Collision2D col)
 	{
+		Collider2D collider = col.collider;
+
+		Vector3 contactPoint = col.contacts[0].point;
+		Vector3 center = collider.bounds.center;
+
+		float centerOffset = 0.06f;
+		
+		// Detect where the enemy or player collided with each other.
+		if(col.gameObject.layer == LayerMask.NameToLayer("Enemy") || col.gameObject.layer == LayerMask.NameToLayer("Player"))
+		{
+			EnemyCollidedTop = contactPoint.y < center.y - centerOffset;
+			EnemyCollidedLeft = contactPoint.x > center.x;
+			EnemyCollidedRight = contactPoint.x < center.x;
+		}
 		HandleCollisions(col, true);
 	}
 
 	public void HandleCollisions(Collision2D col, bool boolValue)
 	{
-		if(col.gameObject.CompareTag("Player") && HasHitPlayer != null)
-		{
-			HasHitPlayer();
-		}
-		else if(col.gameObject.CompareTag("Enemy" ) && HasHitEnemy != null)
-		{
-			HasHitEnemy();
-		}
-		else if(col.gameObject.CompareTag("Ball") && HasHitBallState != null)
+		if(col.gameObject.CompareTag(States.Ball.ToString()) && HasHitBallState != null)
 		{
 			HasHitBallState();
 		}
-		else if(col.gameObject.CompareTag("Block") && HasHitBlockState != null)
+		else if(col.gameObject.CompareTag(States.Block.ToString()) && HasHitBlockState != null)
 		{
 			HasHitBlockState();
 		}
-		else if(col.gameObject.CompareTag("VerticalShield") && HasHitVerticalShieldState != null)
+		else if(col.gameObject.CompareTag(States.VerticalShield.ToString()) && HasHitVerticalShieldState != null)
 		{
 			HasHitVerticalShieldState();
 		}
-		else if(col.gameObject.CompareTag("HorizontalShield") && HasHitHorizontalShieldState != null)
+		else if(col.gameObject.CompareTag(States.HorizontalShield.ToString()) && HasHitHorizontalShieldState != null)
 		{
 			HasHitHorizontalShieldState();
+		}
+
+		if(col.gameObject.layer == LayerMask.NameToLayer(PedType.Enemy.ToString()) && HasHitEnemy != null)
+		{
+			HasHitEnemy();
+		}
+		else if(col.gameObject.layer == LayerMask.NameToLayer(PedType.Player.ToString()) && HasHitPlayer != null)
+		{
+			HasHitPlayer();
 		}
 
 		if(col.gameObject.layer == LayerMask.NameToLayer("Ground") && HasHitGround != null)
@@ -371,15 +398,20 @@ public class Ped : MonoBehaviour
 		}
 	}
 
-	public void Die()
+	private void Die()
 	{
 		IsDead = true;
+		// Name + die data
 		stateMachine.SetState(new DeadState(stateMachine, this));
 	}
 
 	public void Destroy()
 	{
-		//Player.Instance.Lives = 0;
+		// Name + die data
+		if(this.pedType == PedType.Player)
+		{
+			Player.Instance.Lives = 0;
+		}
 		Destroy(this.gameObject);
 	}
 

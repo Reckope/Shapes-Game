@@ -4,9 +4,15 @@ using UnityEngine;
 
 public class IdleState : State
 {
-	public IdleState(StateMachine stateMachine, Ped ped) : base(stateMachine, ped){}
+	// Global Variables
+	private float flinchUpwardsForce = 230f;
 
-	private float flinchUpwardsForce = 180f;
+	// Call the constructure from SetState (StateMachine.cs), then override all of the peds Monobehaviour methods (Ped.cs).
+	public IdleState(StateMachine stateMachine, Ped ped) : base(stateMachine, ped) { }
+
+	// ==============================================================
+	// Abstract and virtual methods from State.cs
+	// ==============================================================
 
 	public override void EnterState()
 	{
@@ -23,20 +29,20 @@ public class IdleState : State
 	}
 
 	// ==============================================================
-	// Events - What happens when an event triggers during this state? 
+	// Events trigger certain methods exclusive to idling.
 	// ==============================================================
 
 	private void SubscribeToInteractionEvents()
 	{
-		ped.HasHitBlockState += ped.Destroy;
-		ped.HasHitBallState += ped.TakeDamage;
+		ped.HasHitBlockState += HitByBlock;
+		ped.HasHitBallState += HitByBall;
 		ped.HasHitHorizontalShieldState += HitByHorizontalShield;
 	}
 
 	private void UnsubscribeFromInteractionEvents()
 	{
-		ped.HasHitBlockState -= ped.Destroy;
-		ped.HasHitBallState -= ped.TakeDamage;
+		ped.HasHitBlockState -= HitByBlock;
+		ped.HasHitBallState -= HitByBall;
 		ped.HasHitHorizontalShieldState -= HitByHorizontalShield;
 	}
 
@@ -53,7 +59,7 @@ public class IdleState : State
 	private void HitByBlock()
 	{
 		// Sound
-		ped.TakeDamage();
+		ped.Destroy();
 	}
 
 	private void HitByHorizontalShield()

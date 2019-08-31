@@ -1,15 +1,32 @@
-﻿using System.Collections;
+﻿/* 
+* Author: Joe Davis
+* Project: Shapes
+* 2019
+* Notes: 
+* Here we can change / set what happens when peds have
+* morphed into a block.
+* Derived Ped > Ped > Statemachine > State > SomeState (Here)
+*/
+
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class MorphIntoBlockState : State
 {
-	public MorphIntoBlockState(StateMachine stateMachine, Ped ped) : base(stateMachine, ped) { }
-
-	private float pos;
+	// Global Variables
+	private float position;
 	private float downwardForce = 0.1f;
 	private float maxForce = 15f;
 	private bool hitShield;
+
+	// Call the constructure from SetState (StateMachine.cs), then override all of the peds Monobehaviour methods (Ped.cs).
+	public MorphIntoBlockState(StateMachine stateMachine, Ped ped) : base(stateMachine, ped) { }
+
+	// ==============================================================
+	// Abstract and virtual methods from State.cs
+	// ==============================================================
 	
 	public override void EnterState()
 	{
@@ -20,18 +37,17 @@ public class MorphIntoBlockState : State
 		ped.HasMorphed = true;
 		ped.Rigidbody2D.constraints = RigidbodyConstraints2D.FreezePositionX;
 		ped.Animator.SetBool("morphToBlock", true);
-		pos = ped.transform.position.x;
+		position = ped.transform.position.x;
 	}
 
 	public override void UpdateState()
 	{
 		ped.transform.rotation = Quaternion.identity;
-		ped.transform.position = new Vector2(pos, ped.transform.position.y);
+		ped.transform.position = new Vector2(position, ped.transform.position.y);
 	}
 
 	public override void FixedUpdateState()
 	{
-		ped.transform.rotation = Quaternion.identity;
 		if(!hitShield)
 		{
 			ped.Rigidbody2D.velocity = Vector2.down * downwardForce;
@@ -44,88 +60,70 @@ public class MorphIntoBlockState : State
 
 	public override void ExitState()
 	{
+		UnsubscribeToInteractionEvents();
 		if(!ped.IsDead)
 		{
 			ped.RevertTag();
+			ped.IsAbleToJump = true;
+			ped.IsAbleToMove = true;
+			ped.HasMorphed = false;
+			ped.transform.rotation = Quaternion.identity;
+			ped.Rigidbody2D.constraints = RigidbodyConstraints2D.None;
+			ped.Animator.SetBool("morphToBlock", false);
 		}
-		UnsubscribeToInteractionEvents();
-		ped.IsAbleToJump = true;
-		ped.IsAbleToMove = true;
-		ped.HasMorphed = false;
-		ped.transform.rotation = Quaternion.identity;
-		ped.Rigidbody2D.constraints = RigidbodyConstraints2D.None;
-		ped.Animator.SetBool("morphToBlock", false);
 	}
+
+	// ==============================================================
+	// Events trigger certain methods exclusive to the block.
+	// ==============================================================
 
 	private void SubscribeToInteractionEvents()
 	{
-		ped.HasHitBlockState += ped.TakeDamage;
-		ped.HasHitHorizontalShieldState += HandleTakenDamage;
-		ped.HasHitVerticalShieldState += Exit;
-		ped.HasHitGround += HandleHitGround;
+		ped.HasHitBlockState += HitBlock;
+		ped.HasHitHorizontalShieldState += HitHorizontalShield;
+		ped.HasHitGround += HitGround;
 	}
 
 	private void UnsubscribeToInteractionEvents()
 	{
-		ped.HasHitBlockState -= ped.TakeDamage;
-		ped.HasHitHorizontalShieldState -= HandleTakenDamage;
-		ped.HasHitVerticalShieldState -= Exit;
-		ped.HasHitGround -= HandleHitGround;
+		ped.HasHitBlockState -= HitBlock;
+		ped.HasHitHorizontalShieldState -= HitHorizontalShield;
+		ped.HasHitGround -= HitGround;
 	}
 
 	// ==============================================================
 	// Methods that events subscribe to.
 	// ==============================================================
 
-	private void Exit()
+	private void HitBlock()
 	{
-		ped.StartCoroutine(ExitBlockState());
+		ped.TakeDamage();
 	}
 
-	private void PlayerControls()
-	{
-		if(!ped.MorphToBlockInput)
-		{
-			ped.ExitMorphState();
-		}
-	}
-
-	private void HandleTakenDamage()
+	private void HitHorizontalShield()
 	{
 		hitShield = true;
-		if(!ped.IsDead && ped.pedType == Ped.PedType.Enemy)
-		{
-			// Do other stuff (camera shake, sound etc)
-			ped.Die();
-		}
-		else if(ped.pedType == Ped.PedType.Player)
-		{
-			ped.TakeDamage();
-			ped.StartCoroutine(ExitBlockState());
-		}
+		ped.TakeDamage();
 	}
 
-	private void HandleHitGround()
-	{
-		if(!ped.IsDead && ped.pedType == Ped.PedType.Enemy)
-		{
-			// Do other stuff (camera shake, sound etc)
-			ped.Die();
-		}
-		else if(ped.pedType == Ped.PedType.Player)
-		{
-			ped.StartCoroutine(ExitBlockState());
-		}
-	}
-
-	private void EnemyControls()
+	private void HitGround()
 	{
 		if(!ped.IsDead)
 		{
-			// Do other stuff (camera shake, sound etc)
-			ped.TakeDamage();
+			if(ped.pedType == Ped.PedType.Enemy)
+			{
+				ped.TakeDamage();
+			}
+			else if(ped.pedType == Ped.PedType.Player)
+			{
+				ped.StartCoroutine(ExitBlockState());
+			}
 		}
 	}
+
+	// ============================================================
+	// Private Methods used by this state.
+	// ============================================================
 
 	private IEnumerator ExitBlockState()
 	{
