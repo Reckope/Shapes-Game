@@ -53,26 +53,27 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\AI\Peds\AI.cs" />
-     <Compile Include="Assets\Scripts\AI\Peds\CinderScript.cs" />
-     <Compile Include="Assets\Scripts\AI\Peds\DynamoScript.cs" />
-     <Compile Include="Assets\Scripts\AI\Peds\Ped.cs" />
-     <Compile Include="Assets\Scripts\AI\Peds\ShieldsScript.cs" />
-     <Compile Include="Assets\Scripts\AI\States\DeadState.cs" />
-     <Compile Include="Assets\Scripts\AI\States\IdleState.cs" />
-     <Compile Include="Assets\Scripts\AI\States\MorphIntoBallState.cs" />
-     <Compile Include="Assets\Scripts\AI\States\MorphIntoBlockState.cs" />
-     <Compile Include="Assets\Scripts\AI\States\MorphIntoHorizontalShieldState.cs" />
-     <Compile Include="Assets\Scripts\AI\States\MorphIntoVerticalShieldState.cs" />
-     <Compile Include="Assets\Scripts\AI\States\State.cs" />
-     <Compile Include="Assets\Scripts\AI\States\StateMachine.cs" />
-     <Compile Include="Assets\Scripts\AI\States\WalkingState.cs" />
+     <Compile Include="Assets\Scripts\Environmental Objects\Harmful Objects\Saw.cs" />
+     <Compile Include="Assets\Scripts\Environmental Objects\ScrollingBackground.cs" />
      <Compile Include="Assets\Scripts\GameManager.cs" />
+     <Compile Include="Assets\Scripts\Gameplay and AI\Peds\AI.cs" />
+     <Compile Include="Assets\Scripts\Gameplay and AI\Peds\CinderScript.cs" />
+     <Compile Include="Assets\Scripts\Gameplay and AI\Peds\DynamoScript.cs" />
+     <Compile Include="Assets\Scripts\Gameplay and AI\Peds\Ped.cs" />
+     <Compile Include="Assets\Scripts\Gameplay and AI\Peds\Player.cs" />
+     <Compile Include="Assets\Scripts\Gameplay and AI\Peds\ShieldsScript.cs" />
+     <Compile Include="Assets\Scripts\Gameplay and AI\States\DeadState.cs" />
+     <Compile Include="Assets\Scripts\Gameplay and AI\States\IdleState.cs" />
+     <Compile Include="Assets\Scripts\Gameplay and AI\States\MorphIntoBallState.cs" />
+     <Compile Include="Assets\Scripts\Gameplay and AI\States\MorphIntoBlockState.cs" />
+     <Compile Include="Assets\Scripts\Gameplay and AI\States\MorphIntoHorizontalShieldState.cs" />
+     <Compile Include="Assets\Scripts\Gameplay and AI\States\MorphIntoVerticalShieldState.cs" />
+     <Compile Include="Assets\Scripts\Gameplay and AI\States\State.cs" />
+     <Compile Include="Assets\Scripts\Gameplay and AI\States\StateMachine.cs" />
+     <Compile Include="Assets\Scripts\Gameplay and AI\States\WalkingState.cs" />
      <Compile Include="Assets\Scripts\Level.cs" />
      <Compile Include="Assets\Scripts\LevelController.cs" />
-     <Compile Include="Assets\Scripts\Player.cs" />
      <Compile Include="Assets\Scripts\SceneController.cs" />
-     <Compile Include="Assets\Scripts\ScrollingBackground.cs" />
      <None Include="Assets\BayatGames\Free Platform Game Assets\Readme.txt" />
  <Reference Include="Unity.Timeline.Editor">
  <HintPath>/Users/JoeDavis/Documents/Unity Projects/Shapes/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>

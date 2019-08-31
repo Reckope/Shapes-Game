@@ -9,6 +9,7 @@ TagManager:
   - Block
   - HorizontalShield
   - VerticalShield
+  - Saw
   layers:
   - Default
   - TransparentFX
