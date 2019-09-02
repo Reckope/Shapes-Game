@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour
 	public static GameManager Instance { get { return _instance; } }
 	private static GameManager _instance;
 
+	//public static string activeLevel;
+
 	// Check in Awake if there is an instance already, and if so, destroy the new instance.
 	private void Awake()
 	{
@@ -34,7 +36,7 @@ public class GameManager : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-
+		//Debug.Log("Active Level: " + activeLevel);
 	}
 
 	public void ExitGame()

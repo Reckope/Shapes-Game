@@ -71,8 +71,11 @@
      <Compile Include="Assets\Scripts\Gameplay and AI\States\State.cs" />
      <Compile Include="Assets\Scripts\Gameplay and AI\States\StateMachine.cs" />
      <Compile Include="Assets\Scripts\Gameplay and AI\States\WalkingState.cs" />
-     <Compile Include="Assets\Scripts\Level.cs" />
-     <Compile Include="Assets\Scripts\LevelController.cs" />
+     <Compile Include="Assets\Scripts\Level Management\LevelButton.cs" />
+     <Compile Include="Assets\Scripts\Level Management\LevelManager.cs" />
+     <Compile Include="Assets\Scripts\Level Management\Levels\Level.cs" />
+     <Compile Include="Assets\Scripts\Level Management\Levels\Level01.cs" />
+     <Compile Include="Assets\Scripts\Level Management\Levels\Tutorial.cs" />
      <Compile Include="Assets\Scripts\SceneController.cs" />
      <None Include="Assets\BayatGames\Free Platform Game Assets\Readme.txt" />
  <Reference Include="Unity.Timeline.Editor">

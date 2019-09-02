@@ -646,7 +646,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2122991572}
   m_HandleRect: {fileID: 2122991571}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -1825,6 +1825,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63f4113902c7a40698f780d07ed10a1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  levelData:
+    levels: []
   buttonPrefab: {fileID: 7523174680675927869, guid: 05db9323f834940b0b32473259b8e3e5,
     type: 3}
   canvasParent: {fileID: 2087512100}
@@ -2729,7 +2731,7 @@ PrefabInstance:
     - target: {fileID: 7523174680675927868, guid: 05db9323f834940b0b32473259b8e3e5,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 232
+      value: 454
       objectReference: {fileID: 0}
     - target: {fileID: 7523174680675927868, guid: 05db9323f834940b0b32473259b8e3e5,
         type: 3}
