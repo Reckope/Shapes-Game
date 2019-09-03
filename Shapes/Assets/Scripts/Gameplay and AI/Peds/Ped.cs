@@ -156,8 +156,8 @@ public class Ped : MonoBehaviour
 
 		//Debug.Log(Name + ": " + stateMachine.CurrentState);
 		DistanceFromGround();
-		FaceBodyInCorrectDirection();
 		UpdateAirbornAnim();
+		FaceBodyInCorrectDirection();
 		areaColliders.transform.rotation = rotation;
 	}
 
@@ -327,7 +327,8 @@ public class Ped : MonoBehaviour
 		float centerOffset = 0.06f;
 		
 		// Detect where the enemy or player collided with each other.
-		if(col.gameObject.layer == LayerMask.NameToLayer("Enemy") || col.gameObject.layer == LayerMask.NameToLayer("Player"))
+		if(col.gameObject.layer == LayerMask.NameToLayer(PedType.Enemy.ToString()) 
+		|| col.gameObject.layer == LayerMask.NameToLayer(PedType.Player.ToString()))
 		{
 			EnemyCollidedTop = contactPoint.y < center.y - centerOffset;
 			EnemyCollidedLeft = contactPoint.x > center.x;

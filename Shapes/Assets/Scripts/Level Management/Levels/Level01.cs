@@ -15,4 +15,12 @@ public class Level01 : Level
 	{
 
 	}
+
+	public void OnTriggerEnter2D(Collider2D col)
+	{
+		if(col.name == "Player")
+		{
+			Debug.Log("End mission");
+		}
+	}
 }

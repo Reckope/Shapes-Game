@@ -55,7 +55,10 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\Environmental Objects\Harmful Objects\Saw.cs" />
      <Compile Include="Assets\Scripts\Environmental Objects\ScrollingBackground.cs" />
-     <Compile Include="Assets\Scripts\GameManager.cs" />
+     <Compile Include="Assets\Scripts\Game Management\CameraController.cs" />
+     <Compile Include="Assets\Scripts\Game Management\GameManager.cs" />
+     <Compile Include="Assets\Scripts\Game Management\SceneController.cs" />
+     <Compile Include="Assets\Scripts\Game Management\UIManager.cs" />
      <Compile Include="Assets\Scripts\Gameplay and AI\Peds\AI.cs" />
      <Compile Include="Assets\Scripts\Gameplay and AI\Peds\CinderScript.cs" />
      <Compile Include="Assets\Scripts\Gameplay and AI\Peds\DynamoScript.cs" />
@@ -72,11 +75,11 @@
      <Compile Include="Assets\Scripts\Gameplay and AI\States\StateMachine.cs" />
      <Compile Include="Assets\Scripts\Gameplay and AI\States\WalkingState.cs" />
      <Compile Include="Assets\Scripts\Level Management\LevelButton.cs" />
+     <Compile Include="Assets\Scripts\Level Management\LevelCompleteTrigger.cs" />
      <Compile Include="Assets\Scripts\Level Management\LevelManager.cs" />
      <Compile Include="Assets\Scripts\Level Management\Levels\Level.cs" />
      <Compile Include="Assets\Scripts\Level Management\Levels\Level01.cs" />
      <Compile Include="Assets\Scripts\Level Management\Levels\Tutorial.cs" />
-     <Compile Include="Assets\Scripts\SceneController.cs" />
      <None Include="Assets\BayatGames\Free Platform Game Assets\Readme.txt" />
  <Reference Include="Unity.Timeline.Editor">
  <HintPath>/Users/JoeDavis/Documents/Unity Projects/Shapes/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>

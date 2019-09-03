@@ -26,7 +26,7 @@ public class Saw : MonoBehaviour
 		}
 	}
 
-	void Update()
+	void FixedUpdate()
 	{
 		transform.Rotate(stationary, stationary, -rotationSpeed);
 	}
