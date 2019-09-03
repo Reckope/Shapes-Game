@@ -16,6 +16,7 @@ using System;
 
 public class SceneController : MonoBehaviour
 {
+	public static event Action LoadedScene;
 
 	// Check if the scene can be loaded.
 	public void LoadScene(string sceneName)
@@ -23,6 +24,7 @@ public class SceneController : MonoBehaviour
 		if(Application.CanStreamedLevelBeLoaded(sceneName))
 		{
 			SceneManager.LoadScene(sceneName);
+			LoadedScene();
 		}
 		else
 		{

@@ -115,8 +115,8 @@ public class LevelButton : MonoBehaviour
 	{
 		if(Application.CanStreamedLevelBeLoaded(ID))
 		{
+			LevelManager.Instance.SetActiveLevel(BuildIndex, true);
 			SceneManager.LoadScene(ID);
-			LevelManager.Instance.SetActiveLevel(this.BuildIndex);
 		}
 		else
 		{

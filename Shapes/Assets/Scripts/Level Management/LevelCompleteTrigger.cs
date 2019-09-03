@@ -7,7 +7,7 @@ public class LevelCompleteTrigger : MonoBehaviour
 {
 	Ped ped;
 
-	public static event Action CompletedLevel;
+	public static event Action<int, bool> CompletedLevel;
 
 	void Start()
 	{
@@ -18,7 +18,7 @@ public class LevelCompleteTrigger : MonoBehaviour
 	{
 		if(col.gameObject.layer == LayerMask.NameToLayer(Ped.PedType.Player.ToString()))
 		{
-			CompletedLevel();
+			CompletedLevel(GlobalLevelData.ActiveLevelIndex, true);
 		}
 	}
 }

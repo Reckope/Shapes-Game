@@ -23,6 +23,8 @@ public class UIManager : MonoBehaviour
 		LevelCompleteTrigger.CompletedLevel += DisplayCompletedLevelUI;
 		GameManager.Instance.PausedGame += DisplayPausedGameUI;
 		GameManager.Instance.UnpausedGame += HidePausedGameUI;
+		GameManager.Instance.ActivateActionShot += DisplayActionShotUI;
+		GameManager.Instance.DeactivateActionShot += HideActionShotUI;
 	}
 
 	private void OnDisable()
@@ -30,6 +32,8 @@ public class UIManager : MonoBehaviour
 		LevelCompleteTrigger.CompletedLevel -= DisplayCompletedLevelUI;
 		GameManager.Instance.PausedGame -= DisplayPausedGameUI;
 		GameManager.Instance.UnpausedGame -= HidePausedGameUI;
+		GameManager.Instance.ActivateActionShot -= DisplayActionShotUI;
+		GameManager.Instance.DeactivateActionShot -= HideActionShotUI;
 	}
 
 	// Start is called before the first frame update
@@ -46,7 +50,7 @@ public class UIManager : MonoBehaviour
 		}
 	}
 
-	private void DisplayCompletedLevelUI()
+	private void DisplayCompletedLevelUI(int level, bool successfulyCompleted)
 	{
 
 	}
@@ -59,5 +63,15 @@ public class UIManager : MonoBehaviour
 	private void HidePausedGameUI()
 	{
 		canvases[0].canvas.SetActive(false);
+	}
+
+	private void DisplayActionShotUI()
+	{
+		canvases[1].canvas.SetActive(true);
+	}
+
+	private void HideActionShotUI()
+	{
+		canvases[1].canvas.SetActive(false);
 	}
 }

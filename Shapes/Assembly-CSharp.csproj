@@ -74,6 +74,7 @@
      <Compile Include="Assets\Scripts\Gameplay and AI\States\State.cs" />
      <Compile Include="Assets\Scripts\Gameplay and AI\States\StateMachine.cs" />
      <Compile Include="Assets\Scripts\Gameplay and AI\States\WalkingState.cs" />
+     <Compile Include="Assets\Scripts\Level Management\GlobalLevelData.cs" />
      <Compile Include="Assets\Scripts\Level Management\LevelButton.cs" />
      <Compile Include="Assets\Scripts\Level Management\LevelCompleteTrigger.cs" />
      <Compile Include="Assets\Scripts\Level Management\LevelManager.cs" />
