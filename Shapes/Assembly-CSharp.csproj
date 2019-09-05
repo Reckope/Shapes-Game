@@ -56,7 +56,10 @@
      <Compile Include="Assets\Scripts\Environmental Objects\Harmful Objects\Saw.cs" />
      <Compile Include="Assets\Scripts\Environmental Objects\ScrollingBackground.cs" />
      <Compile Include="Assets\Scripts\Game Management\CameraController.cs" />
+     <Compile Include="Assets\Scripts\Game Management\GameDataManager.cs" />
      <Compile Include="Assets\Scripts\Game Management\GameManager.cs" />
+     <Compile Include="Assets\Scripts\Game Management\IngameMenuManager.cs" />
+     <Compile Include="Assets\Scripts\Game Management\MainMenuManager.cs" />
      <Compile Include="Assets\Scripts\Game Management\SceneController.cs" />
      <Compile Include="Assets\Scripts\Game Management\UIManager.cs" />
      <Compile Include="Assets\Scripts\Gameplay and AI\Peds\AI.cs" />
@@ -74,7 +77,6 @@
      <Compile Include="Assets\Scripts\Gameplay and AI\States\State.cs" />
      <Compile Include="Assets\Scripts\Gameplay and AI\States\StateMachine.cs" />
      <Compile Include="Assets\Scripts\Gameplay and AI\States\WalkingState.cs" />
-     <Compile Include="Assets\Scripts\Level Management\GlobalLevelData.cs" />
      <Compile Include="Assets\Scripts\Level Management\LevelButton.cs" />
      <Compile Include="Assets\Scripts\Level Management\LevelCompleteTrigger.cs" />
      <Compile Include="Assets\Scripts\Level Management\LevelManager.cs" />

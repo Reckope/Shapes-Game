@@ -15,25 +15,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-// Use a class instead of a structure, as values will be changed in the list. 
-[Serializable]
-public class LevelInfo
-{
-	public string levelID;
-	public string levelName;
-	public string description;
-	public int buildIndex;
-	public bool isUnlocked;
-	public bool isActive;
-	public bool isCompleted;
-}
-
-// Store the levels from LevelData.json in a generic list.
-[Serializable]
-public class LevelDataCollection
-{
-	public List<LevelInfo> levels = new List<LevelInfo>();
-}
 
 public class LevelManager : MonoBehaviour
 {
@@ -42,7 +23,7 @@ public class LevelManager : MonoBehaviour
 	private static LevelManager _instance;
 
 	// Classes
-	public LevelDataCollection levelData;
+	//public LevelDataCollection levelData;
 
 	// GameObjects
 	public GameObject buttonPrefab;
@@ -76,32 +57,20 @@ public class LevelManager : MonoBehaviour
 
 	private void Start()
 	{
-		if(GlobalLevelData.levels.Count == 0)
-		{
-			LoadLevelDataFromJsonFile();
-		}
 		InstantiateLevelButtons();
 		InitializeLevels();
+		Debug.Log(Application.dataPath);
 	}
 
 	// ============================================================
 	// Level Manager Methods
 	// ============================================================
 
-	// First we load the level data from an external Json file "LevelData". 
-	private void LoadLevelDataFromJsonFile()
-	{
-		TextAsset textAsset = (TextAsset)Resources.Load("LevelData", typeof(TextAsset));
-		String data = textAsset.text;
-		levelData = JsonUtility.FromJson<LevelDataCollection>(data);
-		GlobalLevelData.levels = new List<LevelInfo>(levelData.levels);
-	}
-
 	// We then instantiate level buttons for each level in the json file. Designers can simply
 	// add a level to the file, and this will automatically create a button for it. 
 	private void InstantiateLevelButtons()
 	{
-		for(int i = 0; i < GlobalLevelData.levels.Count; i++)
+		for(int i = 0; i < GameData.levelData.levels.Count; i++)
 		{
 			if(buttonPrefab != null || canvasParent != null)
 			{
@@ -125,13 +94,13 @@ public class LevelManager : MonoBehaviour
 			if(levelButtons[i] != null)
 			{
 				levelButtons[i].gameObject.SetActive(true);
-				levelButtons[i].ID = GlobalLevelData.levels[i].levelID;
-				levelButtons[i].LevelName = GlobalLevelData.levels[i].levelName;
-				levelButtons[i].Description = GlobalLevelData.levels[i].description;
-				levelButtons[i].BuildIndex = GlobalLevelData.levels[i].buildIndex;
-				levelButtons[i].IsUnlocked = GlobalLevelData.levels[i].isUnlocked;
-				levelButtons[i].IsActive = GlobalLevelData.levels[i].isActive;
-				levelButtons[i].IsCompleted = GlobalLevelData.levels[i].isCompleted;
+				levelButtons[i].ID = GameData.levelData.levels[i].levelID;
+				levelButtons[i].LevelName = GameData.levelData.levels[i].levelName;
+				levelButtons[i].Description = GameData.levelData.levels[i].description;
+				levelButtons[i].BuildIndex = GameData.levelData.levels[i].buildIndex;
+				levelButtons[i].IsUnlocked = GameData.levelData.levels[i].isUnlocked;
+				levelButtons[i].IsActive = GameData.levelData.levels[i].isActive;
+				levelButtons[i].IsCompleted = GameData.levelData.levels[i].isCompleted;
 			}
 		}
 	}
@@ -143,31 +112,31 @@ public class LevelManager : MonoBehaviour
 	// This is called from the button 'Reset Level Data'. 
 	public void ResetLevelData()
 	{
-		for(int i = 1; i < levelButtons.Length; i++)
+		for(int i = 2; i < levelButtons.Length; i++)
 		{
-			GlobalLevelData.levels[i].isUnlocked = false;
-			levelButtons[i].DisableLevel(GlobalLevelData.levels[i].isUnlocked);
+			GameData.levelData.levels[i].isUnlocked = false;
+			levelButtons[i].DisableLevel(GameData.levelData.levels[i].isUnlocked);
 		}
 	}
 
 	public void SetActiveLevel(int index, bool activeOrNot)
 	{
 		// Use a Lambda expression to find and set the level info :)
-		LevelInfo level = GlobalLevelData.levels.Find((x) => x.buildIndex == index);
+		LevelInfo level = GameData.levelData.levels.Find((x) => x.buildIndex == index);
 
 		level.isActive = activeOrNot;
 
 		if(level.isActive)
 		{
-			GlobalLevelData.ActiveLevelName = level.levelName;
-			GlobalLevelData.ActiveLevelIndex = level.buildIndex;
-			GlobalLevelData.LevelIsActive = true;
+			GameData.ActiveLevelName = level.levelName;
+			GameData.ActiveLevelIndex = level.buildIndex;
+			GameData.LevelIsActive = true;
 		}
 		else
 		{
-			GlobalLevelData.ActiveLevelName = "Not currently on a level.";
-			GlobalLevelData.ActiveLevelIndex = -1;
-			GlobalLevelData.LevelIsActive = false;
+			GameData.ActiveLevelName = "Not currently on a level.";
+			GameData.ActiveLevelIndex = -1;
+			GameData.LevelIsActive = false;
 		}
 
 		Debug.Log("Active Level: " + level.levelName + " Is Active: " + level.isActive);
@@ -175,17 +144,19 @@ public class LevelManager : MonoBehaviour
 
 	private void CompleteLevel(int completedLevelBuildIndex, bool successfullyCompleted)
 	{
-		LevelInfo level = GlobalLevelData.levels.Find((x) => x.buildIndex == completedLevelBuildIndex);
+		LevelInfo level = GameData.levelData.levels.Find((x) => x.buildIndex == completedLevelBuildIndex);
 
 		level.isActive = false;
+		GameData.LevelIsActive = false;
+		Debug.Log(level.buildIndex);
 		if(successfullyCompleted)
 		{
 			level.isCompleted = true;
 			if(completedLevelBuildIndex == HighestUnlockedLevelBuildIndex())
 			{
-				GlobalLevelData.ActiveLevelIndex++;
+				GameData.ActiveLevelIndex++;
 			}
-			GlobalLevelData.levels[GlobalLevelData.ActiveLevelIndex].isUnlocked = true;
+			GameData.levelData.levels[GameData.ActiveLevelIndex].isUnlocked = true;
 		}
 		SceneManager.LoadScene("LevelSelect");
 
@@ -196,7 +167,7 @@ public class LevelManager : MonoBehaviour
 	{
 		int numberOfUnlockedLevels = 0;
 
-		foreach(LevelInfo level in GlobalLevelData.levels)
+		foreach(LevelInfo level in GameData.levelData.levels)
 		{
 			if(level.isUnlocked && level.buildIndex != 0)
 			{
@@ -208,9 +179,9 @@ public class LevelManager : MonoBehaviour
 
 	private void HandleExitLevel()
 	{
-		if(GlobalLevelData.LevelIsActive)
+		if(GameData.LevelIsActive)
 		{
-			SetActiveLevel(GlobalLevelData.ActiveLevelIndex, false);
+			SetActiveLevel(GameData.ActiveLevelIndex, false);
 		}
 	}
 }

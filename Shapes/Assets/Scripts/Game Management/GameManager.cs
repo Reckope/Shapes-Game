@@ -117,6 +117,12 @@ public class GameManager : MonoBehaviour
 		Application.targetFrameRate = 300;
 	}
 
+	// Path for button
+	public void Savegame()
+	{
+		GameData.Savegame();
+	}
+
 	public void ExitGame()
 	{
 		Application.Quit();

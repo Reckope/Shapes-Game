@@ -18,7 +18,7 @@ public class LevelCompleteTrigger : MonoBehaviour
 	{
 		if(col.gameObject.layer == LayerMask.NameToLayer(Ped.PedType.Player.ToString()))
 		{
-			CompletedLevel(GlobalLevelData.ActiveLevelIndex, true);
+			CompletedLevel(GameData.ActiveLevelIndex, true);
 		}
 	}
 }

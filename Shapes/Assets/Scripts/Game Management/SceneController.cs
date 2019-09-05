@@ -16,7 +16,25 @@ using System;
 
 public class SceneController : MonoBehaviour
 {
+
+	// Singleton
+	public static SceneController Instance { get { return _instance; } }
+	private static SceneController _instance;
+
 	public static event Action LoadedScene;
+
+	private void Start()
+	{
+		if(_instance != null && _instance != this)
+		{
+			Debug.LogError("Error: Another instance of SceneController has been found in scene " + " '" + GetActiveScene() + "'.");
+			Destroy(this.gameObject);
+		} 
+		else
+		{
+			_instance = this;
+		}
+	}
 
 	// Check if the scene can be loaded.
 	public void LoadScene(string sceneName)
@@ -24,7 +42,10 @@ public class SceneController : MonoBehaviour
 		if(Application.CanStreamedLevelBeLoaded(sceneName))
 		{
 			SceneManager.LoadScene(sceneName);
-			LoadedScene();
+			if(LoadedScene != null)
+			{
+				LoadedScene();
+			}
 		}
 		else
 		{
