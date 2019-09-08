@@ -33,7 +33,7 @@ public class MainMenuManager : MonoBehaviour
 
 	public void ActivateNewGameButton()
 	{
-		if(File.Exists(GameData.FilePath))
+		if(File.Exists(GameData.LevelFilePathLocation))
 		{
 			confirmNewGamePrompt.SetActive(true);
 			mainMenuButtons.SetActive(false);
@@ -46,7 +46,7 @@ public class MainMenuManager : MonoBehaviour
 
 	public void StartNewGame()
 	{
-		if(File.Exists(GameData.FilePath))
+		if(File.Exists(GameData.LevelFilePathLocation))
 		{
 			GameData.DeleteExistingSave();
 		}

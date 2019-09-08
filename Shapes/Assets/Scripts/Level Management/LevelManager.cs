@@ -22,9 +22,6 @@ public class LevelManager : MonoBehaviour
 	public static LevelManager Instance { get { return _instance; } }
 	private static LevelManager _instance;
 
-	// Classes
-	//public LevelDataCollection levelData;
-
 	// GameObjects
 	public GameObject buttonPrefab;
 	public GameObject canvasParent;
@@ -35,12 +32,6 @@ public class LevelManager : MonoBehaviour
 	// ============================================================
 	// MonoBehaviour Methods
 	// ============================================================
-
-	private void OnEnable()
-	{
-		LevelCompleteTrigger.CompletedLevel += CompleteLevel;
-		SceneController.LoadedScene += HandleExitLevel;
-	}
 
 	private void Awake()
 	{
@@ -53,6 +44,8 @@ public class LevelManager : MonoBehaviour
 		{
 			_instance = this;
 		}
+		LevelCompleteTrigger.CompletedLevel += CompleteLevel;
+		SceneController.LoadedScene += HandleExitLevel;
 	}
 
 	private void Start()
@@ -152,11 +145,11 @@ public class LevelManager : MonoBehaviour
 		if(successfullyCompleted)
 		{
 			level.isCompleted = true;
-			if(completedLevelBuildIndex == HighestUnlockedLevelBuildIndex())
+			if(completedLevelBuildIndex == HighestUnlockedLevelBuildIndex() && completedLevelBuildIndex + 1 < GameData.levelData.levels.Count)
 			{
 				GameData.ActiveLevelIndex++;
+				GameData.levelData.levels[GameData.ActiveLevelIndex].isUnlocked = true;
 			}
-			GameData.levelData.levels[GameData.ActiveLevelIndex].isUnlocked = true;
 		}
 		SceneManager.LoadScene("LevelSelect");
 

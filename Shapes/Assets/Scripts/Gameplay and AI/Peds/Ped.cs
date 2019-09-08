@@ -39,6 +39,7 @@ public class Ped : MonoBehaviour
 		Aegis,
 		Priwen
 	}
+	PedNames pedNames;
 
 	public enum Direction
 	{
@@ -407,7 +408,7 @@ public class Ped : MonoBehaviour
 
 	public void TakeDamage()
 	{
-		if(pedType == Ped.PedType.Player)
+		if(pedType == PedType.Player)
 		{
 			Player.Instance.LoseLives(1);
 		}
@@ -420,7 +421,10 @@ public class Ped : MonoBehaviour
 	protected void Die()
 	{
 		IsDead = true;
-		// Name + die data
+		if(Name == PedNames.Dynamo.ToString())
+		{
+			GameData.IncrementPlayerStatsData(GameData.PlayerStatIDs.DynamoKilled, 1);
+		}
 		stateMachine.SetState(new DeadState(stateMachine, this));
 	}
 
