@@ -18,6 +18,7 @@ public class MorphIntoBallState : State
 	// Global Variables
 	private float ballSpeed = 4f;
 	private bool isAbleToAddForce;
+	private float maxForce = 12f;
 
 	// Call the constructure from SetState (StateMachine.cs), then override all of the peds Monobehaviour methods (Ped.cs).
 	public MorphIntoBallState(StateMachine stateMachine, Ped ped) : base(stateMachine, ped) { }
@@ -141,7 +142,7 @@ public class MorphIntoBallState : State
 	// Give the player / ped some sort of control, but not as much as walking normally.
 	private void AddForce()
 	{
-		if(isAbleToAddForce && !ped.IsDead)
+		if(isAbleToAddForce && !ped.IsDead && ped.Rigidbody2D.velocity.x > -maxForce && ped.Rigidbody2D.velocity.x < maxForce)
 		{
 			Vector2 movement = new Vector2 (ped.MovementDirection, 0);
 			ped.Rigidbody2D.AddForce(movement * ballSpeed);

@@ -53,6 +53,12 @@ public class SceneController : MonoBehaviour
 		}
 	}
 
+	public void RestartLevel()
+	{
+		Scene scene = SceneManager.GetActiveScene(); 
+		SceneManager.LoadScene(scene.name);
+	}
+
 	public static String GetActiveScene()
 	{
 		return SceneManager.GetActiveScene().name;

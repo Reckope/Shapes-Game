@@ -15,7 +15,7 @@ public class WalkingState : State
 {
 	// Global Variables
 	private float walkingAnimationSpeed = 11f;
-	private float flinchUpwardsForce = 230f;
+	private float flinchUpwardsForce = 430f;
 
 	// Call the constructure from SetState (StateMachine.cs), then override all of the peds Monobehaviour methods (Ped.cs).
 	public WalkingState(StateMachine stateMachine, Ped ped) : base(stateMachine, ped) { }

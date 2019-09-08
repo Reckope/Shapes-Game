@@ -21,12 +21,6 @@ public class PlayerStatsDisplayController : MonoBehaviour
 		InitializeStatBoxes();
 	}
 
-	// Update is called once per frame
-	void Update()
-	{
-
-	}
-
 	private void InstantiateStatBoxes()
 	{
 		for(int i = 0; i < GameData.playerStatsData.playerStats.Count; i++)
@@ -51,6 +45,7 @@ public class PlayerStatsDisplayController : MonoBehaviour
 			if(statBoxes[i] != null)
 			{
 				statBoxes[i].gameObject.SetActive(true);
+				statBoxes[i].ID = GameData.playerStatsData.playerStats[i].ID;
 				statBoxes[i].Name = GameData.playerStatsData.playerStats[i].displayName;
 				statBoxes[i].Value = GameData.playerStatsData.playerStats[i].value;
 			}

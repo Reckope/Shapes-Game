@@ -11,7 +11,6 @@ using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 // Use a class instead of a structure, as values will be changed in the list. 
 [Serializable]
@@ -70,6 +69,7 @@ public static class GameData
 	public static string ActiveLevelName { get; set; }
 	public static int ActiveLevelIndex { get; set; }
 	public static bool LevelIsActive { get; set; }
+	public static float TimePlayedValue { get; set; }
 
 	public static LevelDataCollection levelData;
 	public static PlayerStatsCollection playerStatsData;
@@ -116,10 +116,16 @@ public static class GameData
 		Debug.Log("Saved to: " + Application.dataPath);
 	}
 
-	public static void IncrementPlayerStatsData(PlayerStatIDs statID, float amount)
+	public static void IncrementPlayerStatsData(PlayerStatIDs statID)
 	{
 		string _statID = statID.ToString();
 		PlayerStatsinfo stat = playerStatsData.playerStats.Find((x) => x.ID == _statID);
-		stat.value += amount;
+		stat.value ++;
+	}
+
+	public static void IncrementTimePlayed()
+	{
+		PlayerStatsinfo stat = playerStatsData.playerStats.Find((x) => x.ID == PlayerStatIDs.TimePlayed.ToString());
+		stat.value += Time.deltaTime;
 	}
 }

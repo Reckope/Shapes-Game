@@ -5,7 +5,7 @@
 * Notes: 
 * This is used to load and manage the levels. Data can be loaded from a Json file
 * and buttons are instantiated to gain access to the levels. 
-* Attach this to an empty gameobject. 
+* Attach this to an empty gameobject in the LevelSelect scene. 
 */
 
 using System;
@@ -135,13 +135,12 @@ public class LevelManager : MonoBehaviour
 		Debug.Log("Active Level: " + level.levelName + " Is Active: " + level.isActive);
 	}
 
-	private void CompleteLevel(int completedLevelBuildIndex, bool successfullyCompleted)
+	public void CompleteLevel(int completedLevelBuildIndex, bool successfullyCompleted)
 	{
 		LevelInfo level = GameData.levelData.levels.Find((x) => x.buildIndex == completedLevelBuildIndex);
 
 		level.isActive = false;
 		GameData.LevelIsActive = false;
-		Debug.Log(level.buildIndex);
 		if(successfullyCompleted)
 		{
 			level.isCompleted = true;

@@ -38,7 +38,7 @@ public class CameraController : MonoBehaviour
 	// Update is called once per frame
 	private void Update()
 	{
-		if (player != null){
+		if (player != null && !Player.Instance.IsDead){
 			FollowPlayer();
 		}
 	}

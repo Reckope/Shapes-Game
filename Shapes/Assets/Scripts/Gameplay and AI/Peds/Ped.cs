@@ -5,8 +5,7 @@
 * Notes: 
 * This is the core script for peds such as the Player, enemies, allies etc.
 * All peds inherit this script, where they can then access it's components,
-* methods, properties and their State Machine.  
-* Ai class is also here so everything's in 1 place. 
+* methods, properties and the State Machine.  
 * Derived Ped > Ped (here) > Statemachine > State > SomeState
 */
 
@@ -22,7 +21,7 @@ using UnityEngine;
 public class Ped : MonoBehaviour
 {
 	// ============================================================
-	// Everything a healthy ped needs.
+	// Ped Enums
 	// ============================================================
 
 	public enum PedType
@@ -63,6 +62,10 @@ public class Ped : MonoBehaviour
 	{
 		Saw
 	}
+
+	// ============================================================
+	// Everything a healthy ped needs.
+	// ============================================================
 
 	// Classes
 	protected StateMachine stateMachine;
@@ -418,19 +421,18 @@ public class Ped : MonoBehaviour
 		}
 	}
 
+	// Data will increment no matter how the ped dies.
+	// This is so if the player lures the enemy into some harmful environmental
+	// object, the payer will still get the point for kiling an enemy.
 	protected void Die()
 	{
 		IsDead = true;
-		if(Name == PedNames.Dynamo.ToString())
-		{
-			GameData.IncrementPlayerStatsData(GameData.PlayerStatIDs.DynamoKilled, 1);
-		}
 		stateMachine.SetState(new DeadState(stateMachine, this));
 	}
 
 	public void Destroy()
 	{
-		// Name + die data
+		HandleDeadPedData();
 		if(this.pedType == PedType.Player)
 		{
 			Player.Instance.Lives = 0;
@@ -442,6 +444,30 @@ public class Ped : MonoBehaviour
 	private void HitSaw()
 	{
 		Destroy();
+	}
+
+	private void HandleDeadPedData()
+	{
+		if(Name == PedNames.Dynamo.ToString())
+		{
+			GameData.IncrementPlayerStatsData(GameData.PlayerStatIDs.DynamoKilled);
+		}
+		else if(Name == PedNames.Cinder.ToString())
+		{
+			GameData.IncrementPlayerStatsData(GameData.PlayerStatIDs.CinderKilled);
+		}
+		else if(Name == PedNames.Aegis.ToString())
+		{
+			GameData.IncrementPlayerStatsData(GameData.PlayerStatIDs.AegisKilled);
+		}
+		else if(Name == PedNames.Priwen.ToString())
+		{
+			GameData.IncrementPlayerStatsData(GameData.PlayerStatIDs.PriwenKilled);
+		}
+		else if(pedType == PedType.Player)
+		{
+			GameData.IncrementPlayerStatsData(GameData.PlayerStatIDs.TotalDeaths);
+		}
 	}
 
 	// ============================================================

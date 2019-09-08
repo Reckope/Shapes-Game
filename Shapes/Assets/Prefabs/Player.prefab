@@ -124,7 +124,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 1
-  m_Mass: 0.5926322
+  m_Mass: 1.8867588
   m_LinearDrag: 0
   m_AngularDrag: 0
   m_GravityScale: 1.8
@@ -671,7 +671,7 @@ PolygonCollider2D:
   m_GameObject: {fileID: 7094668121314443007}
   m_Enabled: 0
   m_Density: 1
-  m_Material: {fileID: 6200000, guid: 2a01f7d752d384aebad092b7588b15aa, type: 2}
+  m_Material: {fileID: 6200000, guid: 25a783ce792cb4b6caf7ca2ab8c37aba, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0

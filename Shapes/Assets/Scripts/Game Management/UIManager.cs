@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public struct CanvasInfo
+public class CanvasInfo
 {
-	public string name;
+	public UIManager.CanvasNames name;
 	public GameObject canvas;
 }
 
@@ -16,12 +16,22 @@ public class UIManager : MonoBehaviour
 	public static UIManager Instance { get { return _instance; } }
 	private static UIManager _instance;
 
+	public enum CanvasNames
+	{
+		PauseMenu,
+		ExitGamePrompt,
+		MainMenuPrompt,
+		SlowMotion,
+		PlayerDiedFilter,
+		PlayerDiedButtons
+	}
+
 	public List<CanvasInfo> canvases = new List<CanvasInfo>();
 
 	private void OnEnable()
 	{
 		LevelCompleteTrigger.CompletedLevel += DisplayCompletedLevelUI;
-		GameManager.Instance.PausedGame += DisplayPausedGameUI;
+		GameManager.Instance.GamePaused += DisplayPausedGameUI;
 		GameManager.Instance.UnpausedGame += HidePausedGameUI;
 		GameManager.Instance.ActivateActionShot += DisplayActionShotUI;
 		GameManager.Instance.DeactivateActionShot += HideActionShotUI;
@@ -30,7 +40,7 @@ public class UIManager : MonoBehaviour
 	private void OnDisable()
 	{
 		LevelCompleteTrigger.CompletedLevel -= DisplayCompletedLevelUI;
-		GameManager.Instance.PausedGame -= DisplayPausedGameUI;
+		GameManager.Instance.GamePaused -= DisplayPausedGameUI;
 		GameManager.Instance.UnpausedGame -= HidePausedGameUI;
 		GameManager.Instance.ActivateActionShot -= DisplayActionShotUI;
 		GameManager.Instance.DeactivateActionShot -= HideActionShotUI;
@@ -55,23 +65,33 @@ public class UIManager : MonoBehaviour
 
 	}
 
+	public void DisplayUI(CanvasNames canvasName, bool display)
+	{
+		CanvasInfo ui = canvases.Find((x) => x.name == canvasName);
+		ui.canvas.SetActive(display);
+	}
+
 	private void DisplayPausedGameUI()
 	{
-		canvases[0].canvas.SetActive(true);
+		CanvasInfo ui = canvases.Find((x) => x.name == CanvasNames.PauseMenu);
+		ui.canvas.SetActive(true);
 	}
 
 	private void HidePausedGameUI()
 	{
-		canvases[0].canvas.SetActive(false);
+		CanvasInfo ui = canvases.Find((x) => x.name == CanvasNames.PauseMenu);
+		ui.canvas.SetActive(false);
 	}
 
 	private void DisplayActionShotUI()
 	{
-		canvases[1].canvas.SetActive(true);
+		CanvasInfo ui = canvases.Find((x) => x.name == CanvasNames.SlowMotion);
+		ui.canvas.SetActive(true);
 	}
 
 	private void HideActionShotUI()
 	{
-		canvases[1].canvas.SetActive(false);
+		CanvasInfo ui = canvases.Find((x) => x.name == CanvasNames.SlowMotion);
+		ui.canvas.SetActive(false);
 	}
 }

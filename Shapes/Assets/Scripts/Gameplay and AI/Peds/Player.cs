@@ -19,6 +19,8 @@ public class Player : Ped
 	public static Player Instance { get { return _instance; } }
 	private static Player _instance;
 
+	public event Action PlayerHasDied;
+
 	// ============================================================
 	// Player Variables
 	// ============================================================
@@ -162,13 +164,13 @@ public class Player : Ped
 			Lives -= life;
 			if (OnLivesChanged != null)
 			{
-				Debug.Log("Lost life3");
 				OnLivesChanged(Lives);
 			}
 		}
 		else
 		{
 			Lives = 0;
+			StartCoroutine(PlayerDied());
 			Die();
 		}
 	}
@@ -183,5 +185,18 @@ public class Player : Ped
 				OnLivesChanged(Lives);
 			}
 		}
+	}
+
+	private IEnumerator PlayerDied()
+	{
+		if(PlayerHasDied != null)
+		{
+			PlayerHasDied();
+		}
+		GameManager.Instance.EnableSlowMotion(true);
+		UIManager.Instance.DisplayUI(UIManager.CanvasNames.PlayerDiedFilter, true);
+		yield return new WaitForSeconds(1);
+		GameManager.Instance.EnableSlowMotion(false);
+		UIManager.Instance.DisplayUI(UIManager.CanvasNames.PlayerDiedButtons, true);
 	}
 }
