@@ -27,7 +27,7 @@ public class ScrollingBackground : MonoBehaviour
 	// Global Variables
 	[SerializeField][Range(0.1f, 10.0f)]
 	private float movementSpeed = 0.1f;
-	private const int HORIZONTAL_MOVEMENT = 0;
+	private const int VERTICAL_MOVEMENT = 0;
 
 	// ------------------------------------------------------------------------------
 	private void Awake()
@@ -95,12 +95,12 @@ public class ScrollingBackground : MonoBehaviour
 
 	private void MoveBackground()
 	{
-		rb2d.velocity = new Vector2 (-movementSpeed, HORIZONTAL_MOVEMENT);
-		cloneRb2d.velocity = new Vector2(-movementSpeed, HORIZONTAL_MOVEMENT);
+		rb2d.velocity = new Vector2 (-movementSpeed, VERTICAL_MOVEMENT);
+		cloneRb2d.velocity = new Vector2(-movementSpeed, VERTICAL_MOVEMENT);
 	}
 
 	private void RepositionBackground(Transform background)
 	{
-		background.transform.position = new Vector2(LengthOfSprite(), HORIZONTAL_MOVEMENT);
+		background.transform.position = new Vector2(LengthOfSprite(), VERTICAL_MOVEMENT);
 	}
 }

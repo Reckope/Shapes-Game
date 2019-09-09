@@ -26,8 +26,6 @@ public class IdleState : State
 	public override void EnterState()
 	{
 		SubscribeToInteractionEvents();
-		ped.IsAbleToJump = true;
-		ped.IsAbleToMove = true;
 		ped.Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
 		ped.Animator.SetBool("isWalking", false);
 	}

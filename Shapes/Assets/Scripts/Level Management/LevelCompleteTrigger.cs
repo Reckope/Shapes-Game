@@ -11,14 +11,17 @@ public class LevelCompleteTrigger : MonoBehaviour
 
 	void Start()
 	{
-		ped = GameObject.FindObjectOfType(typeof(Ped)) as Ped;
+		//ped = GameObject.FindObjectOfType(typeof(Ped)) as Ped;
 	}
 
 	public void OnTriggerEnter2D(Collider2D col)
 	{
 		if(col.gameObject.layer == LayerMask.NameToLayer(Ped.PedType.Player.ToString()))
 		{
-			CompletedLevel(GameData.ActiveLevelIndex, true);
+			if(CompletedLevel != null)
+			{
+				CompletedLevel(GameData.ActiveLevelIndex, true);
+			}
 		}
 	}
 }

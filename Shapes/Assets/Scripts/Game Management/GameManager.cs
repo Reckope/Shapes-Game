@@ -22,13 +22,11 @@ public class GameManager : MonoBehaviour
 	public event Action GamePaused;
 	public event Action UnpausedGame;
 	public event Action ExitedLevel;
-	public event Action ActivateActionShot;
-	public event Action DeactivateActionShot;
 	
 	private bool _pausedGame = false;
-	private bool _actionShotIsActive = false;
 	[SerializeField][Range(0.1f, 1f)]
 	private float slowMotionSpeed = 0.3f;
+	private static float ACTION_SHOT_PERCENTAGE_CHANCE = 5f;
 	private const float FIXED_TIMESTEP = 0.01f;
 
 	public static float deltaTime;
@@ -43,6 +41,7 @@ public class GameManager : MonoBehaviour
 	private void Start()
 	{
 		//SceneController.LoadedScene += PauseGame;
+		_pausedGame = false;
 	}
 
 	// Update is called once per frame
@@ -56,7 +55,7 @@ public class GameManager : MonoBehaviour
 		{
 			PauseGame();
 		}
-		HandleSlowMotion();
+		//HandleSlowMotion();
 	}
 
 	private void GameSettings()
@@ -75,36 +74,23 @@ public class GameManager : MonoBehaviour
 		Application.targetFrameRate = 300;
 	}
 
-	private void HandleSlowMotion()
+	// Percentage change that the action shot will activate when
+	// an enemy dies. 
+	public IEnumerator EnableActionShot()
 	{
-		if(Input.GetKeyDown("l"))
+		if(UnityEngine.Random.value <= (ACTION_SHOT_PERCENTAGE_CHANCE / 100))
 		{
-			if(!_actionShotIsActive)
-			{
-				if(ActivateActionShot != null)
-				{
-					ActivateActionShot();
-				}
-				_actionShotIsActive = true;
-				EnableSlowMotion(true);
-				return;
-			}
-			else if(_actionShotIsActive)
-			{
-				if(DeactivateActionShot != null)
-				{
-					DeactivateActionShot();
-				}
-				_actionShotIsActive = false;
-				EnableSlowMotion(false);
-				return;
-			}
+			EnableSlowMotion(true);
+			UIManager.Instance.DisplayUI(UIManager.CanvasNames.ActionShot, true);
+			yield return new WaitForSeconds(1);
+			EnableSlowMotion(false);
+			UIManager.Instance.DisplayUI(UIManager.CanvasNames.ActionShot, false);
 		}
 	}
 
 	public void PauseGame()
 	{
-		if(!_pausedGame && GameData.LevelIsActive)
+		if(!_pausedGame)
 		{
 			if(GamePaused != null)
 			{
@@ -113,6 +99,7 @@ public class GameManager : MonoBehaviour
 			_pausedGame = true;
 			Time.timeScale = 0;
 			Time.fixedDeltaTime = FIXED_TIMESTEP * Time.timeScale;
+			UIManager.Instance.DisplayUI(UIManager.CanvasNames.PauseMenu, true);
 			return;
 		}
 		else if(_pausedGame)
@@ -124,6 +111,7 @@ public class GameManager : MonoBehaviour
 			_pausedGame = false;
 			Time.timeScale = 1;
 			Time.fixedDeltaTime = FIXED_TIMESTEP;
+			UIManager.Instance.DisplayUI(UIManager.CanvasNames.PauseMenu, false);
 			return;
 		}
 	}

@@ -30,7 +30,9 @@ public class Player : Ped
 	private PedNames _name = PedNames.Morphy;
 	[SerializeField][Range(0.1f, 15.0f)]
 	private float _speed = 0.1f, _jumpForce = 0.1f, blockCheckRadius = 1.4f;
-	private bool isDead;
+	public bool isDead, isInvulnerable, inputIsEnabled = true;
+	public int Lives { get; set; }
+	public int MaxLives { get; set; }
 
 	[SerializeField][Range(0.1f, 0.5f)]
 	private float _sideCheckRadius = 0.1f, _groundCheckRadius = 0.2f;
@@ -42,8 +44,8 @@ public class Player : Ped
 	{ 
 		get { return !Physics2D.OverlapCircle (morphIntoBlockCheck.position, blockCheckRadius, whatIsGround); } 
 	}
+	public GameObject[] hearts;
 
-	public int Lives { get; set; }
 	public event Action<int> OnLivesChanged;
 
 	// ============================================================
@@ -76,8 +78,13 @@ public class Player : Ped
 	protected override void Start()
 	{
 		base.Start();
+
 		stateMachine.SetState(new IdleState(stateMachine, this));
 		Lives = 3;
+		MaxLives = 3;
+		isInvulnerable = false;
+		LevelCompleteTrigger.CompletedLevel += CompletedLevel;
+		OnLivesChanged += DisplayLives;
 	}
 
 	protected override void Update()
@@ -88,7 +95,7 @@ public class Player : Ped
 		isDead = IsDead;
 		Speed = _speed;
 		JumpForce = _jumpForce;
-		if(!isDead)
+		if(!isDead && inputIsEnabled)
 		{
 			HandlePlayerInput();
 		}
@@ -157,21 +164,30 @@ public class Player : Ped
 	// Player Related tasks.
 	// ============================================================
 
+	private void CompletedLevel(int level, bool completed)
+	{
+		isInvulnerable = true;
+		inputIsEnabled = false;
+		IsAbleToJump = false;
+	}
+
 	public void LoseLives(int life)
 	{
 		if(Lives - life > 0) 
 		{
 			Lives -= life;
-			if (OnLivesChanged != null)
-			{
-				OnLivesChanged(Lives);
-			}
+			StartCoroutine(BecomeTemporarilyInvulnerable(1));
 		}
 		else
 		{
 			Lives = 0;
 			StartCoroutine(PlayerDied());
 			Die();
+		}
+
+		if (OnLivesChanged != null)
+		{
+			OnLivesChanged(Lives);
 		}
 	}
 
@@ -185,6 +201,28 @@ public class Player : Ped
 				OnLivesChanged(Lives);
 			}
 		}
+	}
+
+	private void DisplayLives(int lives)
+	{
+		for(int i = 0; i < hearts.Length; i++)
+		{
+			if(i < lives && lives != 0)
+			{
+				hearts[i].SetActive(true);
+			}
+			else
+			{
+				hearts[i].SetActive(false);
+			}
+		}
+	}
+
+	private IEnumerator BecomeTemporarilyInvulnerable(int seconds)
+	{
+		isInvulnerable = true;
+		yield return new WaitForSeconds(seconds);
+		isInvulnerable = false;
 	}
 
 	private IEnumerator PlayerDied()

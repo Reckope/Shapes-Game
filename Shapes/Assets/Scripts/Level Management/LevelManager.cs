@@ -150,7 +150,7 @@ public class LevelManager : MonoBehaviour
 				GameData.levelData.levels[GameData.ActiveLevelIndex].isUnlocked = true;
 			}
 		}
-		SceneManager.LoadScene("LevelSelect");
+		//SceneManager.LoadScene("LevelSelect");
 
 		Debug.Log("Active Level: " + level.levelName + " Is Active: " + level.isActive);
 	}

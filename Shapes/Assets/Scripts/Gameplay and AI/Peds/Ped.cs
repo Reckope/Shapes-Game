@@ -152,6 +152,8 @@ public class Ped : MonoBehaviour
 		Rigidbody2D.bodyType = RigidbodyType2D.Dynamic;
 		HasHitSaw += HitSaw;
 		rotation = areaColliders.transform.rotation;
+		IsAbleToMove = true;
+		IsAbleToJump = true;
 	}
 
 	protected virtual void Update()
@@ -413,7 +415,10 @@ public class Ped : MonoBehaviour
 	{
 		if(pedType == PedType.Player)
 		{
-			Player.Instance.LoseLives(1);
+			if(!Player.Instance.isInvulnerable)
+			{
+				Player.Instance.LoseLives(1);
+			}
 		}
 		else
 		{
