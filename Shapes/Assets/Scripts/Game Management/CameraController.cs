@@ -8,13 +8,11 @@ public class CameraController : MonoBehaviour
 	private Camera Camera;
 
 	// Global Variables
-	const float FOLLOW_PLAYER_DAMP_TIME = 0.25f;
-	const float CAMERA_ESCAPE_Y_POSITION = -25f;
-	const float CAMERA_DELTA_X_POSITION = 0.5f;
-	const float CAMERA_DELTA_Y_POSITION = 0.5f;
-	const float CAMERA_DISTANCE_ABOVE_PLAYER = 1f;
-	const float LOWER_GROUND_Y_POSITION = -26.5f;
-	const float LOWER_GROUND_FINISH_POINT = 22f;
+	public bool onFollowPlayer;
+	private const float FOLLOW_PLAYER_DAMP_TIME = 0.25f;
+	private const float CAMERA_DELTA_X_POSITION = 0.5f;
+	private const float CAMERA_DELTA_Y_POSITION = 0.5f;
+	private const float CAMERA_DISTANCE_ABOVE_PLAYER = 1f;
 	private float cameraDistanceAheadOfPlayer;
 	private float cameraMaxXBounds;
 	private float cameraMinXBounds;
@@ -28,17 +26,20 @@ public class CameraController : MonoBehaviour
 		player = GameObject.FindGameObjectWithTag("Player").transform;
 		Camera = GetComponent<Camera>();
 
-		cameraMaxYBounds = 13.6f;
-		cameraMinYBounds = -13.6f;
-		cameraMinXBounds = -23.1f;
-		cameraMaxXBounds = 23.1f;
-		cameraDistanceAheadOfPlayer = 0;
+		cameraMaxYBounds = 9999f;
+		cameraMinYBounds = -9999f;
+		cameraMinXBounds = -9999f;
+		cameraMaxXBounds = 9999f;
+		cameraDistanceAheadOfPlayer = 1f;
+		onFollowPlayer = true;
+
+		LevelCompleteTrigger.CompletedLevel += OnFollowPlayer;
 	}
 
 	// Update is called once per frame
 	private void Update()
 	{
-		if (player != null && !Player.Instance.IsDead){
+		if (player != null && !Player.Instance.IsDead && onFollowPlayer){
 			FollowPlayer();
 		}
 	}
@@ -55,5 +56,10 @@ public class CameraController : MonoBehaviour
 		destination.y = Mathf.Clamp (destination.y + CAMERA_DISTANCE_ABOVE_PLAYER, cameraMinYBounds, cameraMaxYBounds);
 		// Follow
 		transform.position = Vector3.SmoothDamp(transform.position, destination, ref velocity, FOLLOW_PLAYER_DAMP_TIME);
-	}	
+	}
+
+	private void OnFollowPlayer(int level, bool completed)
+	{
+		onFollowPlayer = false;
+	}
 }

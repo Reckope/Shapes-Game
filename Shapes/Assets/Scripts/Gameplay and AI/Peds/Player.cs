@@ -85,6 +85,7 @@ public class Player : Ped
 		isInvulnerable = false;
 		LevelCompleteTrigger.CompletedLevel += CompletedLevel;
 		OnLivesChanged += DisplayLives;
+		DisplayLives(Lives);
 	}
 
 	protected override void Update()
@@ -98,6 +99,15 @@ public class Player : Ped
 		if(!isDead && inputIsEnabled)
 		{
 			HandlePlayerInput();
+		}
+
+		if(HasMorphed)
+		{
+			DisplayLives(0);
+		}
+		else
+		{
+			DisplayLives(Lives);
 		}
 	}
 

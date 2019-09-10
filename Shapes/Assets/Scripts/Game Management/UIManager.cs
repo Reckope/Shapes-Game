@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 [Serializable]
 public class CanvasInfo
@@ -28,6 +30,15 @@ public class UIManager : MonoBehaviour
 	}
 
 	public List<CanvasInfo> canvases = new List<CanvasInfo>();
+
+	public GameObject prompt;
+	public Text promptLineOne;
+	public Text promptlineTwo;
+	public Button promptYesButton;
+	public Button promptNoButton;
+
+	public delegate void PromptActionMethod();
+	public PromptActionMethod PromptAction;
 
 	private void OnEnable()
 	{
@@ -57,6 +68,27 @@ public class UIManager : MonoBehaviour
 	{
 		CanvasInfo ui = canvases.Find((x) => x.name == canvasName);
 		ui.canvas.SetActive(display);
+	}
+
+	public void DisplayPrompt(string line1, string line2, PointerEventData action)
+	{
+		//PointerEventData hide;
+		prompt.SetActive(true);
+		promptLineOne.text = line1;
+		promptlineTwo.text = line2;
+
+		promptYesButton.OnPointerDown(action);
+		//promptNoButton.OnPointerDown(hide);
+	}
+
+	//public PointerEventData HidePrompt()
+	//{
+	//	prompt.SetActive(false);
+	//}
+
+	public void PromptYes(PromptActionMethod action)
+	{
+		action();
 	}
 
 	private void DisplayCompletedLevelUI(int level, bool successfulyCompleted)
