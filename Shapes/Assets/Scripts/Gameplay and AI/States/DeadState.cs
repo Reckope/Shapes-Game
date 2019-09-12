@@ -28,10 +28,6 @@ public class DeadState : State
 	{
 		//SubscribeToInteractionEvents();
 		//PedHasDied event <pedName>
-		if(ped.pedType == Ped.PedType.Enemy)
-		{
-			GameManager.Instance.StartCoroutine(GameManager.Instance.EnableActionShot());
-		}
 		ped.StartCoroutine(FallOffScreen());
 		ped.IsAbleToMove = false;
 	}

@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
 	private bool _pausedGame = false;
 	[SerializeField][Range(0.1f, 1f)]
 	private float slowMotionSpeed = 0.3f;
-	private static float ACTION_SHOT_PERCENTAGE_CHANCE = 5f;
+	public static float ACTION_SHOT_PERCENTAGE_CHANCE = 5f;
 	private const float FIXED_TIMESTEP = 0.01f;
 
 	public static float deltaTime;
@@ -78,14 +78,11 @@ public class GameManager : MonoBehaviour
 	// an enemy dies. 
 	public IEnumerator EnableActionShot()
 	{
-		if(UnityEngine.Random.value <= (ACTION_SHOT_PERCENTAGE_CHANCE / 100))
-		{
-			EnableSlowMotion(true);
-			UIManager.Instance.DisplayUI(UIManager.CanvasNames.ActionShot, true);
-			yield return new WaitForSeconds(1);
-			EnableSlowMotion(false);
-			UIManager.Instance.DisplayUI(UIManager.CanvasNames.ActionShot, false);
-		}
+		EnableSlowMotion(true);
+		UIManager.Instance.DisplayUI(UIManager.CanvasNames.ActionShot, true);
+		yield return new WaitForSeconds(1);
+		EnableSlowMotion(false);
+		UIManager.Instance.DisplayUI(UIManager.CanvasNames.ActionShot, false);
 	}
 
 	public void PauseGame()

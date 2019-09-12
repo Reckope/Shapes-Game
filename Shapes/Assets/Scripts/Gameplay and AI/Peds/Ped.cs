@@ -422,6 +422,10 @@ public class Ped : MonoBehaviour
 		}
 		else
 		{
+			if(UnityEngine.Random.value <= (GameManager.ACTION_SHOT_PERCENTAGE_CHANCE / 100))
+			{
+				GameManager.Instance.StartCoroutine(GameManager.Instance.EnableActionShot());
+			}
 			Die();
 		}
 	}
