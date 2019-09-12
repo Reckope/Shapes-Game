@@ -49,6 +49,9 @@ public class DeadState : State
 			collider.enabled = false;
 		}
 		yield return new WaitForSeconds(secondsBeforeDestroyingPed);
-		ped.Destroy();
+		if(ped != null)
+		{
+			ped.Destroy();
+		}
 	}
 }

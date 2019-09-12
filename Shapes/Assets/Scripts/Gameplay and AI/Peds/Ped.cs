@@ -38,7 +38,6 @@ public class Ped : MonoBehaviour
 		Aegis,
 		Priwen
 	}
-	PedNames pedNames;
 
 	public enum Direction
 	{
@@ -62,6 +61,13 @@ public class Ped : MonoBehaviour
 	{
 		Saw
 	}
+
+	public enum DamageType
+	{
+		Destroy,
+		Hit
+	}
+	DamageType damageType;
 
 	// ============================================================
 	// Everything a healthy ped needs.
@@ -411,22 +417,40 @@ public class Ped : MonoBehaviour
 	// What happens when the ped dies? :/ 
 	// ============================================================
 
-	public void TakeDamage()
+	// Use an enum to determine death - Destroy or hit
+	public void TakeDamage(DamageType DamageType)
 	{
-		if(pedType == PedType.Player)
+		if(DamageType == DamageType.Hit)
 		{
-			if(!Player.Instance.isInvulnerable)
+			if(pedType == PedType.Player)
 			{
-				Player.Instance.LoseLives(1);
+				if(!Player.Instance.isInvulnerable)
+				{
+					Player.Instance.LoseLives(1);
+				}
+			}
+			else
+			{
+				if(Name != PedNames.Cinder.ToString())
+				{
+					GameManager.Instance.StartCoroutine(GameManager.Instance.EnableActionShot());
+				}
+				Die();
 			}
 		}
-		else
+		else if(DamageType == DamageType.Destroy)
 		{
-			if(UnityEngine.Random.value <= (GameManager.ACTION_SHOT_PERCENTAGE_CHANCE / 100))
+			HandleDeadPedData();
+			if(pedType == PedType.Player)
+			{
+				Player.Instance.LoseLives(Player.Instance.Lives);
+				transform.localScale = new Vector3(0f, 0f, 0f);
+			}
+			else
 			{
 				GameManager.Instance.StartCoroutine(GameManager.Instance.EnableActionShot());
+				Destroy();
 			}
-			Die();
 		}
 	}
 
@@ -436,22 +460,19 @@ public class Ped : MonoBehaviour
 	protected void Die()
 	{
 		IsDead = true;
+		HandleDeadPedData();
 		stateMachine.SetState(new DeadState(stateMachine, this));
 	}
 
 	public void Destroy()
 	{
-		HandleDeadPedData();
-		if(this.pedType == PedType.Player)
-		{
-			Player.Instance.Lives = 0;
-		}
 		IsDead = true;
 		Destroy(this.gameObject);
 	}
 
 	private void HitSaw()
 	{
+		// Sound
 		Destroy();
 	}
 
@@ -467,6 +488,7 @@ public class Ped : MonoBehaviour
 		}
 		else if(Name == PedNames.Aegis.ToString())
 		{
+			Debug.Log("Aegis Killed");
 			GameData.IncrementPlayerStatsData(GameData.PlayerStatIDs.AegisKilled);
 		}
 		else if(Name == PedNames.Priwen.ToString())

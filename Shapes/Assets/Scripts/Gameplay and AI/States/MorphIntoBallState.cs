@@ -115,14 +115,14 @@ public class MorphIntoBallState : State
 
 	private void HitBlock()
 	{
-		ped.Destroy();
+		ped.TakeDamage(Ped.DamageType.Destroy);
 	}
 
 	private void HitHorizontalShield()
 	{
 		if(!ped.IsGrounded)
 		{
-			ped.TakeDamage();
+			ped.TakeDamage(Ped.DamageType.Hit);
 		}
 		else
 		{
@@ -132,7 +132,7 @@ public class MorphIntoBallState : State
 
 	private void HitVerticalShield()
 	{
-		ped.TakeDamage();
+		ped.TakeDamage(Ped.DamageType.Hit);
 	}
 
 	// ============================================================

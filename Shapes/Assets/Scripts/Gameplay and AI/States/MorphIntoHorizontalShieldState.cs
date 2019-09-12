@@ -93,7 +93,7 @@ public class MorphIntoHorizontalShieldState : State
 		}
 		else
 		{
-			ped.TakeDamage();
+			ped.TakeDamage(Ped.DamageType.Hit);
 		}
 	}
 

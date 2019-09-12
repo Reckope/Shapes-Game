@@ -60,13 +60,13 @@ public class IdleState : State
 	private void HitByBall()
 	{
 		ped.Rigidbody2D.AddForce(ped.transform.up * flinchUpwardsForce);
-		ped.TakeDamage();
+		ped.TakeDamage(Ped.DamageType.Hit);
 	}
 
 	private void HitByBlock()
 	{
 		// Sound
-		ped.Destroy();
+		ped.TakeDamage(Ped.DamageType.Destroy);
 	}
 
 	private void HitByHorizontalShield()

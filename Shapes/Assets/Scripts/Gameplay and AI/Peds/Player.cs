@@ -30,7 +30,7 @@ public class Player : Ped
 	private PedNames _name = PedNames.Morphy;
 	[SerializeField][Range(0.1f, 15.0f)]
 	private float _speed = 0.1f, _jumpForce = 0.1f, blockCheckRadius = 1.4f;
-	public bool isDead, isInvulnerable, inputIsEnabled = true;
+	public bool _isDead, isInvulnerable, inputIsEnabled = true;
 	public int Lives { get; set; }
 	public int MaxLives { get; set; }
 
@@ -92,11 +92,10 @@ public class Player : Ped
 	{
 		base.Update();
 
-		Debug.Log(_name + "'s Lives: " + Lives);
-		isDead = IsDead;
+		_isDead = IsDead;
 		Speed = _speed;
 		JumpForce = _jumpForce;
-		if(!isDead && inputIsEnabled)
+		if(!_isDead && inputIsEnabled)
 		{
 			HandlePlayerInput();
 		}
@@ -190,6 +189,10 @@ public class Player : Ped
 		}
 		else
 		{
+			if(PlayerHasDied != null)
+			{
+				PlayerHasDied();
+			}
 			Lives = 0;
 			StartCoroutine(PlayerDied());
 			Die();
@@ -203,7 +206,7 @@ public class Player : Ped
 
 	public void IncreaseLives(int life)
 	{
-		if(Lives + life > 0) 
+		if(Lives + life <= MaxLives) 
 		{
 			Lives += life;
 			if (OnLivesChanged != null)
@@ -235,12 +238,8 @@ public class Player : Ped
 		isInvulnerable = false;
 	}
 
-	private IEnumerator PlayerDied()
+	public IEnumerator PlayerDied()
 	{
-		if(PlayerHasDied != null)
-		{
-			PlayerHasDied();
-		}
 		GameManager.Instance.EnableSlowMotion(true);
 		UIManager.Instance.DisplayUI(UIManager.CanvasNames.PlayerDiedFilter, true);
 		yield return new WaitForSeconds(1);

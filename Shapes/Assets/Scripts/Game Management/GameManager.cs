@@ -26,7 +26,8 @@ public class GameManager : MonoBehaviour
 	private bool _pausedGame = false;
 	[SerializeField][Range(0.1f, 1f)]
 	private float slowMotionSpeed = 0.3f;
-	public static float ACTION_SHOT_PERCENTAGE_CHANCE = 5f;
+	private const float ACTION_SHOT_PERCENTAGE_CHANCE = 5f;
+	private float actionShotPercentageChance;
 	private const float FIXED_TIMESTEP = 0.01f;
 
 	public static float deltaTime;
@@ -42,6 +43,8 @@ public class GameManager : MonoBehaviour
 	{
 		//SceneController.LoadedScene += PauseGame;
 		_pausedGame = false;
+		EnableSlowMotion(false);
+		actionShotPercentageChance = 50f;
 	}
 
 	// Update is called once per frame
@@ -74,15 +77,23 @@ public class GameManager : MonoBehaviour
 		Application.targetFrameRate = 300;
 	}
 
-	// Percentage change that the action shot will activate when
-	// an enemy dies. 
+	// Percentage chance that the action shot will activate when
+	// an enemy dies. This increase when an enemy dies, but doesn't active.
 	public IEnumerator EnableActionShot()
 	{
-		EnableSlowMotion(true);
-		UIManager.Instance.DisplayUI(UIManager.CanvasNames.ActionShot, true);
-		yield return new WaitForSeconds(1);
-		EnableSlowMotion(false);
-		UIManager.Instance.DisplayUI(UIManager.CanvasNames.ActionShot, false);
+		if(UnityEngine.Random.value <= (actionShotPercentageChance / 100))
+		{
+			actionShotPercentageChance = ACTION_SHOT_PERCENTAGE_CHANCE;
+			EnableSlowMotion(true);
+			UIManager.Instance.DisplayUI(UIManager.CanvasNames.ActionShot, true);
+			yield return new WaitForSeconds(1);
+			EnableSlowMotion(false);
+			UIManager.Instance.DisplayUI(UIManager.CanvasNames.ActionShot, false);
+		}
+		else
+		{
+			actionShotPercentageChance++;
+		}
 	}
 
 	public void PauseGame()

@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 3686708093896332869}
   - component: {fileID: 3686708093896332868}
+  - component: {fileID: 3686708093896332864}
   - component: {fileID: 3686708093896332867}
   - component: {fileID: 3686708093896332866}
-  - component: {fileID: 3686708093896332864}
   m_Layer: 0
   m_Name: Saw
   m_TagString: Saw
@@ -70,7 +70,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 756613949
-  m_SortingLayer: 3
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 0d21968c0a3661243b89705a9206e2f8, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -83,6 +83,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &3686708093896332864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3686708093896332871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 871632fd4ea6b4c58ab1e10e3ce6ff1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationSpeed: 4.59
 --- !u!50 &3686708093896332867
 Rigidbody2D:
   serializedVersion: 4
@@ -289,16 +302,3 @@ PolygonCollider2D:
       - {x: 0.32999998, y: -0.56}
       - {x: 0.099999994, y: -0.64}
       - {x: -0.08, y: -0.64}
---- !u!114 &3686708093896332864
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3686708093896332871}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 871632fd4ea6b4c58ab1e10e3ce6ff1a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rotationSpeed: 4.59

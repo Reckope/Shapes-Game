@@ -80,7 +80,7 @@ public class MorphIntoVerticalShieldState : State
 	private void HitBlock()
 	{
 		// Data
-		ped.Destroy();
+		ped.TakeDamage(Ped.DamageType.Destroy);
 	}
 
 	// ============================================================

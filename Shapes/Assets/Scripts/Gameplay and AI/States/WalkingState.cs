@@ -79,12 +79,12 @@ public class WalkingState : State
 		// Public event: Name + died.
 		ped.Rigidbody2D.AddForce(ped.transform.up * flinchUpwardsForce);
 		ped.BounceAway();
-		ped.TakeDamage();
+		ped.TakeDamage(Ped.DamageType.Hit);
 	}
 
 	private void HitBlock()
 	{
-		ped.Destroy();
+		ped.TakeDamage(Ped.DamageType.Destroy);
 	}
 
 	private void HitHorizontalShield()

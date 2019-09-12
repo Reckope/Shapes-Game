@@ -97,13 +97,13 @@ public class MorphIntoBlockState : State
 
 	private void HitBlock()
 	{
-		ped.TakeDamage();
+		ped.TakeDamage(Ped.DamageType.Hit);
 	}
 
 	private void HitHorizontalShield()
 	{
 		hitShield = true;
-		ped.TakeDamage();
+		ped.TakeDamage(Ped.DamageType.Hit);
 		ped.StartCoroutine(ExitBlockState());
 	}
 
@@ -113,7 +113,7 @@ public class MorphIntoBlockState : State
 		{
 			if(ped.pedType == Ped.PedType.Enemy)
 			{
-				ped.TakeDamage();
+				ped.TakeDamage(Ped.DamageType.Hit);
 			}
 			else if(ped.pedType == Ped.PedType.Player)
 			{
