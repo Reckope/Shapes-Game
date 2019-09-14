@@ -22,10 +22,10 @@ public class ShieldsScript : Ped
 	[SerializeField]
 	private PedNames _name = PedNames.Aegis;
 	[SerializeField]
-	private Direction _startMovementDirection = Direction.Left;
+	private Direction _startMovementDirection = Direction.Idle;
 	[SerializeField]
 	private bool _blockAI = false;
-	[SerializeField][Range(0.1f, 7.0f)]
+	[SerializeField][Range(0f, 7.0f)]
 	private float _speed = 1f, _alertedRange = 5.8f;
 	private float _groundCheckRadius = 0.2f;
 	private float _sideCheckRadius = 0.4f;

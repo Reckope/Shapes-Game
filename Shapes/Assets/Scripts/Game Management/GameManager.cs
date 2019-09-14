@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
 	[SerializeField][Range(0.1f, 1f)]
 	private float slowMotionSpeed = 0.3f;
 	private const float ACTION_SHOT_PERCENTAGE_CHANCE = 5f;
-	private float actionShotPercentageChance;
+	private float actionShotPercentageChance = 30f;
 	private const float FIXED_TIMESTEP = 0.01f;
 
 	public static float deltaTime;
@@ -44,7 +44,6 @@ public class GameManager : MonoBehaviour
 		//SceneController.LoadedScene += PauseGame;
 		_pausedGame = false;
 		EnableSlowMotion(false);
-		actionShotPercentageChance = 50f;
 	}
 
 	// Update is called once per frame

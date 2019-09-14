@@ -56,6 +56,7 @@
      <Compile Include="Assets\Scripts\Environmental Objects\BreakableGround.cs" />
      <Compile Include="Assets\Scripts\Environmental Objects\Harmful Objects\Saw.cs" />
      <Compile Include="Assets\Scripts\Environmental Objects\ScrollingBackground.cs" />
+     <Compile Include="Assets\Scripts\Environmental Objects\Torch.cs" />
      <Compile Include="Assets\Scripts\Game Management\CameraController.cs" />
      <Compile Include="Assets\Scripts\Game Management\GameDataManager.cs" />
      <Compile Include="Assets\Scripts\Game Management\GameManager.cs" />

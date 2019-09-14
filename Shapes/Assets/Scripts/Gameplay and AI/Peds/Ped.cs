@@ -473,7 +473,7 @@ public class Ped : MonoBehaviour
 	private void HitSaw()
 	{
 		// Sound
-		Destroy();
+		TakeDamage(DamageType.Destroy);
 	}
 
 	private void HandleDeadPedData()

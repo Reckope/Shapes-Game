@@ -12,7 +12,8 @@ public class CameraController : MonoBehaviour
 	private const float FOLLOW_PLAYER_DAMP_TIME = 0.25f;
 	private const float CAMERA_DELTA_X_POSITION = 0.5f;
 	private const float CAMERA_DELTA_Y_POSITION = 0.5f;
-	private const float CAMERA_DISTANCE_ABOVE_PLAYER = 1f;
+	[SerializeField][Range(-1f, 1f)]
+	private float distanceAheadOfPlayer = 1f;
 	private float cameraDistanceAheadOfPlayer;
 	private float cameraMaxXBounds;
 	private float cameraMinXBounds;
@@ -53,7 +54,7 @@ public class CameraController : MonoBehaviour
 		Vector3 destination = transform.position + delta;
 		// Set Bounds
 		destination.x = Mathf.Clamp (destination.x + cameraDistanceAheadOfPlayer, cameraMinXBounds, cameraMaxXBounds);
-		destination.y = Mathf.Clamp (destination.y + CAMERA_DISTANCE_ABOVE_PLAYER, cameraMinYBounds, cameraMaxYBounds);
+		destination.y = Mathf.Clamp (destination.y + distanceAheadOfPlayer, cameraMinYBounds, cameraMaxYBounds);
 		// Follow
 		transform.position = Vector3.SmoothDamp(transform.position, destination, ref velocity, FOLLOW_PLAYER_DAMP_TIME);
 	}
