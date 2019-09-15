@@ -51,7 +51,7 @@ public class ShieldsScript : Ped
 		GroundCheckRadius = _groundCheckRadius;
 		if(_blockAI)
 		{
-			SetPedState(States.Idle);
+			MovementDirection = (int)Direction.Idle;
 			shieldAI.enabled = false;
 		}
 		else

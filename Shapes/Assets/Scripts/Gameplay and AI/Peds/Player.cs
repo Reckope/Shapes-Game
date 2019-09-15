@@ -19,6 +19,8 @@ public class Player : Ped
 	public static Player Instance { get { return _instance; } }
 	private static Player _instance;
 
+	private CinematicBars CinematicBars;
+
 	public event Action PlayerHasDied;
 
 	// ============================================================
@@ -30,7 +32,7 @@ public class Player : Ped
 	private PedNames _name = PedNames.Morphy;
 	[SerializeField][Range(0.1f, 15.0f)]
 	private float _speed = 0.1f, _jumpForce = 0.1f, blockCheckRadius = 1.4f;
-	public bool _isDead, isInvulnerable, inputIsEnabled = true;
+	public bool isDead, isInvulnerable, inputIsEnabled = true;
 	public int Lives { get; set; }
 	public int MaxLives { get; set; }
 
@@ -58,6 +60,7 @@ public class Player : Ped
 	{
 		base.Awake();
 
+		CinematicBars = GameObject.FindObjectOfType(typeof(CinematicBars)) as CinematicBars;
 		if(_instance != null && _instance != this)
 		{
 			Debug.LogError("Error: Another instance of Player has been found in scene " + " '" + SceneController.GetActiveScene() + "'.");
@@ -84,6 +87,7 @@ public class Player : Ped
 		MaxLives = 3;
 		isInvulnerable = false;
 		LevelCompleteTrigger.CompletedLevel += CompletedLevel;
+		Level04.PlayLevel04Intro += RollIntoLevel;
 		OnLivesChanged += DisplayLives;
 		DisplayLives(Lives);
 	}
@@ -92,10 +96,10 @@ public class Player : Ped
 	{
 		base.Update();
 
-		_isDead = IsDead;
+		isDead = IsDead;
 		Speed = _speed;
 		JumpForce = _jumpForce;
-		if(!_isDead && inputIsEnabled)
+		if(!isDead && inputIsEnabled)
 		{
 			HandlePlayerInput();
 		}
@@ -245,5 +249,24 @@ public class Player : Ped
 		yield return new WaitForSeconds(1);
 		GameManager.Instance.EnableSlowMotion(false);
 		UIManager.Instance.DisplayUI(UIManager.CanvasNames.PlayerDiedButtons, true);
+	}
+
+	private void RollIntoLevel()
+	{
+		CinematicBars.ShowCinematicBars();
+		transform.position = new Vector2(-593f, -2.44f);
+		MorphToBallInput = true;
+		SetPedState(States.Ball);
+		inputIsEnabled = false;
+		MovementDirection = (int)Direction.Right;
+		Invoke("ReturnToNormal", 52.6f);
+	}
+
+	private void ReturnToNormal()
+	{
+		CinematicBars.HideCinematicBars();
+		inputIsEnabled = true;
+		MorphToBallInput = false;
+		MovementDirection = (int)Direction.Idle;
 	}
 }

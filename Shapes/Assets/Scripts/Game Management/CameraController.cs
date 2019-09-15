@@ -4,11 +4,15 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
+	private CinematicBars CinematicBars;
+
+	private Animator Animator;
+
 	private Transform player;
 	private Camera Camera;
 
 	// Global Variables
-	public bool onFollowPlayer;
+	public bool followPlayer;
 	private const float FOLLOW_PLAYER_DAMP_TIME = 0.25f;
 	private const float CAMERA_DELTA_X_POSITION = 0.5f;
 	private const float CAMERA_DELTA_Y_POSITION = 0.5f;
@@ -21,33 +25,52 @@ public class CameraController : MonoBehaviour
 	private float cameraMaxYBounds;
 	private Vector3 velocity = Vector3.zero;
 
+	private void Awake()
+	{
+		CinematicBars = GameObject.FindObjectOfType(typeof(CinematicBars)) as CinematicBars;
+		player = GameObject.FindGameObjectWithTag("Player").transform;
+		Camera = GetComponent<Camera>();
+		Animator = GetComponent<Animator>();
+		Animator.enabled = false;
+		followPlayer = true;
+	}
+
+	void OnEnable()
+	{
+		LevelCompleteTrigger.CompletedLevel += OnFollowPlayer;
+		Level04.PlayLevel04Intro += LevelFourIntro;
+	}
+
+	void OnDisable()
+	{
+		LevelCompleteTrigger.CompletedLevel -= OnFollowPlayer;
+		Level04.PlayLevel04Intro -= LevelFourIntro;
+	}
+
 	// Start is called before the first frame update
 	void Start()
 	{
-		player = GameObject.FindGameObjectWithTag("Player").transform;
-		Camera = GetComponent<Camera>();
-
 		cameraMaxYBounds = 9999f;
 		cameraMinYBounds = -9999f;
 		cameraMinXBounds = -9999f;
 		cameraMaxXBounds = 9999f;
 		cameraDistanceAheadOfPlayer = 1f;
-		onFollowPlayer = true;
-
-		LevelCompleteTrigger.CompletedLevel += OnFollowPlayer;
 	}
 
 	// Update is called once per frame
 	private void Update()
 	{
-		if (player != null && !Player.Instance.IsDead && onFollowPlayer){
+		if (player != null && !Player.Instance.IsDead && followPlayer){
 			FollowPlayer();
 		}
 	}
 
 	// Constantly follow the player throughout the game, then stop when reaching
 	// the edge of the game world. 
-	private void FollowPlayer(){
+	private void FollowPlayer()
+	{
+		followPlayer = true;
+		Animator.enabled = false;
 		// Set position
 		Vector3 point = Camera.WorldToViewportPoint(player.position);
 		Vector3 delta = player.position - Camera.ViewportToWorldPoint(new Vector3(CAMERA_DELTA_X_POSITION, CAMERA_DELTA_Y_POSITION, point.z));
@@ -61,6 +84,15 @@ public class CameraController : MonoBehaviour
 
 	private void OnFollowPlayer(int level, bool completed)
 	{
-		onFollowPlayer = false;
+		followPlayer = false;
+	}
+
+	private void LevelFourIntro()
+	{
+		followPlayer = false;
+		Animator.enabled = true;
+		transform.position = new Vector3(90f, 28f, transform.position.z);
+		Animator.SetBool("playLevelFourIntro", true);
+		Invoke("FollowPlayer", 35.3f);
 	}
 }

@@ -103,7 +103,7 @@ public class Ped : MonoBehaviour
 	public float SideCheckRadius { get; set; }
 	private Quaternion rotation;
 	private string _sound;
-	private float _movementDirection;
+	private float _movementDirection = 0.5f;
 
 	// Detect collisions around the ped to prevent morphing in tight spaces.
 	public bool CollidedLeft { get { return Physics2D.OverlapCircle (leftCheck.position, SideCheckRadius, whatIsGround); } }

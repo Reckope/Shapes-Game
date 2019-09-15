@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour
 	[SerializeField][Range(0.1f, 1f)]
 	private float slowMotionSpeed = 0.3f;
 	private const float ACTION_SHOT_PERCENTAGE_CHANCE = 5f;
+	[SerializeField][Range(0, 100f)]
 	private float actionShotPercentageChance = 30f;
 	private const float FIXED_TIMESTEP = 0.01f;
 

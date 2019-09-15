@@ -51,7 +51,7 @@ public class DynamoScript : Ped
 		GroundCheckRadius = _groundCheckRadius;
 		if(_blockAI)
 		{
-			SetPedState(States.Idle);
+			MovementDirection = (int)Direction.Idle;
 			dynamoAI.enabled = false;
 		}
 		else

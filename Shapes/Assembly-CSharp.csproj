@@ -58,6 +58,7 @@
      <Compile Include="Assets\Scripts\Environmental Objects\ScrollingBackground.cs" />
      <Compile Include="Assets\Scripts\Environmental Objects\Torch.cs" />
      <Compile Include="Assets\Scripts\Game Management\CameraController.cs" />
+     <Compile Include="Assets\Scripts\Game Management\CinematicBars.cs" />
      <Compile Include="Assets\Scripts\Game Management\GameDataManager.cs" />
      <Compile Include="Assets\Scripts\Game Management\GameManager.cs" />
      <Compile Include="Assets\Scripts\Game Management\IngameMenuManager.cs" />
@@ -86,6 +87,7 @@
      <Compile Include="Assets\Scripts\Level Management\LevelManager.cs" />
      <Compile Include="Assets\Scripts\Level Management\Levels\Level.cs" />
      <Compile Include="Assets\Scripts\Level Management\Levels\Level01.cs" />
+     <Compile Include="Assets\Scripts\Level Management\Levels\Level04.cs" />
      <Compile Include="Assets\Scripts\Level Management\Levels\Tutorial.cs" />
      <None Include="Assets\BayatGames\Free Platform Game Assets\Readme.txt" />
  <Reference Include="Unity.Timeline.Editor">
