@@ -9,23 +9,11 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
-    path: Assets/Scenes/Levels/Tutorial.unity
-    guid: 2cea54d3dae0a4ff5880ce9c158b4b2d
-  - enabled: 1
-    path: Assets/Scenes/Settings.unity
-    guid: 0f98451088bdb4282ab6f94ee4106619
-  - enabled: 1
-    path: Assets/Scenes/Credits.unity
-    guid: aa66c3c09445742c2ace01fac9a41af0
-  - enabled: 1
-    path: Assets/Scenes/Achievements.unity
-    guid: 7f7405a5a3a5f437c889aadf6e0e3232
-  - enabled: 1
     path: Assets/Scenes/LevelSelect.unity
     guid: c397a50f9f5aa4110be40e4ea72b7ee1
   - enabled: 1
-    path: Assets/Scenes/InGameMenu.unity
-    guid: 0518c5daec5e843ab9dc6888607d3086
+    path: Assets/Scenes/Credits.unity
+    guid: aa66c3c09445742c2ace01fac9a41af0
   - enabled: 1
     path: Assets/Scenes/Levels/Level01.unity
     guid: 7855b52ebb46c4971a2ff44db47a1bac
@@ -38,4 +26,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Levels/Level04.unity
     guid: 488e83449d0dc45329baa0ea215a2fa5
+  - enabled: 1
+    path: Assets/Scenes/Levels/Tutorial.unity
+    guid: 2cea54d3dae0a4ff5880ce9c158b4b2d
   m_configObjects: {}

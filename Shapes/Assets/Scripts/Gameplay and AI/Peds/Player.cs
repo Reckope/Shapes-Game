@@ -36,6 +36,8 @@ public class Player : Ped
 	public int Lives { get; set; }
 	public int MaxLives { get; set; }
 
+	private bool levelFourIsActive;
+
 	[SerializeField][Range(0.1f, 0.5f)]
 	private float _sideCheckRadius = 0.1f, _groundCheckRadius = 0.2f;
 
@@ -78,6 +80,18 @@ public class Player : Ped
 		blockFeedback.SetActive(false);
 	}
 
+	private void OnEnable()
+	{
+		LevelCompleteTrigger.CompletedLevel += CompletedLevel;
+		Level04.PlayLevel04Intro += RollIntoLevel;
+	}
+
+	private void OnDisable()
+	{
+		LevelCompleteTrigger.CompletedLevel -= CompletedLevel;
+		Level04.PlayLevel04Intro -= RollIntoLevel;
+	}
+
 	protected override void Start()
 	{
 		base.Start();
@@ -86,8 +100,6 @@ public class Player : Ped
 		Lives = 3;
 		MaxLives = 3;
 		isInvulnerable = false;
-		LevelCompleteTrigger.CompletedLevel += CompletedLevel;
-		Level04.PlayLevel04Intro += RollIntoLevel;
 		OnLivesChanged += DisplayLives;
 		DisplayLives(Lives);
 	}
@@ -112,6 +124,15 @@ public class Player : Ped
 		{
 			DisplayLives(Lives);
 		}
+
+		if(levelFourIsActive)
+		{
+			MorphToBallInput = true;
+				SetPedState(States.Ball);
+				inputIsEnabled = false;
+				MovementDirection = (int)Direction.Right;
+		}
+
 	}
 
 	// ============================================================
@@ -257,19 +278,24 @@ public class Player : Ped
 		{
 			CinematicBars.ShowCinematicBars();
 		}
-		if(this != null)
-		{
-			transform.position = new Vector2(-593f, -2.44f);
-			MorphToBallInput = true;
-			SetPedState(States.Ball);
-			inputIsEnabled = false;
-			MovementDirection = (int)Direction.Right;
-			Invoke("ReturnToNormal", 52.6f);
-		}
+		// In the release build, the player would not roll at the start of the level.
+		// I had to add a bool here and add it to Update() to ensure it gets called.
+		// No idea why it worked in the editor, but not in release. 
+			if(this != null)
+			{
+			//transform.position = new Vector2(-593f, -2.44f);
+			levelFourIsActive = true;
+				//MorphToBallInput = true;
+				//SetPedState(States.Ball);
+				//inputIsEnabled = false;
+				//MovementDirection = (int)Direction.Right;
+				//Invoke("ReturnToNormal", 52.6f);
+			}
 	}
 
 	private void ReturnToNormal()
 	{
+		levelFourIsActive = false;
 		CinematicBars.HideCinematicBars();
 		inputIsEnabled = true;
 		MorphToBallInput = false;
