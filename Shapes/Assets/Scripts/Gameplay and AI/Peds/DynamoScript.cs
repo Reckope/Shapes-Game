@@ -24,6 +24,8 @@ public class DynamoScript : Ped
 	[SerializeField]
 	private Direction _startMovementDirection = Direction.Left;
 	[SerializeField]
+	private Direction _startFaceDirection = Direction.Left;
+	[SerializeField]
 	private bool _blockAI = false;
 	[SerializeField][Range(0.1f, 7.0f)]
 	private float _speed = 0.1f, _alertedSpeed = 5, _morphToPlayerRange = 5.8f;
@@ -58,6 +60,7 @@ public class DynamoScript : Ped
 		{
 			MovementDirection = (int)_startMovementDirection;
 		}
+		FaceDirection = (int)_startFaceDirection;
 	}
 
 	protected override void Update()

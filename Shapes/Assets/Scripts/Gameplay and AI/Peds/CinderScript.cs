@@ -24,6 +24,8 @@ public class CinderScript : Ped
 	[SerializeField]
 	private Direction _startMovementDirection = Direction.Left;
 	[SerializeField]
+	private Direction _startFaceDirection = Direction.Left;
+	[SerializeField]
 	private bool _blockAI = false;
 	[SerializeField][Range(0.1f, 7.0f)]
 	private float _speed = 1f, _alertedSpeed = 5;
@@ -52,6 +54,7 @@ public class CinderScript : Ped
 		SideCheckRadius = _sideCheckRadius;
 		GroundCheckRadius = _groundCheckRadius;
 		MovementDirection = (int)_startMovementDirection;
+		FaceDirection = (int)_startFaceDirection;
 	}
 
 	protected override void Update()
@@ -59,7 +62,6 @@ public class CinderScript : Ped
 		base.Update();
 		
 		Speed = _speed;
-
 		if(!_blockAI)
 		{
 			if(!HasMorphed && !IsAlerted)
@@ -82,6 +84,7 @@ public class CinderScript : Ped
 	private IEnumerator AttemptToSquashPlayer()
 	{
 		Speed = _alertedSpeed;
+		MovementDirection = (int)FaceDirection;
 		if
 		(
 			!cinderAI.HasReachedLedgeOnLeftSide && cinderAI.HasReachedLedgeOnRightSide ||

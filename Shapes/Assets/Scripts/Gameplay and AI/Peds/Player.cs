@@ -63,7 +63,7 @@ public class Player : Ped
 		CinematicBars = GameObject.FindObjectOfType(typeof(CinematicBars)) as CinematicBars;
 		if(_instance != null && _instance != this)
 		{
-			Debug.LogError("Error: Another instance of Player has been found in scene " + " '" + SceneController.GetActiveScene() + "'.");
+			Debug.Log("Error: Another instance of Player has been found in scene " + " '" + SceneController.GetActiveScene() + "'.");
 			Destroy(this.gameObject);
 		} 
 		else
@@ -253,13 +253,19 @@ public class Player : Ped
 
 	private void RollIntoLevel()
 	{
-		CinematicBars.ShowCinematicBars();
-		transform.position = new Vector2(-593f, -2.44f);
-		MorphToBallInput = true;
-		SetPedState(States.Ball);
-		inputIsEnabled = false;
-		MovementDirection = (int)Direction.Right;
-		Invoke("ReturnToNormal", 52.6f);
+		if(CinematicBars != null)
+		{
+			CinematicBars.ShowCinematicBars();
+		}
+		if(this != null)
+		{
+			transform.position = new Vector2(-593f, -2.44f);
+			MorphToBallInput = true;
+			SetPedState(States.Ball);
+			inputIsEnabled = false;
+			MovementDirection = (int)Direction.Right;
+			Invoke("ReturnToNormal", 52.6f);
+		}
 	}
 
 	private void ReturnToNormal()

@@ -24,7 +24,7 @@ public class CinematicBars : MonoBehaviour {
 
 	// ---------------------------------------------------------------------------------
 
-	void Awake()
+	void OnEnable()
 	{
 		CreateBars();
 	}

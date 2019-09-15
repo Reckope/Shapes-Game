@@ -24,6 +24,8 @@ public class ShieldsScript : Ped
 	[SerializeField]
 	private Direction _startMovementDirection = Direction.Idle;
 	[SerializeField]
+	private Direction _startFaceDirection = Direction.Left;
+	[SerializeField]
 	private bool _blockAI = false;
 	[SerializeField][Range(0f, 7.0f)]
 	private float _speed = 1f, _alertedRange = 5.8f;
@@ -58,6 +60,7 @@ public class ShieldsScript : Ped
 		{
 			MovementDirection = (int)_startMovementDirection;
 		}
+		FaceDirection = (int)_startFaceDirection;
 	}
 
 	// Both shield enemies morphs once the player is in range, regardless of 

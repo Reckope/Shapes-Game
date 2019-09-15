@@ -99,6 +99,7 @@ public class Ped : MonoBehaviour
 	public string Name { get; protected set; }
 	public float Speed { get; set; }
 	public float JumpForce { get; set; }
+	public int FaceDirection { get; set; }
 	public float GroundCheckRadius { get; set; }
 	public float SideCheckRadius { get; set; }
 	private Quaternion rotation;
@@ -264,9 +265,11 @@ public class Ped : MonoBehaviour
 			if(Rigidbody2D.velocity.x > 0)
 			{
 				transform.eulerAngles = new Vector3(0, 0, 0);
+				FaceDirection = 1;
 			}
-			else if(Rigidbody2D.velocity.x < 0)
+			else if(Rigidbody2D.velocity.x < 0 || FaceDirection == -1)
 			{
+				FaceDirection = -1;
 				transform.eulerAngles = new Vector3(0, 180, 0);
 			}
 		}
@@ -467,7 +470,8 @@ public class Ped : MonoBehaviour
 	public void Destroy()
 	{
 		IsDead = true;
-		Destroy(this.gameObject);
+		//Destroy(this.gameObject);
+		this.gameObject.SetActive(false);
 	}
 
 	private void HitSaw()

@@ -1,9 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class CameraController : MonoBehaviour
 {
+
+	// There can only ever be one instance of the camera..
+	public static CameraController Instance { get { return _instance; } }
+	private static CameraController _instance;
+
 	private CinematicBars CinematicBars;
 
 	private Animator Animator;
@@ -18,7 +24,8 @@ public class CameraController : MonoBehaviour
 	private const float CAMERA_DELTA_Y_POSITION = 0.5f;
 	[SerializeField][Range(-1f, 1f)]
 	private float distanceAheadOfPlayer = 1f;
-	private float cameraDistanceAheadOfPlayer;
+	[SerializeField][Range(-1f, 3f)]
+	private float distanceAbovePlayer = 1f;
 	private float cameraMaxXBounds;
 	private float cameraMinXBounds;
 	private float cameraMinYBounds;
@@ -31,12 +38,15 @@ public class CameraController : MonoBehaviour
 		player = GameObject.FindGameObjectWithTag("Player").transform;
 		Camera = GetComponent<Camera>();
 		Animator = GetComponent<Animator>();
-		Animator.enabled = false;
-		followPlayer = true;
+		Assert.IsNotNull(player);
+		Assert.IsNotNull(CinematicBars);
+		Assert.IsNotNull(Camera);
+		Assert.IsNotNull(Animator);
 	}
 
 	void OnEnable()
 	{
+		followPlayer = true;
 		LevelCompleteTrigger.CompletedLevel += OnFollowPlayer;
 		Level04.PlayLevel04Intro += LevelFourIntro;
 	}
@@ -54,7 +64,20 @@ public class CameraController : MonoBehaviour
 		cameraMinYBounds = -9999f;
 		cameraMinXBounds = -9999f;
 		cameraMaxXBounds = 9999f;
-		cameraDistanceAheadOfPlayer = 1f;
+		Instanced();
+	}
+
+	private void Instanced()
+	{
+		if(_instance != null && _instance != this)
+		{
+			Debug.Log("Error: Another instance of Camera has been found in scene " + " '" + SceneController.GetActiveScene() + "'.");
+			Destroy(this.gameObject);
+		} 
+		else
+		{
+			_instance = this;
+		}
 	}
 
 	// Update is called once per frame
@@ -76,8 +99,8 @@ public class CameraController : MonoBehaviour
 		Vector3 delta = player.position - Camera.ViewportToWorldPoint(new Vector3(CAMERA_DELTA_X_POSITION, CAMERA_DELTA_Y_POSITION, point.z));
 		Vector3 destination = transform.position + delta;
 		// Set Bounds
-		destination.x = Mathf.Clamp (destination.x + cameraDistanceAheadOfPlayer, cameraMinXBounds, cameraMaxXBounds);
-		destination.y = Mathf.Clamp (destination.y + distanceAheadOfPlayer, cameraMinYBounds, cameraMaxYBounds);
+		destination.x = Mathf.Clamp (destination.x + distanceAheadOfPlayer, cameraMinXBounds, cameraMaxXBounds);
+		destination.y = Mathf.Clamp (destination.y + distanceAbovePlayer, cameraMinYBounds, cameraMaxYBounds);
 		// Follow
 		transform.position = Vector3.SmoothDamp(transform.position, destination, ref velocity, FOLLOW_PLAYER_DAMP_TIME);
 	}
@@ -90,6 +113,7 @@ public class CameraController : MonoBehaviour
 	private void LevelFourIntro()
 	{
 		followPlayer = false;
+		Debug.Log("Level4");
 		Animator.enabled = true;
 		transform.position = new Vector3(90f, 28f, transform.position.z);
 		Animator.SetBool("playLevelFourIntro", true);

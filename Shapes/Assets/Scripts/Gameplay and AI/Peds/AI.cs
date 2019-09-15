@@ -81,11 +81,11 @@ public class AI : MonoBehaviour
 		Vector2 left = ped.leftCheck.transform.position;
 		Vector2 right = ped.rightCheck.transform.position;
 
-		if(ped.MovementDirection == (int)Ped.Direction.Left)
+		if(ped.FaceDirection == (int)Ped.Direction.Left)
 		{
 			visionSpawn = left;
 		}
-		else
+		else if(ped.FaceDirection == (int)Ped.Direction.Right)
 		{
 			visionSpawn = right;
 		}
