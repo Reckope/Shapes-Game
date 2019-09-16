@@ -49,6 +49,8 @@ public class Player : Ped
 		get { return !Physics2D.OverlapCircle (morphIntoBlockCheck.position, blockCheckRadius, whatIsGround); } 
 	}
 	public GameObject[] hearts;
+	public AudioClip footStepsAudio;
+	private AudioSource audioSource;
 
 	public event Action<int> OnLivesChanged;
 
@@ -63,6 +65,7 @@ public class Player : Ped
 		base.Awake();
 
 		CinematicBars = GameObject.FindObjectOfType(typeof(CinematicBars)) as CinematicBars;
+		audioSource = GetComponent<AudioSource>();
 		if(_instance != null && _instance != this)
 		{
 			Debug.Log("Error: Another instance of Player has been found in scene " + " '" + SceneController.GetActiveScene() + "'.");
@@ -84,12 +87,14 @@ public class Player : Ped
 	{
 		LevelCompleteTrigger.CompletedLevel += CompletedLevel;
 		Level04.PlayLevel04Intro += RollIntoLevel;
+		Level01.PlayLevel01Intro += LevelOneIntro;
 	}
 
 	private void OnDisable()
 	{
 		LevelCompleteTrigger.CompletedLevel -= CompletedLevel;
 		Level04.PlayLevel04Intro -= RollIntoLevel;
+		Level01.PlayLevel01Intro -= LevelOneIntro;
 	}
 
 	protected override void Start()
@@ -128,9 +133,9 @@ public class Player : Ped
 		if(levelFourIsActive)
 		{
 			MorphToBallInput = true;
-				SetPedState(States.Ball);
-				inputIsEnabled = false;
-				MovementDirection = (int)Direction.Right;
+			SetPedState(States.Ball);
+			inputIsEnabled = false;
+			MovementDirection = (int)Direction.Right;
 		}
 
 	}
@@ -141,7 +146,7 @@ public class Player : Ped
 
 	private void HandlePlayerInput()
 	{
-		bool MorphToBlockFeedback = Input.GetKeyDown("up");
+		bool MorphToBlockFeedbackInput = Input.GetKey("up");
 		float jump = Input.GetAxisRaw("Jump");
 
 		MovementDirection = Input.GetAxisRaw("Horizontal");
@@ -183,12 +188,12 @@ public class Player : Ped
 			SetPedState(States.Ball);
 		}
 
-		if(MorphToBlockFeedback && !CanMorphIntoBlock && !HasMorphed)
+		if(MorphToBlockFeedbackInput && !CanMorphIntoBlock && !HasMorphed)
 		{
 			blockFeedback.SetActive(true);
 		}
 
-		if(!MorphToBlockInput)
+		if(!MorphToBlockFeedbackInput)
 		{
 			blockFeedback.SetActive(false);
 		}
@@ -281,16 +286,28 @@ public class Player : Ped
 		// In the release build, the player would not roll at the start of the level.
 		// I had to add a bool here and add it to Update() to ensure it gets called.
 		// No idea why it worked in the editor, but not in release. 
-			if(this != null)
-			{
-			//transform.position = new Vector2(-593f, -2.44f);
+		if(this != null)
+		{
+			transform.position = new Vector2(-593f, -2.44f);
 			levelFourIsActive = true;
-				//MorphToBallInput = true;
-				//SetPedState(States.Ball);
-				//inputIsEnabled = false;
-				//MovementDirection = (int)Direction.Right;
-				//Invoke("ReturnToNormal", 52.6f);
-			}
+			Invoke("ReturnToNormal", 52.6f);
+		}
+	}
+
+	private void LevelOneIntro()
+	{
+		if(CinematicBars != null)
+		{
+			CinematicBars.ShowCinematicBars();
+		}
+		inputIsEnabled = false;
+		MovementDirection = (int)Direction.Idle;
+		Invoke("ReturnToNormal", 15f);
+	}
+
+	private void ReturnToNormalLevelOne()
+	{
+		inputIsEnabled = true;
 	}
 
 	private void ReturnToNormal()
@@ -300,5 +317,13 @@ public class Player : Ped
 		inputIsEnabled = true;
 		MorphToBallInput = false;
 		MovementDirection = (int)Direction.Idle;
+	}
+
+	public void PlayFootStepsAudio()
+	{
+		audioSource.Play();
+		audioSource.clip = footStepsAudio;
+		audioSource.Play();
+		Debug.Log("Footstep");
 	}
 }

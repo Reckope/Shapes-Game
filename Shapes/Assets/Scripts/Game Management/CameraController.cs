@@ -47,14 +47,18 @@ public class CameraController : MonoBehaviour
 	void OnEnable()
 	{
 		followPlayer = true;
+		GameManager.Instance.GamePaused += PauseMusic;
 		LevelCompleteTrigger.CompletedLevel += OnFollowPlayer;
 		Level04.PlayLevel04Intro += LevelFourIntro;
+		Level01.PlayLevel01Intro += LevelOneIntro;
 	}
 
 	void OnDisable()
 	{
+		GameManager.Instance.GamePaused -= PauseMusic;
 		LevelCompleteTrigger.CompletedLevel -= OnFollowPlayer;
 		Level04.PlayLevel04Intro -= LevelFourIntro;
+		Level01.PlayLevel01Intro -= LevelOneIntro;
 	}
 
 	// Start is called before the first frame update
@@ -113,10 +117,23 @@ public class CameraController : MonoBehaviour
 	private void LevelFourIntro()
 	{
 		followPlayer = false;
-		Debug.Log("Level4");
 		Animator.enabled = true;
 		transform.position = new Vector3(90f, 28f, transform.position.z);
 		Animator.SetBool("playLevelFourIntro", true);
 		Invoke("FollowPlayer", 35.3f);
+	}
+
+	private void LevelOneIntro()
+	{
+		followPlayer = false;
+		Animator.enabled = true;
+		transform.position = new Vector3(48f, 3.7f, transform.position.z);
+		Animator.SetBool("playLevelOneIntro", true);
+		Invoke("FollowPlayer", 15.0f);
+	}
+
+	private void PauseMusic()
+	{
+		//AudioListener.pause = true;
 	}
 }

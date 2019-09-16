@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -725,29 +725,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 161437996}
-  - component: {fileID: 161437994}
   - component: {fileID: 161437995}
   m_Layer: 0
-  m_Name: '*Game Manager'
+  m_Name: '*UI Manager'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &161437994
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 161437993}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3994eecb045a1412c9237d7d1394a508, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  slowMotionSpeed: 0.3
-  actionShotPercentageChance: 100
 --- !u!114 &161437995
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1032,7 +1017,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 161437994}
+      - m_Target: {fileID: 0}
         m_MethodName: ConfirmExitGame
         m_Mode: 1
         m_Arguments:
@@ -1482,7 +1467,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 161437994}
+      - m_Target: {fileID: 0}
         m_MethodName: ExitGame
         m_Mode: 1
         m_Arguments:
@@ -1688,7 +1673,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 161437994}
+      - m_Target: {fileID: 0}
         m_MethodName: HidePrompt
         m_Mode: 1
         m_Arguments:
@@ -65434,8 +65419,8 @@ Tilemap:
       m_ColliderType: 1
   - first: {x: 96, y: 36, z: 0}
     second:
-      m_TileIndex: 10
-      m_TileSpriteIndex: 10
+      m_TileIndex: 12
+      m_TileSpriteIndex: 12
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_ObjectToInstantiate: {fileID: 0}
@@ -66235,8 +66220,8 @@ Tilemap:
       m_ColliderType: 1
   - first: {x: 90, y: 39, z: 0}
     second:
-      m_TileIndex: 11
-      m_TileSpriteIndex: 11
+      m_TileIndex: 12
+      m_TileSpriteIndex: 12
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_ObjectToInstantiate: {fileID: 0}
@@ -68260,8 +68245,8 @@ Tilemap:
       m_ColliderType: 1
   - first: {x: 59, y: 43, z: 0}
     second:
-      m_TileIndex: 11
-      m_TileSpriteIndex: 11
+      m_TileIndex: 12
+      m_TileSpriteIndex: 12
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_ObjectToInstantiate: {fileID: 0}
@@ -68278,8 +68263,8 @@ Tilemap:
       m_ColliderType: 1
   - first: {x: 61, y: 43, z: 0}
     second:
-      m_TileIndex: 11
-      m_TileSpriteIndex: 11
+      m_TileIndex: 12
+      m_TileSpriteIndex: 12
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_ObjectToInstantiate: {fileID: 0}
@@ -68701,8 +68686,8 @@ Tilemap:
       m_ColliderType: 1
   - first: {x: 61, y: 44, z: 0}
     second:
-      m_TileIndex: 9
-      m_TileSpriteIndex: 9
+      m_TileIndex: 8
+      m_TileSpriteIndex: 8
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_ObjectToInstantiate: {fileID: 0}
@@ -69502,8 +69487,8 @@ Tilemap:
       m_ColliderType: 1
   - first: {x: 68, y: 46, z: 0}
     second:
-      m_TileIndex: 10
-      m_TileSpriteIndex: 10
+      m_TileIndex: 12
+      m_TileSpriteIndex: 12
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_ObjectToInstantiate: {fileID: 0}
@@ -69799,8 +69784,8 @@ Tilemap:
       m_ColliderType: 1
   - first: {x: 101, y: 46, z: 0}
     second:
-      m_TileIndex: 10
-      m_TileSpriteIndex: 10
+      m_TileIndex: 12
+      m_TileSpriteIndex: 12
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_ObjectToInstantiate: {fileID: 0}
@@ -70159,8 +70144,8 @@ Tilemap:
       m_ColliderType: 1
   - first: {x: 68, y: 47, z: 0}
     second:
-      m_TileIndex: 7
-      m_TileSpriteIndex: 7
+      m_TileIndex: 8
+      m_TileSpriteIndex: 8
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_ObjectToInstantiate: {fileID: 0}
@@ -70456,8 +70441,8 @@ Tilemap:
       m_ColliderType: 1
   - first: {x: 101, y: 47, z: 0}
     second:
-      m_TileIndex: 7
-      m_TileSpriteIndex: 7
+      m_TileIndex: 8
+      m_TileSpriteIndex: 8
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_ObjectToInstantiate: {fileID: 0}
@@ -74214,17 +74199,17 @@ Tilemap:
     m_Data: {fileID: 0}
   - m_RefCount: 0
     m_Data: {fileID: 0}
-  - m_RefCount: 36
+  - m_RefCount: 34
     m_Data: {fileID: 11400000, guid: d82fdf978ba7943c2907eb438157a86a, type: 2}
-  - m_RefCount: 569
+  - m_RefCount: 572
     m_Data: {fileID: 11400000, guid: 0bed4a563c7fd454ebb004d09d5ffd78, type: 2}
-  - m_RefCount: 28
+  - m_RefCount: 27
     m_Data: {fileID: 11400000, guid: 80ecf98a7a35f46d2952d2039de8110e, type: 2}
-  - m_RefCount: 47
+  - m_RefCount: 44
     m_Data: {fileID: 11400000, guid: 82d86d3bc34c34d48ac9e531b08588ae, type: 2}
-  - m_RefCount: 67
+  - m_RefCount: 64
     m_Data: {fileID: 11400000, guid: 8910b35c1688e4989aa3f62212440e6b, type: 2}
-  - m_RefCount: 7198
+  - m_RefCount: 7204
     m_Data: {fileID: 11400000, guid: 5abfb8530a71c4e458b47c55a6350d1e, type: 2}
   m_TileSpriteArray:
   - m_RefCount: 0
@@ -74241,17 +74226,17 @@ Tilemap:
     m_Data: {fileID: 0}
   - m_RefCount: 0
     m_Data: {fileID: 0}
-  - m_RefCount: 36
+  - m_RefCount: 34
     m_Data: {fileID: 21300000, guid: 72600ec4565c5cd4096f85be5b2f93e8, type: 3}
-  - m_RefCount: 569
+  - m_RefCount: 572
     m_Data: {fileID: 21300000, guid: b99068ec623350f4aaed2ddb9cbaf389, type: 3}
-  - m_RefCount: 28
+  - m_RefCount: 27
     m_Data: {fileID: 21300000, guid: 104f3eea9e3e02344ae26c49c3069ffc, type: 3}
-  - m_RefCount: 47
+  - m_RefCount: 44
     m_Data: {fileID: 21300000, guid: 51da486d08a712c42b777a890813863f, type: 3}
-  - m_RefCount: 67
+  - m_RefCount: 64
     m_Data: {fileID: 21300000, guid: 0176fa3c0a61a0f4cad9cc98bc459e0c, type: 3}
-  - m_RefCount: 7198
+  - m_RefCount: 7204
     m_Data: {fileID: 21300000, guid: 71c9d16b0d779e04e8a6d6f78cf7837b, type: 3}
   m_TileMatrixArray:
   - m_RefCount: 7942
@@ -74532,7 +74517,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 7f584ee330a424b07a0c8cc0f6d5f01d, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.7
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -74891,8 +74876,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 161437994}
-        m_MethodName: PauseGame
+      - m_Target: {fileID: 1672117390}
+        m_MethodName: UnPauseGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -75091,7 +75076,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 161437994}
+      - m_Target: {fileID: 0}
         m_MethodName: ReturnToLevelSelectMenu
         m_Mode: 1
         m_Arguments:
@@ -75221,7 +75206,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 161437994}
+      - m_Target: {fileID: 0}
         m_MethodName: ConfirmExitGame
         m_Mode: 1
         m_Arguments:
@@ -75351,7 +75336,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 161437994}
+      - m_Target: {fileID: 0}
         m_MethodName: PauseGame
         m_Mode: 1
         m_Arguments:
@@ -76345,7 +76330,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 161437994}
+      - m_Target: {fileID: 0}
         m_MethodName: HidePrompt
         m_Mode: 1
         m_Arguments:
@@ -78541,7 +78526,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 161437994}
+      - m_Target: {fileID: 0}
         m_MethodName: ReturnToLevelSelectMenu
         m_Mode: 1
         m_Arguments:
@@ -78671,8 +78656,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 161437994}
-        m_MethodName: ConfirmExitGame
+      - m_Target: {fileID: 1672117390}
+        m_MethodName: ExitGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -79021,7 +79006,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 161437994}
+      - m_Target: {fileID: 1672117390}
         m_MethodName: ReturnToLevelSelectMenu
         m_Mode: 1
         m_Arguments:
@@ -80147,6 +80132,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1672117389}
+  - component: {fileID: 1672117390}
   m_Layer: 5
   m_Name: Pause
   m_TagString: Untagged
@@ -80175,6 +80161,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1672117390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1672117388}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03c13efe4fcbe438b9d398d8bc1b2712, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1682149260
 GameObject:
   m_ObjectHideFlags: 0

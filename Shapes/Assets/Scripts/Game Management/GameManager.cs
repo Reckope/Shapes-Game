@@ -19,11 +19,13 @@ public class GameManager : MonoBehaviour
 	public static GameManager Instance { get { return _instance; } }
 	private static GameManager _instance;
 
+	private AudioSource audioSource;
+
 	public event Action GamePaused;
 	public event Action UnpausedGame;
-	public event Action ExitedLevel;
+	//public event Action ExitedLevel;
 	
-	private bool _pausedGame = false;
+	public bool PausedGame { get; set; }
 	[SerializeField][Range(0.1f, 1f)]
 	private float slowMotionSpeed = 0.3f;
 	private const float ACTION_SHOT_PERCENTAGE_CHANCE = 5f;
@@ -38,12 +40,28 @@ public class GameManager : MonoBehaviour
 	private void Awake()
 	{
 		GameSettings();
+		audioSource = GetComponent<AudioSource>();
+	}
+
+	private void OnEnable()
+	{
+		SceneController.LoadedScene += StartFresh;
+	}
+
+	private void OnDisable()
+	{
+		SceneController.LoadedScene -= StartFresh;
 	}
 
 	private void Start()
 	{
-		//SceneController.LoadedScene += PauseGame;
-		_pausedGame = false;
+		DontDestroyOnLoad(this.gameObject);
+	}
+
+	private void StartFresh()
+	{
+		PausedGame = false;
+		AudioListener.pause = false;
 		EnableSlowMotion(false);
 	}
 
@@ -53,8 +71,14 @@ public class GameManager : MonoBehaviour
 		if(GameData.LevelIsActive)
 		{
 			GameData.IncrementTimePlayed();
+			audioSource.enabled = false;
 		}
-		if(Input.GetKeyDown("p"))
+		else
+		{
+			audioSource.enabled = true;
+		}
+
+		if(Input.GetKeyDown("p") && GameData.LevelIsActive)
 		{
 			PauseGame();
 		}
@@ -65,7 +89,7 @@ public class GameManager : MonoBehaviour
 	{
 		if(_instance != null && _instance != this)
 		{
-			Debug.LogError("Error: Another instance of GameManager has been found in scene " + " '" + SceneController.GetActiveScene() + "'.");
+			Debug.Log("Error: Another instance of GameManager has been found in scene " + " '" + SceneController.GetActiveScene() + "'.");
 			Destroy(this.gameObject);
 		} 
 		else
@@ -98,25 +122,27 @@ public class GameManager : MonoBehaviour
 
 	public void PauseGame()
 	{
-		if(!_pausedGame)
+		if(!PausedGame)
 		{
 			if(GamePaused != null)
 			{
 				GamePaused();
 			}
-			_pausedGame = true;
+			PausedGame = true;
+			AudioListener.pause = true;
 			Time.timeScale = 0;
 			Time.fixedDeltaTime = FIXED_TIMESTEP * Time.timeScale;
 			UIManager.Instance.DisplayUI(UIManager.CanvasNames.PauseMenu, true);
 			return;
 		}
-		else if(_pausedGame)
+		else if(PausedGame)
 		{
 			if(UnpausedGame != null)
 			{
 				UnpausedGame();
 			}
-			_pausedGame = false;
+			PausedGame = false;
+			AudioListener.pause = false;
 			Time.timeScale = 1;
 			Time.fixedDeltaTime = FIXED_TIMESTEP;
 			UIManager.Instance.DisplayUI(UIManager.CanvasNames.PauseMenu, false);
@@ -134,11 +160,11 @@ public class GameManager : MonoBehaviour
 		else
 		{
 			Time.timeScale = 1;
-    		Time.fixedDeltaTime = FIXED_TIMESTEP ;
+			Time.fixedDeltaTime = FIXED_TIMESTEP ;
 		}
 	}
 
-	public void ReturnToLevelSelectMenu()
+	/*public void ReturnToLevelSelectMenu()
 	{
 		SceneController.Instance.LoadScene("LevelSelect");
 		//_pausedGame = false;
@@ -146,7 +172,7 @@ public class GameManager : MonoBehaviour
 		{
 			ExitedLevel();
 		}
-	}
+	}*/
 
 	public void ConfirmExitGame()
 	{

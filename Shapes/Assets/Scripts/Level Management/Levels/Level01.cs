@@ -1,26 +1,18 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Level01 : Level
 {
+	public static event Action PlayLevel01Intro;
+
 	// Start is called before the first frame update
 	void Start()
 	{
-		
-	}
-
-	// Update is called once per frame
-	void Update()
-	{
-
-	}
-
-	public void OnTriggerEnter2D(Collider2D col)
-	{
-		if(col.name == "Player")
+		if(PlayLevel01Intro != null)
 		{
-			Debug.Log("End mission");
+			PlayLevel01Intro();
 		}
 	}
 }

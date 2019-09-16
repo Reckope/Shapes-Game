@@ -13,6 +13,8 @@ using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
 
 
@@ -25,6 +27,7 @@ public class LevelManager : MonoBehaviour
 	// GameObjects
 	public GameObject buttonPrefab;
 	public GameObject canvasParent;
+	public Text feedbackText;
 
 	// Global Variables
 	private LevelButton[] levelButtons;
@@ -175,5 +178,11 @@ public class LevelManager : MonoBehaviour
 		{
 			SetActiveLevel(GameData.ActiveLevelIndex, false);
 		}
+	}
+
+	public void DisplayFeedbackText(string feedback)
+	{
+		Assert.IsNotNull(feedbackText);
+		feedbackText.text = feedback;
 	}
 }

@@ -29,4 +29,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Levels/Tutorial.unity
     guid: 2cea54d3dae0a4ff5880ce9c158b4b2d
+  - enabled: 1
+    path: Assets/Scenes/InGameMenu.unity
+    guid: d4426c4d2e3b5427c900fdbef9eff4e5
+  - enabled: 1
+    path: Assets/Scenes/Controls.unity
+    guid: b1714c8aa261b483a82e6a8e89a7c634
   m_configObjects: {}

@@ -52,13 +52,13 @@ public class MainMenuManager : MonoBehaviour
 		}
 		GameData.LoadLevelDataFromResources();
 		GameData.Savegame();
-		SceneController.Instance.LoadScene("LevelSelect");
+		SceneController.Instance.LoadScene("InGameMenu");
 	}
 
 	public void LoadExistingGame()
 	{
 		GameData.LoadGame();
-		SceneController.Instance.LoadScene("LevelSelect");
+		SceneController.Instance.LoadScene("InGameMenu");
 	}
 
 	public void HideConfirmNewGamePrompt()
