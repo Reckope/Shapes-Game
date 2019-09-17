@@ -65,7 +65,7 @@ public class IdleState : State
 
 	private void HitByBlock()
 	{
-		// Sound
+		ped.PlaySound(Ped.PedSounds.Splat, true, false, 0.8f);
 		ped.TakeDamage(Ped.DamageType.Destroy);
 	}
 

@@ -23,14 +23,14 @@ public class GameManager : MonoBehaviour
 
 	public event Action GamePaused;
 	public event Action UnpausedGame;
-	//public event Action ExitedLevel;
+	public event Action ExitedLevel;
 	
 	public bool PausedGame { get; set; }
 	[SerializeField][Range(0.1f, 1f)]
 	private float slowMotionSpeed = 0.3f;
-	private const float ACTION_SHOT_PERCENTAGE_CHANCE = 5f;
+	public float ActionShotPercentageChance { get; set; }
+	private const float INITIAL_ACTION_SHOT_PERCENTAGE_CHANCE = 5f;
 	[SerializeField][Range(0, 100f)]
-	private float actionShotPercentageChance = 30f;
 	private const float FIXED_TIMESTEP = 0.01f;
 
 	public static float deltaTime;
@@ -56,6 +56,7 @@ public class GameManager : MonoBehaviour
 	private void Start()
 	{
 		DontDestroyOnLoad(this.gameObject);
+		AudioListener.pause = false;
 	}
 
 	private void StartFresh()
@@ -105,9 +106,9 @@ public class GameManager : MonoBehaviour
 	// an enemy dies. This increase when an enemy dies, but doesn't active.
 	public IEnumerator EnableActionShot()
 	{
-		if(UnityEngine.Random.value <= (actionShotPercentageChance / 100))
+		if(UnityEngine.Random.value <= (ActionShotPercentageChance / 100))
 		{
-			actionShotPercentageChance = ACTION_SHOT_PERCENTAGE_CHANCE;
+			ActionShotPercentageChance = INITIAL_ACTION_SHOT_PERCENTAGE_CHANCE;
 			EnableSlowMotion(true);
 			UIManager.Instance.DisplayUI(UIManager.CanvasNames.ActionShot, true);
 			yield return new WaitForSeconds(1);
@@ -116,7 +117,7 @@ public class GameManager : MonoBehaviour
 		}
 		else
 		{
-			actionShotPercentageChance++;
+			ActionShotPercentageChance++;
 		}
 	}
 
@@ -164,16 +165,6 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-	/*public void ReturnToLevelSelectMenu()
-	{
-		SceneController.Instance.LoadScene("LevelSelect");
-		//_pausedGame = false;
-		if(ExitedLevel != null)
-		{
-			ExitedLevel();
-		}
-	}*/
-
 	public void ConfirmExitGame()
 	{
 		UIManager.Instance.DisplayUI(UIManager.CanvasNames.ExitGamePrompt, true);
@@ -193,6 +184,16 @@ public class GameManager : MonoBehaviour
 	{
 		Savegame();
 		SceneController.Instance.LoadScene("MainMenu");
+	}
+
+	public void ReturnToLevelSelectMenu()
+	{
+		GameData.LevelIsActive = false;
+		SceneController.Instance.LoadScene("LevelSelect");
+		if(ExitedLevel != null)
+		{
+			ExitedLevel();
+		}
 	}
 
 	// Path for buttons

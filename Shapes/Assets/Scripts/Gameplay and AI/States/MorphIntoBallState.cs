@@ -19,6 +19,7 @@ public class MorphIntoBallState : State
 	private float ballSpeed = 4f;
 	private bool isAbleToAddForce;
 	private float maxForce = 12f;
+	private bool soundIsPlaying;
 
 	// Call the constructure from SetState (StateMachine.cs), then override all of the peds Monobehaviour methods (Ped.cs).
 	public MorphIntoBallState(StateMachine stateMachine, Ped ped) : base(stateMachine, ped) { }
@@ -79,6 +80,7 @@ public class MorphIntoBallState : State
 			ped.Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
 			ped.RevertTag();
 			ped.Animator.SetBool("morphToBall", false);
+			ped.PlaySound(Ped.PedSounds.BallRolling, false, false, 0.3f);
 		}
 	}
 
@@ -92,6 +94,7 @@ public class MorphIntoBallState : State
 		ped.HasHitBallState += HitBall;;
 		ped.HasHitHorizontalShieldState += HitHorizontalShield;
 		ped.HasHitVerticalShieldState += HitVerticalShield;
+		ped.HasHitGround += PlayRollingSound;
 	}
 
 	private void UnsubscribeToInteractionEvents()
@@ -100,6 +103,7 @@ public class MorphIntoBallState : State
 		ped.HasHitBallState -= HitBall;
 		ped.HasHitHorizontalShieldState -= HitHorizontalShield;
 		ped.HasHitVerticalShieldState -= HitVerticalShield;
+		ped.HasHitGround -= PlayRollingSound;
 	}
 
 	// ==============================================================
@@ -108,13 +112,12 @@ public class MorphIntoBallState : State
 
 	private void HitBall()
 	{
-		// Sound
-		// Public observer event: Name + died. (DataManager.HitBall();)
 		BounceBack();
 	}
 
 	private void HitBlock()
 	{
+		ped.PlaySound(Ped.PedSounds.Splat, true, false, 0.8f);
 		ped.TakeDamage(Ped.DamageType.Destroy);
 	}
 
@@ -175,5 +178,18 @@ public class MorphIntoBallState : State
 		float bounceAwayForce = 120f;
 
 		ped.Rigidbody2D.AddForce(bounceDirection * bounceAwayForce);
+	}
+
+	private void PlayRollingSound()
+	{
+		if(soundIsPlaying)
+		{
+			return;
+		}
+		else
+		{
+			ped.PlaySound(Ped.PedSounds.BallRolling, true, true, 0.3f);
+			soundIsPlaying = true;
+		}
 	}
 }

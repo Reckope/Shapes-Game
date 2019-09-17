@@ -84,6 +84,7 @@ public class WalkingState : State
 
 	private void HitBlock()
 	{
+		ped.PlaySound(Ped.PedSounds.Splat, true, false, 0.8f);
 		ped.TakeDamage(Ped.DamageType.Destroy);
 	}
 

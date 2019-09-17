@@ -14,5 +14,6 @@ public class Level04 : MonoBehaviour
 		{
 			PlayLevel04Intro();
 		}
+		GameManager.Instance.ActionShotPercentageChance = 100f;
 	}
 }

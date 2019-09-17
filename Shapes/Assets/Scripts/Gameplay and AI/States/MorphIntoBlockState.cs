@@ -111,6 +111,7 @@ public class MorphIntoBlockState : State
 	{
 		if(!ped.IsDead)
 		{
+			ped.PlaySound(Ped.PedSounds.BlockToGround, true, false, 1f);
 			if(ped.pedType == Ped.PedType.Enemy)
 			{
 				ped.TakeDamage(Ped.DamageType.Hit);

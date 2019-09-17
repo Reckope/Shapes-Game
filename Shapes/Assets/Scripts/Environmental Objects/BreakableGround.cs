@@ -1,13 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class BreakableGround : MonoBehaviour
 {
+
+	private AudioSource AudioSource;
 	// Start is called before the first frame update
 	void Start()
 	{
-		
+		AudioSource = GetComponent<AudioSource>();
+		Assert.IsNotNull(AudioSource);
 	}
 
 	// Update is called once per frame
@@ -20,12 +24,15 @@ public class BreakableGround : MonoBehaviour
 	{
 		if(col.gameObject.tag == Ped.States.Block.ToString())
 		{
-			BreakGround();
+			StartCoroutine(BreakGround());
 		}
 	}
 
-	private void BreakGround()
+	private IEnumerator BreakGround()
 	{
+		AudioSource.Play();
+		transform.position = new Vector2(999f, 999f);
+		yield return new WaitForSeconds(5);
 		Destroy(this.gameObject);
 	}
 }

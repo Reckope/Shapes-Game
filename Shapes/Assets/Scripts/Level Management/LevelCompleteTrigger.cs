@@ -18,6 +18,7 @@ public class LevelCompleteTrigger : MonoBehaviour
 	{
 		if(col.gameObject.layer == LayerMask.NameToLayer(Ped.PedType.Player.ToString()))
 		{
+			AudioListener.pause = true;
 			if(CompletedLevel != null)
 			{
 				CompletedLevel(GameData.ActiveLevelIndex, true);

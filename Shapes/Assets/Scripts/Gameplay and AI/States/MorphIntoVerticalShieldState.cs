@@ -79,7 +79,7 @@ public class MorphIntoVerticalShieldState : State
 
 	private void HitBlock()
 	{
-		// Data
+		ped.PlaySound(Ped.PedSounds.Splat, true, false, 0.8f);
 		ped.TakeDamage(Ped.DamageType.Destroy);
 	}
 

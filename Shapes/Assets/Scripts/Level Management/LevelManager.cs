@@ -143,7 +143,7 @@ public class LevelManager : MonoBehaviour
 		LevelInfo level = GameData.levelData.levels.Find((x) => x.buildIndex == completedLevelBuildIndex);
 
 		level.isActive = false;
-		GameData.LevelIsActive = false;
+		//GameData.LevelIsActive = false;
 		if(successfullyCompleted)
 		{
 			level.isCompleted = true;

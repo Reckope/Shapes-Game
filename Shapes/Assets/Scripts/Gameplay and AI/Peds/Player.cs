@@ -49,6 +49,7 @@ public class Player : Ped
 		get { return !Physics2D.OverlapCircle (morphIntoBlockCheck.position, blockCheckRadius, whatIsGround); } 
 	}
 	public GameObject[] hearts;
+	
 	public AudioClip footStepsAudio;
 	private AudioSource audioSource;
 
@@ -147,7 +148,7 @@ public class Player : Ped
 	private void HandlePlayerInput()
 	{
 		bool MorphToBlockFeedbackInput = Input.GetKey("up");
-		float jump = Input.GetAxisRaw("Jump");
+		bool jump = Input.GetKeyDown("w");
 
 		MovementDirection = Input.GetAxisRaw("Horizontal");
 
@@ -169,8 +170,11 @@ public class Player : Ped
 			{
 				SetPedState(States.VerticalShield);
 			}
-			if(jump > 0)
+			if(jump)
 			{
+				// Putting the sound here so it doesn't get repeatedly called
+				// for a few frames in ped.cs FixedUpdate.
+				PlaySound(PedSounds.Jump, true, false, 1);
 				Jumped = true;
 			}
 		}
@@ -321,9 +325,7 @@ public class Player : Ped
 
 	public void PlayFootStepsAudio()
 	{
-		audioSource.Play();
 		audioSource.clip = footStepsAudio;
 		audioSource.Play();
-		Debug.Log("Footstep");
 	}
 }

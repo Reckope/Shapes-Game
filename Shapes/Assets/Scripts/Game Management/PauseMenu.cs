@@ -5,15 +5,9 @@ using UnityEngine;
 
 public class PauseMenu : MonoBehaviour
 {
-	public static event Action ExitedLevel;
-
 	public void ReturnToLevelSelectMenu()
 	{
-		SceneController.Instance.LoadScene("LevelSelect");
-		if(ExitedLevel != null)
-		{
-			ExitedLevel();
-		}
+		GameManager.Instance.ReturnToLevelSelectMenu();
 	}
 
 	public void UnPauseGame()

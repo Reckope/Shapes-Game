@@ -13,11 +13,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(CapsuleCollider2D))]
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(StateMachine))]
+[RequireComponent(typeof(AudioSource))]
 public class Ped : MonoBehaviour
 {
 	// ============================================================
@@ -69,6 +71,18 @@ public class Ped : MonoBehaviour
 	}
 	DamageType damageType;
 
+	public enum PedSounds
+	{
+		Morph,
+		BallRolling,
+		BlockToGround,
+		ToShield,
+		Ouch,
+		Splat,
+		Jump,
+		Land
+	}
+
 	// ============================================================
 	// Everything a healthy ped needs.
 	// ============================================================
@@ -85,6 +99,8 @@ public class Ped : MonoBehaviour
 	public Animator Animator;
 	[HideInInspector]
 	public Animation Animation;
+	[HideInInspector]
+	public AudioSource AudioSource;
 
 	// GameObjects / Transforms
 	[HideInInspector]
@@ -140,6 +156,8 @@ public class Ped : MonoBehaviour
 	public bool MorphToHorizontalShieldInput { get; protected set; }
 	public bool MorphToVerticalShieldInput { get; protected set; }
 
+	public List<AudioClip> pedSounds;
+
 	// ============================================================
 	// MonoBehaviour methods
 	// ============================================================
@@ -150,6 +168,8 @@ public class Ped : MonoBehaviour
 		Rigidbody2D = GetComponent<Rigidbody2D>();
 		Collider2D = GetComponent<Collider2D>();
 		Animator = GetComponent<Animator>();
+		AudioSource = GetComponent<AudioSource>();
+		Assert.IsNotNull(AudioSource);
 		stateMachine = GetComponent<StateMachine>();
 	}
 
@@ -309,6 +329,7 @@ public class Ped : MonoBehaviour
 		}
 		else
 		{
+			PlaySound(PedSounds.Morph, true, false, 0.4f);
 			switch(state)
 			{
 				case States.Ball: 
@@ -425,6 +446,7 @@ public class Ped : MonoBehaviour
 	{
 		if(DamageType == DamageType.Hit)
 		{
+			PlaySound(PedSounds.Ouch, true, false, 1f);
 			if(pedType == PedType.Player)
 			{
 				if(!Player.Instance.isInvulnerable)
@@ -546,5 +568,40 @@ public class Ped : MonoBehaviour
 		Rigidbody2D.AddForce(bounceDirection * bounceAwayForce);
 		yield return new WaitForSeconds(0.5f);
 		IsAbleToMove = true;
+	}
+
+	// Any ped can call this and play a sound locally :)
+	public void PlaySound(PedSounds sounds, bool play, bool loop, float volume)
+	{
+		string sound = sounds.ToString();
+		foreach(AudioClip clip in pedSounds)
+		{
+			if(clip.name == sound)
+			{
+				AudioSource.clip = clip;
+				if(play && loop)
+				{
+					AudioSource.loop = loop;
+					AudioSource.volume = volume;
+					AudioSource.Play();
+				}
+				else if(play && !loop)
+				{
+					AudioSource.PlayOneShot(clip, volume);
+				}
+				else
+				{
+					AudioSource.loop = false;
+					AudioSource.volume = 1;
+					AudioSource.Stop();
+				}
+			}
+		}
+	}
+
+	// Used by Animation Event
+	public void PlayLandSound()
+	{
+		PlaySound(PedSounds.Land, true, false, 1);
 	}
 }
