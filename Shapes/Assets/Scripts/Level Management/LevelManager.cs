@@ -180,6 +180,32 @@ public class LevelManager : MonoBehaviour
 		}
 	}
 
+	//Methods for Buttons in LevelSelect
+	public void SaveGame()
+	{
+		GameManager.Instance.SaveGame();
+	}
+
+	public void ReturnToPreviousMenu()
+	{
+		GameManager.Instance.SaveBeforeReturningToPreviousMenu();
+	}
+
+	public void ConfirmExitGame()
+	{
+		GameManager.Instance.ConfirmExitGame();
+	}
+
+	public void ExitGame()
+	{
+		GameManager.Instance.ExitGame();
+	}
+
+	public void HideExitGamePrompt()
+	{
+		GameManager.Instance.HideExitGamePrompt();
+	}
+
 	public void DisplayFeedbackText(string feedback)
 	{
 		Assert.IsNotNull(feedbackText);

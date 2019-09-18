@@ -31,12 +31,6 @@ public class UIManager : MonoBehaviour
 
 	public List<CanvasInfo> canvases = new List<CanvasInfo>();
 
-	public GameObject prompt;
-	public Text promptLineOne;
-	public Text promptlineTwo;
-	public Button promptYesButton;
-	public Button promptNoButton;
-
 	public delegate void PromptActionMethod();
 	public PromptActionMethod PromptAction;
 
@@ -70,22 +64,6 @@ public class UIManager : MonoBehaviour
 		ui.canvas.SetActive(display);
 	}
 
-	public void DisplayPrompt(string line1, string line2, PointerEventData action)
-	{
-		//PointerEventData hide;
-		prompt.SetActive(true);
-		promptLineOne.text = line1;
-		promptlineTwo.text = line2;
-
-		promptYesButton.OnPointerDown(action);
-		//promptNoButton.OnPointerDown(hide);
-	}
-
-	//public PointerEventData HidePrompt()
-	//{
-	//	prompt.SetActive(false);
-	//}
-
 	public void PromptYes(PromptActionMethod action)
 	{
 		action();
@@ -96,28 +74,4 @@ public class UIManager : MonoBehaviour
 		CanvasInfo ui = canvases.Find((x) => x.name == CanvasNames.CompletedLevel);
 		ui.canvas.SetActive(true);
 	}
-/* 
-	private void DisplayPausedGameUI()
-	{
-		CanvasInfo ui = canvases.Find((x) => x.name == CanvasNames.PauseMenu);
-		ui.canvas.SetActive(true);
-	}
-
-	private void HidePausedGameUI()
-	{
-		CanvasInfo ui = canvases.Find((x) => x.name == CanvasNames.PauseMenu);
-		ui.canvas.SetActive(false);
-	}
-
-	private void DisplayActionShotUI()
-	{
-		CanvasInfo ui = canvases.Find((x) => x.name == CanvasNames.ActionShot);
-		ui.canvas.SetActive(true);
-	}
-
-	private void HideActionShotUI()
-	{
-		CanvasInfo ui = canvases.Find((x) => x.name == CanvasNames.ActionShot);
-		ui.canvas.SetActive(false);
-	}*/
 }

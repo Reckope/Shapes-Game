@@ -106,7 +106,7 @@ public static class GameData
 		}
 	}
 
-	public static void Savegame()
+	public static void SaveGame()
 	{
 		string dataLevels = JsonUtility.ToJson(levelData);
 		string dataPlayerStats = JsonUtility.ToJson(playerStatsData);

@@ -292,7 +292,7 @@ public class Player : Ped
 		// No idea why it worked in the editor, but not in release. 
 		if(this != null)
 		{
-			transform.position = new Vector2(-593f, -2.44f);
+			transform.position = new Vector2(-580f, -2.44f);
 			levelFourIsActive = true;
 			Invoke("ReturnToNormal", 52.6f);
 		}

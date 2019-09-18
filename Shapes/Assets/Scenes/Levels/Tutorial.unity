@@ -1821,8 +1821,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: HidePrompt
+      - m_Target: {fileID: 94770084}
+        m_MethodName: HideExitGamePrompt
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3684,7 +3684,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &901389119
 GameObject:
@@ -4327,11 +4327,6 @@ MonoBehaviour:
     canvas: {fileID: 25754177}
   - name: 6
     canvas: {fileID: 534484899}
-  prompt: {fileID: 0}
-  promptLineOne: {fileID: 0}
-  promptlineTwo: {fileID: 0}
-  promptYesButton: {fileID: 0}
-  promptNoButton: {fileID: 0}
 --- !u!4 &1158795355
 Transform:
   m_ObjectHideFlags: 0
@@ -4344,7 +4339,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1166823644
 GameObject:
@@ -5069,7 +5064,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1484463484
 GameObject:
@@ -32801,7 +32796,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 94770084}
         m_MethodName: ExitGame
         m_Mode: 1
         m_Arguments:

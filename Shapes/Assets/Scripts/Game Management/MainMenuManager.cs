@@ -51,7 +51,7 @@ public class MainMenuManager : MonoBehaviour
 			GameData.DeleteExistingSave();
 		}
 		GameData.LoadLevelDataFromResources();
-		GameData.Savegame();
+		GameData.SaveGame();
 		SceneController.Instance.LoadScene("InGameMenu");
 	}
 

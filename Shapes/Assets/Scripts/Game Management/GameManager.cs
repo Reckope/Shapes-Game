@@ -170,7 +170,7 @@ public class GameManager : MonoBehaviour
 		UIManager.Instance.DisplayUI(UIManager.CanvasNames.ExitGamePrompt, true);
 	}
 
-	public void HidePrompt()
+	public void HideExitGamePrompt()
 	{
 		UIManager.Instance.DisplayUI(UIManager.CanvasNames.ExitGamePrompt, false);
 	}
@@ -180,10 +180,10 @@ public class GameManager : MonoBehaviour
 		UIManager.Instance.DisplayUI(UIManager.CanvasNames.MainMenuPrompt, false);
 	}
 
-	public void SaveBeforeReturningToMainMenu()
+	public void SaveBeforeReturningToPreviousMenu()
 	{
-		Savegame();
-		SceneController.Instance.LoadScene("MainMenu");
+		SaveGame();
+		SceneController.Instance.LoadScene("InGameMenu");
 	}
 
 	public void ReturnToLevelSelectMenu()
@@ -197,9 +197,9 @@ public class GameManager : MonoBehaviour
 	}
 
 	// Path for buttons
-	public void Savegame()
+	public void SaveGame()
 	{
-		GameData.Savegame();
+		GameData.SaveGame();
 	}
 
 	public void ExitGame()
