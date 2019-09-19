@@ -125,7 +125,7 @@ public class Ped : MonoBehaviour
 	// Detect collisions around the ped to prevent morphing in tight spaces.
 	public bool CollidedLeft { get { return Physics2D.OverlapCircle (leftCheck.position, SideCheckRadius, whatIsGround); } }
 	public bool CollidedRight { get { return Physics2D.OverlapCircle (rightCheck.position, SideCheckRadius, whatIsGround); } }
-	public bool CollidedTop { get { return Physics2D.OverlapCircle (topCheck.position, GroundCheckRadius * 3, whatIsGround); } }
+	public bool CollidedTop { get { return Physics2D.OverlapCircle (topCheck.position, GroundCheckRadius, whatIsGround); } }
 	public bool IsGrounded { get { return Physics2D.OverlapCircle (groundCheck.position, GroundCheckRadius, whatIsGround); } }
 
 	public bool EnemyCollidedLeft { get; set; }
@@ -143,7 +143,7 @@ public class Ped : MonoBehaviour
 	public event Action HasHitGround;
 	public event Action HasHitWater;
 	public event Action HasHitPlayer;
-	public event Action HasHitEnemy;
+	public static event Action HasHitEnemy;
 	public event Action HasHitBallState;
 	public event Action HasHitBlockState;
 	public event Action HasHitHorizontalShieldState;
@@ -179,6 +179,7 @@ public class Ped : MonoBehaviour
 		Rigidbody2D.bodyType = RigidbodyType2D.Dynamic;
 		HasHitSaw += HitSaw;
 		rotation = areaColliders.transform.rotation;
+		AudioSource.spatialBlend = 1f;
 		IsAbleToMove = true;
 		IsAbleToJump = true;
 	}
@@ -323,11 +324,11 @@ public class Ped : MonoBehaviour
 	// adding additional functionality to only call the state for one frame. 
 	public void SetPedState(States state)
 	{
-		if(HasMorphed && !IsDead)
+		if(HasMorphed)
 		{
 			return;
 		}
-		else
+		else if(!IsDead)
 		{
 			PlaySound(PedSounds.Morph, true, false, 0.4f);
 			switch(state)
@@ -456,10 +457,6 @@ public class Ped : MonoBehaviour
 			}
 			else
 			{
-				if(Name != PedNames.Cinder.ToString())
-				{
-					GameManager.Instance.StartCoroutine(GameManager.Instance.EnableActionShot());
-				}
 				Die();
 			}
 		}
@@ -473,7 +470,6 @@ public class Ped : MonoBehaviour
 			}
 			else
 			{
-				GameManager.Instance.StartCoroutine(GameManager.Instance.EnableActionShot());
 				Destroy();
 			}
 		}
@@ -514,7 +510,6 @@ public class Ped : MonoBehaviour
 		}
 		else if(Name == PedNames.Aegis.ToString())
 		{
-			Debug.Log("Aegis Killed");
 			GameData.IncrementPlayerStatsData(GameData.PlayerStatIDs.AegisKilled);
 		}
 		else if(Name == PedNames.Priwen.ToString())

@@ -154,7 +154,7 @@ public class MorphIntoBallState : State
 
 	private void PlayerControls()
 	{
-		if(!ped.MorphToBallInput && !ped.CollidedTop && (!ped.CollidedLeft || !ped.CollidedRight))
+		if(!ped.MorphToBallInput && (!ped.CollidedTop && !ped.CollidedLeft) || !ped.MorphToBallInput && (!ped.CollidedTop && !ped.CollidedRight))
 		{
 			ped.ExitMorphState();
 		}

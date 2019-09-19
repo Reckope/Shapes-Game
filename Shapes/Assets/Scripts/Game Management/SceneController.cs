@@ -27,7 +27,7 @@ public class SceneController : MonoBehaviour
 	{
 		if(_instance != null && _instance != this)
 		{
-			Debug.LogError("Error: Another instance of SceneController has been found in scene " + " '" + GetActiveScene() + "'.");
+			Debug.Log("Error: Another instance of SceneController has been found in scene " + " '" + GetActiveScene() + "'.");
 			Destroy(this.gameObject);
 		} 
 		else
@@ -53,10 +53,9 @@ public class SceneController : MonoBehaviour
 		}
 	}
 
-	public void RestartLevel()
+	public void RetryLevel()
 	{
-		Scene scene = SceneManager.GetActiveScene(); 
-		SceneManager.LoadScene(scene.name);
+		LoadScene(GetActiveScene());
 	}
 
 	public static String GetActiveScene()

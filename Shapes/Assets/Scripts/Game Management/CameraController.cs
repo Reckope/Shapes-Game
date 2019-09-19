@@ -13,6 +13,7 @@ public class CameraController : MonoBehaviour
 	private CinematicBars CinematicBars;
 
 	private Animator Animator;
+	private AudioLowPassFilter AudioLowPassFilter;
 
 	private Transform player;
 	private Camera Camera;
@@ -38,27 +39,31 @@ public class CameraController : MonoBehaviour
 		player = GameObject.FindGameObjectWithTag("Player").transform;
 		Camera = GetComponent<Camera>();
 		Animator = GetComponent<Animator>();
+		AudioLowPassFilter = GetComponent<AudioLowPassFilter>();
 		Assert.IsNotNull(player);
 		Assert.IsNotNull(CinematicBars);
 		Assert.IsNotNull(Camera);
 		Assert.IsNotNull(Animator);
+		Assert.IsNotNull(AudioLowPassFilter);
 	}
 
 	void OnEnable()
 	{
 		followPlayer = true;
-		GameManager.Instance.GamePaused += PauseMusic;
-		LevelCompleteTrigger.CompletedLevel += OnFollowPlayer;
+		GameManager.Instance.ActionShotIsActive += Action;
+		LevelCompleteTrigger.LevelIsComplete += OnFollowPlayer;
 		Level04.PlayLevel04Intro += LevelFourIntro;
 		Level01.PlayLevel01Intro += LevelOneIntro;
+		Player.HasDied += PlayerDied;
 	}
 
 	void OnDisable()
 	{
-		GameManager.Instance.GamePaused -= PauseMusic;
-		LevelCompleteTrigger.CompletedLevel -= OnFollowPlayer;
+		GameManager.Instance.ActionShotIsActive -= Action;
+		LevelCompleteTrigger.LevelIsComplete -= OnFollowPlayer;
 		Level04.PlayLevel04Intro -= LevelFourIntro;
 		Level01.PlayLevel01Intro -= LevelOneIntro;
+		Player.HasDied -= PlayerDied;
 	}
 
 	// Start is called before the first frame update
@@ -68,6 +73,7 @@ public class CameraController : MonoBehaviour
 		cameraMinYBounds = -9999f;
 		cameraMinXBounds = -9999f;
 		cameraMaxXBounds = 9999f;
+		AudioLowPassFilter.enabled = false;
 		Instanced();
 	}
 
@@ -109,7 +115,7 @@ public class CameraController : MonoBehaviour
 		transform.position = Vector3.SmoothDamp(transform.position, destination, ref velocity, FOLLOW_PLAYER_DAMP_TIME);
 	}
 
-	private void OnFollowPlayer(int level, bool completed)
+	private void OnFollowPlayer()
 	{
 		followPlayer = false;
 	}
@@ -132,8 +138,25 @@ public class CameraController : MonoBehaviour
 		Invoke("FollowPlayer", 15.0f);
 	}
 
-	private void PauseMusic()
+	private void Action(bool actionIsEnabled)
 	{
-		//AudioListener.pause = true;
+		if(actionIsEnabled)
+		{
+			Camera.orthographicSize = 4.5f;
+		}
+		else
+		{
+			Camera.orthographicSize = 5.5f;
+		}
+	}
+
+	public void MuffleMusic()
+	{
+		AudioLowPassFilter.enabled = true;
+	}
+
+	private void PlayerDied()
+	{
+		MuffleMusic();
 	}
 }

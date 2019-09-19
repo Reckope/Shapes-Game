@@ -27,7 +27,6 @@ public class DeadState : State
 	public override void EnterState()
 	{
 		//SubscribeToInteractionEvents();
-		//PedHasDied event <pedName>
 		ped.StartCoroutine(FallOffScreen());
 		ped.IsAbleToMove = false;
 	}

@@ -1139,7 +1139,7 @@ PrefabInstance:
     - target: {fileID: 3703828467031729774, guid: bb3d9665296f44766a8277b39c787cf3,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 11.87
+      value: 6.21
       objectReference: {fileID: 0}
     - target: {fileID: 3703828467031729774, guid: bb3d9665296f44766a8277b39c787cf3,
         type: 3}
@@ -1200,6 +1200,21 @@ PrefabInstance:
         type: 3}
       propertyPath: _alertedSpeed
       value: 3.29
+      objectReference: {fileID: 0}
+    - target: {fileID: 3703828467031729773, guid: bb3d9665296f44766a8277b39c787cf3,
+        type: 3}
+      propertyPath: _startMovementDirection
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3703828467031729773, guid: bb3d9665296f44766a8277b39c787cf3,
+        type: 3}
+      propertyPath: _startFaceDirection
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3703828467031729773, guid: bb3d9665296f44766a8277b39c787cf3,
+        type: 3}
+      propertyPath: _morphToPlayerRange
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bb3d9665296f44766a8277b39c787cf3, type: 3}
@@ -1814,8 +1829,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: RestartLevel
+      - m_Target: {fileID: 37540393}
+        m_MethodName: RetryLevel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -71454,8 +71469,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: ConfirmExitGame
+      - m_Target: {fileID: 864294805}
+        m_MethodName: ExitGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -72003,6 +72018,7 @@ GameObject:
   - component: {fileID: 1206721829}
   - component: {fileID: 1206721830}
   - component: {fileID: 1206721831}
+  - component: {fileID: 1206721832}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -72130,6 +72146,31 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
+--- !u!169 &1206721832
+AudioLowPassFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1206721825}
+  m_Enabled: 0
+  serializedVersion: 3
+  m_LowpassResonanceQ: 1
+  lowpassLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.045020465
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1235349147
 GameObject:
   m_ObjectHideFlags: 0
@@ -72198,7 +72239,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Tutorial Completed!
+  m_Text: Level Completed!
 --- !u!222 &1235349150
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -72747,7 +72788,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 864294805}
         m_MethodName: ReturnToLevelSelectMenu
         m_Mode: 1
         m_Arguments:
@@ -76510,6 +76551,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2019550972}
   - component: {fileID: 2019550971}
+  - component: {fileID: 2019550973}
   m_Layer: 0
   m_Name: '*Mission Controller'
   m_TagString: Untagged
@@ -76529,6 +76571,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d8c53aaa623b49ce8b8edfc765b6619, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  intro: {fileID: 8300000, guid: 2ef145231d1c544888cfddd41f751ffa, type: 3}
+  breakingFree: {fileID: 8300000, guid: 4fc33b1a00ceb46508a36183e8bc2781, type: 3}
 --- !u!4 &2019550972
 Transform:
   m_ObjectHideFlags: 0
@@ -76543,6 +76587,102 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &2019550973
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2019550970}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 1
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 90
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &2026156291
 GameObject:
   m_ObjectHideFlags: 0

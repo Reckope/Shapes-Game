@@ -21,7 +21,7 @@ public class Player : Ped
 
 	private CinematicBars CinematicBars;
 
-	public event Action PlayerHasDied;
+	public static event Action HasDied;
 
 	// ============================================================
 	// Player Variables
@@ -86,14 +86,14 @@ public class Player : Ped
 
 	private void OnEnable()
 	{
-		LevelCompleteTrigger.CompletedLevel += CompletedLevel;
+		LevelCompleteTrigger.LevelIsComplete += CompletedLevel;
 		Level04.PlayLevel04Intro += RollIntoLevel;
 		Level01.PlayLevel01Intro += LevelOneIntro;
 	}
 
 	private void OnDisable()
 	{
-		LevelCompleteTrigger.CompletedLevel -= CompletedLevel;
+		LevelCompleteTrigger.LevelIsComplete -= CompletedLevel;
 		Level04.PlayLevel04Intro -= RollIntoLevel;
 		Level01.PlayLevel01Intro -= LevelOneIntro;
 	}
@@ -133,6 +133,7 @@ public class Player : Ped
 
 		if(levelFourIsActive)
 		{
+			AudioSource.volume = 0;
 			MorphToBallInput = true;
 			SetPedState(States.Ball);
 			inputIsEnabled = false;
@@ -207,7 +208,7 @@ public class Player : Ped
 	// Player Related tasks.
 	// ============================================================
 
-	private void CompletedLevel(int level, bool completed)
+	private void CompletedLevel()
 	{
 		isInvulnerable = true;
 		inputIsEnabled = false;
@@ -223,9 +224,9 @@ public class Player : Ped
 		}
 		else
 		{
-			if(PlayerHasDied != null)
+			if(HasDied != null)
 			{
-				PlayerHasDied();
+				HasDied();
 			}
 			Lives = 0;
 			StartCoroutine(PlayerDied());
@@ -276,7 +277,7 @@ public class Player : Ped
 	{
 		GameManager.Instance.EnableSlowMotion(true);
 		UIManager.Instance.DisplayUI(UIManager.CanvasNames.PlayerDiedFilter, true);
-		yield return new WaitForSeconds(1);
+		yield return new WaitForSeconds(1.1f);
 		GameManager.Instance.EnableSlowMotion(false);
 		UIManager.Instance.DisplayUI(UIManager.CanvasNames.PlayerDiedButtons, true);
 	}
@@ -292,7 +293,7 @@ public class Player : Ped
 		// No idea why it worked in the editor, but not in release. 
 		if(this != null)
 		{
-			transform.position = new Vector2(-580f, -2.44f);
+			transform.position = new Vector2(-580.5f, -2.44f);
 			levelFourIsActive = true;
 			Invoke("ReturnToNormal", 52.6f);
 		}
@@ -316,6 +317,7 @@ public class Player : Ped
 
 	private void ReturnToNormal()
 	{
+		AudioSource.volume = 1f;
 		levelFourIsActive = false;
 		CinematicBars.HideCinematicBars();
 		inputIsEnabled = true;

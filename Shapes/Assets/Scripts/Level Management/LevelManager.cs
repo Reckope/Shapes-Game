@@ -32,6 +32,10 @@ public class LevelManager : MonoBehaviour
 	// Global Variables
 	private LevelButton[] levelButtons;
 
+	//Events & variables
+	public static event Action<bool> LevelHasActivated;
+	public static bool LevelIsCurrentlyActive { get; set; }
+
 	// ============================================================
 	// MonoBehaviour Methods
 	// ============================================================
@@ -48,7 +52,7 @@ public class LevelManager : MonoBehaviour
 			_instance = this;
 		}
 		LevelCompleteTrigger.CompletedLevel += CompleteLevel;
-		SceneController.LoadedScene += HandleExitLevel;
+		GameManager.ExitedLevel += HandleExitLevel;
 	}
 
 	private void Start()
@@ -117,22 +121,26 @@ public class LevelManager : MonoBehaviour
 
 	public void SetActiveLevel(int index, bool activeOrNot)
 	{
+		if(LevelHasActivated != null)
+		{
+			LevelHasActivated(activeOrNot);
+		}
 		// Use a Lambda expression to find and set the level info :)
 		LevelInfo level = GameData.levelData.levels.Find((x) => x.buildIndex == index);
-
+		Assert.IsNotNull(level);
 		level.isActive = activeOrNot;
 
 		if(level.isActive)
 		{
 			GameData.ActiveLevelName = level.levelName;
 			GameData.ActiveLevelIndex = level.buildIndex;
-			GameData.LevelIsActive = true;
+			LevelIsCurrentlyActive = true;
 		}
 		else
 		{
 			GameData.ActiveLevelName = "Not currently on a level.";
 			GameData.ActiveLevelIndex = -1;
-			GameData.LevelIsActive = false;
+			LevelIsCurrentlyActive = false;
 		}
 
 		Debug.Log("Active Level: " + level.levelName + " Is Active: " + level.isActive);
@@ -174,10 +182,7 @@ public class LevelManager : MonoBehaviour
 
 	private void HandleExitLevel()
 	{
-		if(GameData.LevelIsActive)
-		{
-			SetActiveLevel(GameData.ActiveLevelIndex, false);
-		}
+		SetActiveLevel(GameData.ActiveLevelIndex, false);
 	}
 
 	//Methods for Buttons in LevelSelect

@@ -36,12 +36,12 @@ public class UIManager : MonoBehaviour
 
 	private void OnEnable()
 	{
-		LevelCompleteTrigger.CompletedLevel += DisplayCompletedLevelUI;
+		LevelCompleteTrigger.LevelIsComplete += DisplayCompletedLevelUI;
 	}
 
 	private void OnDisable()
 	{
-		LevelCompleteTrigger.CompletedLevel -= DisplayCompletedLevelUI;
+		LevelCompleteTrigger.LevelIsComplete -= DisplayCompletedLevelUI;
 	}
 
 	// Start is called before the first frame update
@@ -69,7 +69,7 @@ public class UIManager : MonoBehaviour
 		action();
 	}
 
-	private void DisplayCompletedLevelUI(int level, bool successfulyCompleted)
+	private void DisplayCompletedLevelUI()
 	{
 		CanvasInfo ui = canvases.Find((x) => x.name == CanvasNames.CompletedLevel);
 		ui.canvas.SetActive(true);

@@ -8,6 +8,7 @@ public class LevelCompleteTrigger : MonoBehaviour
 	Ped ped;
 
 	public static event Action<int, bool> CompletedLevel;
+	public static event Action LevelIsComplete;
 
 	void Start()
 	{
@@ -22,6 +23,10 @@ public class LevelCompleteTrigger : MonoBehaviour
 			if(CompletedLevel != null)
 			{
 				CompletedLevel(GameData.ActiveLevelIndex, true);
+			}
+			if(LevelIsComplete != null)
+			{
+				LevelIsComplete();
 			}
 		}
 	}

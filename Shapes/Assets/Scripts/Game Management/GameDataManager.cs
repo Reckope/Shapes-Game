@@ -68,7 +68,6 @@ public static class GameData
 
 	public static string ActiveLevelName { get; set; }
 	public static int ActiveLevelIndex { get; set; }
-	public static bool LevelIsActive { get; set; }
 	public static float TimePlayedValue { get; set; }
 
 	public static LevelDataCollection levelData;
@@ -101,8 +100,8 @@ public static class GameData
 		{
 			levelData = JsonUtility.FromJson<LevelDataCollection>(File.ReadAllText(LevelFilePathLocation));
 			playerStatsData = JsonUtility.FromJson<PlayerStatsCollection>(File.ReadAllText(PlayerStatsFilePathLocation));
-			Debug.Log("Levels Loaded from: " + LevelFilePathLocation);
-			Debug.Log("Player Stats Loaded from: " + PlayerStatsFilePathLocation);
+			//Debug.Log("Levels Loaded from: " + LevelFilePathLocation);
+			//Debug.Log("Player Stats Loaded from: " + PlayerStatsFilePathLocation);
 		}
 	}
 
@@ -113,7 +112,7 @@ public static class GameData
 
 		File.WriteAllText(LevelFilePathLocation, dataLevels);
 		File.WriteAllText(PlayerStatsFilePathLocation, dataPlayerStats);
-		Debug.Log("Saved to: " + Application.dataPath);
+		//Debug.Log("Saved to: " + Application.dataPath);
 	}
 
 	public static void IncrementPlayerStatsData(PlayerStatIDs statID)

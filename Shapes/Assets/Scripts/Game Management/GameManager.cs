@@ -19,11 +19,10 @@ public class GameManager : MonoBehaviour
 	public static GameManager Instance { get { return _instance; } }
 	private static GameManager _instance;
 
-	private AudioSource audioSource;
-
 	public event Action GamePaused;
 	public event Action UnpausedGame;
-	public event Action ExitedLevel;
+	public static event Action ExitedLevel;
+	public event Action<bool> ActionShotIsActive;
 	
 	public bool PausedGame { get; set; }
 	[SerializeField][Range(0.1f, 1f)]
@@ -40,50 +39,44 @@ public class GameManager : MonoBehaviour
 	private void Awake()
 	{
 		GameSettings();
-		audioSource = GetComponent<AudioSource>();
 	}
 
 	private void OnEnable()
 	{
 		SceneController.LoadedScene += StartFresh;
+		Ped.HasHitEnemy += ActionShot;
 	}
 
 	private void OnDisable()
 	{
 		SceneController.LoadedScene -= StartFresh;
+		Ped.HasHitEnemy -= ActionShot;
 	}
 
 	private void Start()
 	{
 		DontDestroyOnLoad(this.gameObject);
-		AudioListener.pause = false;
 	}
 
 	private void StartFresh()
 	{
 		PausedGame = false;
-		AudioListener.pause = false;
 		EnableSlowMotion(false);
 	}
 
 	// Update is called once per frame
 	void Update()
 	{
-		if(GameData.LevelIsActive)
+		Debug.Log("Active Level: " + LevelManager.LevelIsCurrentlyActive);
+		if(LevelManager.LevelIsCurrentlyActive)
 		{
 			GameData.IncrementTimePlayed();
-			audioSource.enabled = false;
-		}
-		else
-		{
-			audioSource.enabled = true;
 		}
 
-		if(Input.GetKeyDown("p") && GameData.LevelIsActive)
+		if(Input.GetKeyDown("p") && LevelManager.LevelIsCurrentlyActive)
 		{
 			PauseGame();
 		}
-		//HandleSlowMotion();
 	}
 
 	private void GameSettings()
@@ -102,16 +95,30 @@ public class GameManager : MonoBehaviour
 		Application.targetFrameRate = 300;
 	}
 
+	// Wrapper for event 
+	private void ActionShot()
+	{
+		StartCoroutine(EnableActionShot());
+	}
+
 	// Percentage chance that the action shot will activate when
 	// an enemy dies. This increase when an enemy dies, but doesn't active.
 	public IEnumerator EnableActionShot()
 	{
 		if(UnityEngine.Random.value <= (ActionShotPercentageChance / 100))
 		{
+			if(ActionShotIsActive != null)
+			{
+				ActionShotIsActive(true);
+			}
 			ActionShotPercentageChance = INITIAL_ACTION_SHOT_PERCENTAGE_CHANCE;
 			EnableSlowMotion(true);
 			UIManager.Instance.DisplayUI(UIManager.CanvasNames.ActionShot, true);
 			yield return new WaitForSeconds(1);
+			if(ActionShotIsActive != null)
+			{
+				ActionShotIsActive(false);
+			}
 			EnableSlowMotion(false);
 			UIManager.Instance.DisplayUI(UIManager.CanvasNames.ActionShot, false);
 		}
@@ -165,6 +172,7 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
+	// BUTTONS
 	public void ConfirmExitGame()
 	{
 		UIManager.Instance.DisplayUI(UIManager.CanvasNames.ExitGamePrompt, true);
@@ -188,7 +196,7 @@ public class GameManager : MonoBehaviour
 
 	public void ReturnToLevelSelectMenu()
 	{
-		GameData.LevelIsActive = false;
+		LevelManager.LevelIsCurrentlyActive = false;
 		SceneController.Instance.LoadScene("LevelSelect");
 		if(ExitedLevel != null)
 		{

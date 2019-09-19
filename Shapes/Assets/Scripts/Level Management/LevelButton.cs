@@ -17,7 +17,7 @@ using UnityEngine.EventSystems;
 
 public class LevelButton : MonoBehaviour
 {
-	// Leve Button Components
+	// Level Button Components
 	public Sprite lockedLevelSprite;
 	public Text levelNumberText;
 	public Text levelNameText;
