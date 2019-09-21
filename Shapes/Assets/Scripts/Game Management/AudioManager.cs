@@ -18,6 +18,7 @@ public class AudioManager : MonoBehaviour
 	private void Start()
 	{
 		StartMenuMusic(true);
+		StopCoroutine(FadeOutMusic(1));
 	}
 
 	private void OnEnable()
@@ -34,11 +35,6 @@ public class AudioManager : MonoBehaviour
 		Player.HasDied -= PlayGameOver;
 		LevelCompleteTrigger.LevelIsComplete -= FadeMusic;
 		LevelManager.LevelHasActivated -= HandleMenuMusic;
-	}
-
-	void Update()
-	{
-		StopCoroutine(FadeOutMusic(0));
 	}
 
 	private void HandleMenuMusic(bool levelIsActive)

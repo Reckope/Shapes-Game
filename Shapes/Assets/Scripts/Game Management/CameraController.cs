@@ -142,7 +142,7 @@ public class CameraController : MonoBehaviour
 	{
 		if(actionIsEnabled)
 		{
-			Camera.orthographicSize = 4.5f;
+			Camera.orthographicSize = 4.8f;
 		}
 		else
 		{

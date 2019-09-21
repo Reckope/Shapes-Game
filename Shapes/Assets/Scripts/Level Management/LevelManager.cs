@@ -51,8 +51,18 @@ public class LevelManager : MonoBehaviour
 		{
 			_instance = this;
 		}
+	}
+
+	private void OnEnable()
+	{
 		LevelCompleteTrigger.CompletedLevel += CompleteLevel;
 		GameManager.ExitedLevel += HandleExitLevel;
+	}
+
+	private void OnDisable()
+	{
+		LevelCompleteTrigger.CompletedLevel -= CompleteLevel;
+		GameManager.ExitedLevel -= HandleExitLevel;
 	}
 
 	private void Start()
@@ -198,7 +208,7 @@ public class LevelManager : MonoBehaviour
 
 	public void ConfirmExitGame()
 	{
-		GameManager.Instance.ConfirmExitGame();
+		GameManager.Instance.ExitGame();
 	}
 
 	public void ExitGame()

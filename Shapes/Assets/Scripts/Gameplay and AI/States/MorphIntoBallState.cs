@@ -16,7 +16,7 @@ using UnityEngine;
 public class MorphIntoBallState : State
 {
 	// Global Variables
-	private float ballSpeed = 4f;
+	private float ballSpeed = 6f;
 	private bool isAbleToAddForce;
 	private float maxForce = 12f;
 	private bool soundIsPlaying;
@@ -154,7 +154,7 @@ public class MorphIntoBallState : State
 
 	private void PlayerControls()
 	{
-		if(!ped.MorphToBallInput && (!ped.CollidedTop && !ped.CollidedLeft) || !ped.MorphToBallInput && (!ped.CollidedTop && !ped.CollidedRight))
+		if((!ped.MorphToBallInput && !ped.CollidedTop && !ped.CollidedLeft) || (!ped.MorphToBallInput && !ped.CollidedTop && !ped.CollidedRight))
 		{
 			ped.ExitMorphState();
 		}

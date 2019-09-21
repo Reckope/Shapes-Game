@@ -71,6 +71,7 @@ public class IdleState : State
 
 	private void HitByHorizontalShield()
 	{
+		ped.PlaySound(Ped.PedSounds.Bounce, true, false, 1f);
 		if(!ped.IsGrounded)
 		{
 			ped.Animator.SetTrigger("takeOff");

@@ -80,7 +80,8 @@ public class Ped : MonoBehaviour
 		Ouch,
 		Splat,
 		Jump,
-		Land
+		Land,
+		Bounce
 	}
 
 	// ============================================================
@@ -119,13 +120,12 @@ public class Ped : MonoBehaviour
 	public float GroundCheckRadius { get; set; }
 	public float SideCheckRadius { get; set; }
 	private Quaternion rotation;
-	private string _sound;
 	private float _movementDirection = 0.5f;
 
 	// Detect collisions around the ped to prevent morphing in tight spaces.
 	public bool CollidedLeft { get { return Physics2D.OverlapCircle (leftCheck.position, SideCheckRadius, whatIsGround); } }
 	public bool CollidedRight { get { return Physics2D.OverlapCircle (rightCheck.position, SideCheckRadius, whatIsGround); } }
-	public bool CollidedTop { get { return Physics2D.OverlapCircle (topCheck.position, GroundCheckRadius, whatIsGround); } }
+	public bool CollidedTop { get { return Physics2D.OverlapCircle (topCheck.position, GroundCheckRadius * 2, whatIsGround); } }
 	public bool IsGrounded { get { return Physics2D.OverlapCircle (groundCheck.position, GroundCheckRadius, whatIsGround); } }
 
 	public bool EnemyCollidedLeft { get; set; }
@@ -143,12 +143,13 @@ public class Ped : MonoBehaviour
 	public event Action HasHitGround;
 	public event Action HasHitWater;
 	public event Action HasHitPlayer;
-	public static event Action HasHitEnemy;
+	public event Action HasHitEnemy;
 	public event Action HasHitBallState;
 	public event Action HasHitBlockState;
 	public event Action HasHitHorizontalShieldState;
 	public event Action HasHitVerticalShieldState;
 	public event Action HasHitSaw;
+	public static event Action EnemyHasDied;
 
 	// Player Input
 	public bool MorphToBallInput { get; protected set; }
@@ -214,8 +215,6 @@ public class Ped : MonoBehaviour
 	// ============================================================
 	// Properties with logic.
 	// ============================================================
-
-	public string Sound { get { return _sound; } set { _sound = value; } }
 
 	// Set Movement Direction as a property so the state is
 	// automatically applied when moving. 
@@ -457,6 +456,10 @@ public class Ped : MonoBehaviour
 			}
 			else
 			{
+				if(EnemyHasDied != null)
+				{
+					EnemyHasDied();
+				}
 				Die();
 			}
 		}
@@ -494,7 +497,6 @@ public class Ped : MonoBehaviour
 
 	private void HitSaw()
 	{
-		// Sound
 		TakeDamage(DamageType.Destroy);
 	}
 

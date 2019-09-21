@@ -44,13 +44,13 @@ public class GameManager : MonoBehaviour
 	private void OnEnable()
 	{
 		SceneController.LoadedScene += StartFresh;
-		Ped.HasHitEnemy += ActionShot;
+		Ped.EnemyHasDied += ActionShot;
 	}
 
 	private void OnDisable()
 	{
 		SceneController.LoadedScene -= StartFresh;
-		Ped.HasHitEnemy -= ActionShot;
+		Ped.EnemyHasDied -= ActionShot;
 	}
 
 	private void Start()
@@ -173,7 +173,7 @@ public class GameManager : MonoBehaviour
 	}
 
 	// BUTTONS
-	public void ConfirmExitGame()
+	public void DisplayExitGamePrompt()
 	{
 		UIManager.Instance.DisplayUI(UIManager.CanvasNames.ExitGamePrompt, true);
 	}

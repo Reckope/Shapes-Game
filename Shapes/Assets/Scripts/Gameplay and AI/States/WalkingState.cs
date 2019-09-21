@@ -104,6 +104,7 @@ public class WalkingState : State
 
 	private void TakeOff()
 	{
+		ped.PlaySound(Ped.PedSounds.Bounce, true, false, 1f);
 		if(!ped.IsGrounded)
 		{
 			ped.Animator.SetTrigger("takeOff");
