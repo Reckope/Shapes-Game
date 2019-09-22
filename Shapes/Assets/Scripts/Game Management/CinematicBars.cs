@@ -31,7 +31,7 @@ public class CinematicBars : MonoBehaviour {
 
 	void Start () 
 	{
-		barSpeed = 0.3f;
+		//barSpeed = 1f;
 	}
 	
 	// Update is called once per frame
@@ -63,7 +63,7 @@ public class CinematicBars : MonoBehaviour {
 	}
 
 	// Display the cinematic bars
-	public void ShowCinematicBars()
+	public void ShowCinematicBars(float barSpeed)
 	{
 		float targetSize = BLACK_BAR_SIZE;
 		this.targetSize = targetSize;
@@ -72,7 +72,7 @@ public class CinematicBars : MonoBehaviour {
 	}
 
 	// Hide the cinematic bars
-	public void HideCinematicBars()
+	public void HideCinematicBars(float barSpeed)
 	{
 		targetSize = ANCHOR_MIN;
 		changeSizeAmount = (targetSize - topBar.sizeDelta.y) / barSpeed;

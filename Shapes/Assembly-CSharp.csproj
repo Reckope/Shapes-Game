@@ -61,13 +61,13 @@
      <Compile Include="Assets\Scripts\Game Management\AudioManager.cs" />
      <Compile Include="Assets\Scripts\Game Management\CameraController.cs" />
      <Compile Include="Assets\Scripts\Game Management\CinematicBars.cs" />
-     <Compile Include="Assets\Scripts\Game Management\GameDataManager.cs" />
+     <Compile Include="Assets\Scripts\Game Management\Game Data Management\GameDataManager.cs" />
+     <Compile Include="Assets\Scripts\Game Management\Game Data Management\PlayerStatsDisplayController.cs" />
+     <Compile Include="Assets\Scripts\Game Management\Game Data Management\StatBox.cs" />
      <Compile Include="Assets\Scripts\Game Management\GameManager.cs" />
      <Compile Include="Assets\Scripts\Game Management\MainMenuManager.cs" />
      <Compile Include="Assets\Scripts\Game Management\PauseMenu.cs" />
-     <Compile Include="Assets\Scripts\Game Management\PlayerStatsDisplayController.cs" />
      <Compile Include="Assets\Scripts\Game Management\SceneController.cs" />
-     <Compile Include="Assets\Scripts\Game Management\StatBox.cs" />
      <Compile Include="Assets\Scripts\Game Management\UIManager.cs" />
      <Compile Include="Assets\Scripts\Gameplay and AI\Peds\AI.cs" />
      <Compile Include="Assets\Scripts\Gameplay and AI\Peds\CinderScript.cs" />

@@ -55,14 +55,10 @@ public class LevelManager : MonoBehaviour
 
 	private void OnEnable()
 	{
+		// Don't unsubscribe from these!! Otherwise, the next level
+		// won't be unlocked.
 		LevelCompleteTrigger.CompletedLevel += CompleteLevel;
 		GameManager.ExitedLevel += HandleExitLevel;
-	}
-
-	private void OnDisable()
-	{
-		LevelCompleteTrigger.CompletedLevel -= CompleteLevel;
-		GameManager.ExitedLevel -= HandleExitLevel;
 	}
 
 	private void Start()
@@ -158,6 +154,7 @@ public class LevelManager : MonoBehaviour
 
 	public void CompleteLevel(int completedLevelBuildIndex, bool successfullyCompleted)
 	{
+		Debug.Log("Completed level! " + completedLevelBuildIndex + " " + successfullyCompleted);
 		LevelInfo level = GameData.levelData.levels.Find((x) => x.buildIndex == completedLevelBuildIndex);
 
 		level.isActive = false;

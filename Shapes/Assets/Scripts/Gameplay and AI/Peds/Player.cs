@@ -35,6 +35,7 @@ public class Player : Ped
 	public bool isDead, isInvulnerable, inputIsEnabled = true;
 	public int Lives { get; set; }
 	public int MaxLives { get; set; }
+	public int _FaceDirection { get; private set; }
 
 	private bool levelFourIsActive;
 
@@ -88,14 +89,16 @@ public class Player : Ped
 	{
 		LevelCompleteTrigger.LevelIsComplete += CompletedLevel;
 		Level04.PlayLevel04Intro += RollIntoLevel;
-		Level01.PlayLevel01Intro += LevelOneIntro;
+		CameraController.CutsceneIsStarting += Cutscene;
+		CameraController.CutsceneIsFinished += ReturnToNormal;
 	}
 
 	private void OnDisable()
 	{
 		LevelCompleteTrigger.LevelIsComplete -= CompletedLevel;
 		Level04.PlayLevel04Intro -= RollIntoLevel;
-		Level01.PlayLevel01Intro -= LevelOneIntro;
+		CameraController.CutsceneIsStarting -= Cutscene;
+		CameraController.CutsceneIsFinished -= ReturnToNormal;
 	}
 
 	protected override void Start()
@@ -114,6 +117,7 @@ public class Player : Ped
 	{
 		base.Update();
 
+		_FaceDirection = FaceDirection;
 		isDead = IsDead;
 		Speed = _speed;
 		JumpForce = _jumpForce;
@@ -284,10 +288,6 @@ public class Player : Ped
 
 	private void RollIntoLevel()
 	{
-		if(CinematicBars != null)
-		{
-			CinematicBars.ShowCinematicBars();
-		}
 		// In the release build, the player would not roll at the start of the level.
 		// I had to add a bool here and add it to Update() to ensure it gets called.
 		// No idea why it worked in the editor, but not in release. 
@@ -299,15 +299,10 @@ public class Player : Ped
 		}
 	}
 
-	private void LevelOneIntro()
+	private void Cutscene()
 	{
-		if(CinematicBars != null)
-		{
-			CinematicBars.ShowCinematicBars();
-		}
 		inputIsEnabled = false;
 		MovementDirection = (int)Direction.Idle;
-		Invoke("ReturnToNormal", 15f);
 	}
 
 	private void ReturnToNormalLevelOne()
@@ -319,7 +314,6 @@ public class Player : Ped
 	{
 		AudioSource.volume = 1f;
 		levelFourIsActive = false;
-		CinematicBars.HideCinematicBars();
 		inputIsEnabled = true;
 		MorphToBallInput = false;
 		MovementDirection = (int)Direction.Idle;

@@ -8,6 +8,7 @@ public class LevelCompleteTrigger : MonoBehaviour
 	Ped ped;
 
 	public static event Action<int, bool> CompletedLevel;
+	// Used for other objects (Camera, player etc)
 	public static event Action LevelIsComplete;
 
 	void Start()

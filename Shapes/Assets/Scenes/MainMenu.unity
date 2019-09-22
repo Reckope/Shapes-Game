@@ -1672,6 +1672,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   menuMusic: {fileID: 8300000, guid: a392245cd58204fa1b2db80cef12d84b, type: 3}
   gameOverMusic: {fileID: 8300000, guid: e8187719eca9944bdb1356322dcc6ecb, type: 3}
+  fadeOutMusicTime: 1
 --- !u!1 &1877102436
 GameObject:
   m_ObjectHideFlags: 0

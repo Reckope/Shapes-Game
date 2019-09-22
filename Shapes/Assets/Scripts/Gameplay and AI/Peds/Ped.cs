@@ -125,7 +125,7 @@ public class Ped : MonoBehaviour
 	// Detect collisions around the ped to prevent morphing in tight spaces.
 	public bool CollidedLeft { get { return Physics2D.OverlapCircle (leftCheck.position, SideCheckRadius, whatIsGround); } }
 	public bool CollidedRight { get { return Physics2D.OverlapCircle (rightCheck.position, SideCheckRadius, whatIsGround); } }
-	public bool CollidedTop { get { return Physics2D.OverlapCircle (topCheck.position, GroundCheckRadius * 2, whatIsGround); } }
+	public bool CollidedTop { get { return Physics2D.OverlapCircle (topCheck.position, GroundCheckRadius, whatIsGround); } }
 	public bool IsGrounded { get { return Physics2D.OverlapCircle (groundCheck.position, GroundCheckRadius, whatIsGround); } }
 
 	public bool EnemyCollidedLeft { get; set; }

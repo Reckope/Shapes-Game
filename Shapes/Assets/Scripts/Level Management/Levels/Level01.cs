@@ -12,8 +12,6 @@ public class Level01 : Level
 	public AudioClip intro;
 	public AudioClip breakingFree;
 
-	public static event Action PlayLevel01Intro;
-
 	private void OnEnable()
 	{
 		audioSource = GetComponent<AudioSource>();
@@ -24,10 +22,8 @@ public class Level01 : Level
 	// Start is called before the first frame update
 	void Start()
 	{
-		if(PlayLevel01Intro != null)
-		{
-			PlayLevel01Intro();
-		}
+		CameraController.Instance.SetCameraPosition(90f, 28f);
+		CameraController.Instance.PlayCutscene("Level01Intro");
 		audioSource.clip = intro;
 		audioSource.Play();
 	}
