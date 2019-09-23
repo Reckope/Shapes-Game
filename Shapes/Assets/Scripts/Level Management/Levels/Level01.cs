@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Assertions;
 
 [RequireComponent(typeof(AudioSource))]
-public class Level01 : Level
+public class Level01 : MonoBehaviour
 {
 	private AudioSource audioSource;
 
@@ -19,7 +19,6 @@ public class Level01 : Level
 		BreakableGround.BrokeGround += PlayBreakingFreeMusic;
 	}
 
-	// Start is called before the first frame update
 	void Start()
 	{
 		CameraController.Instance.SetCameraPosition(90f, 28f);

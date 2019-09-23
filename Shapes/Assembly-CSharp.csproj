@@ -87,10 +87,8 @@
      <Compile Include="Assets\Scripts\Level Management\LevelButton.cs" />
      <Compile Include="Assets\Scripts\Level Management\LevelCompleteTrigger.cs" />
      <Compile Include="Assets\Scripts\Level Management\LevelManager.cs" />
-     <Compile Include="Assets\Scripts\Level Management\Levels\Level.cs" />
      <Compile Include="Assets\Scripts\Level Management\Levels\Level01.cs" />
      <Compile Include="Assets\Scripts\Level Management\Levels\Level04.cs" />
-     <Compile Include="Assets\Scripts\Level Management\Levels\Tutorial.cs" />
      <None Include="Assets\BayatGames\Free Platform Game Assets\Readme.txt" />
  <Reference Include="Unity.Timeline.Editor">
  <HintPath>/Users/JoeDavis/Documents/Unity Projects/Shapes/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>

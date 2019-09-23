@@ -4,14 +4,14 @@
 * 2019
 * Notes: 
 * This is used to coordinate actions across the entire game.
-* Design Pattern implemented: Singleton
-* Remove Scene clones - Yes. Global Access - Yes.
+* This persists across all scenes
 */
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class GameManager : MonoBehaviour
 {
@@ -19,23 +19,24 @@ public class GameManager : MonoBehaviour
 	public static GameManager Instance { get { return _instance; } }
 	private static GameManager _instance;
 
+	// Events
 	public event Action GamePaused;
-	public event Action UnpausedGame;
 	public static event Action ExitedLevel;
 	public event Action<bool> ActionShotIsActive;
 	
+	// Global variables
 	public bool PausedGame { get; set; }
-	[SerializeField][Range(0.1f, 1f)]
-	private float slowMotionSpeed = 0.3f;
 	public float ActionShotPercentageChance { get; set; }
 	private const float INITIAL_ACTION_SHOT_PERCENTAGE_CHANCE = 5f;
 	[SerializeField][Range(0, 100f)]
 	private const float FIXED_TIMESTEP = 0.01f;
+	[SerializeField][Range(0.1f, 1f)]
+	private float slowMotionSpeed = 0.7f;
 
-	public static float deltaTime;
-	private static float _lastframetime;
+	// =========================================================
+	// MonoBehaviour Methods (In order of execution)
+	// =========================================================
 
-	// Check in Awake if there is an instance already, and if so, destroy the new instance.
 	private void Awake()
 	{
 		GameSettings();
@@ -43,14 +44,8 @@ public class GameManager : MonoBehaviour
 
 	private void OnEnable()
 	{
-		SceneController.LoadedScene += StartFresh;
+		SceneController.LoadedScene += DisablePauseAndSlowMotion;
 		Ped.EnemyHasDied += ActionShot;
-	}
-
-	private void OnDisable()
-	{
-		SceneController.LoadedScene -= StartFresh;
-		Ped.EnemyHasDied -= ActionShot;
 	}
 
 	private void Start()
@@ -58,16 +53,8 @@ public class GameManager : MonoBehaviour
 		DontDestroyOnLoad(this.gameObject);
 	}
 
-	private void StartFresh()
+	private void Update()
 	{
-		PausedGame = false;
-		EnableSlowMotion(false);
-	}
-
-	// Update is called once per frame
-	void Update()
-	{
-		Debug.Log("Active Level: " + LevelManager.LevelIsCurrentlyActive);
 		if(LevelManager.LevelIsCurrentlyActive)
 		{
 			GameData.IncrementTimePlayed();
@@ -77,6 +64,22 @@ public class GameManager : MonoBehaviour
 		{
 			PauseGame();
 		}
+	}
+
+	// =========================================================
+	// GameManager Methods
+	// =========================================================
+
+	private void OnDisable()
+	{
+		SceneController.LoadedScene -= DisablePauseAndSlowMotion;
+		Ped.EnemyHasDied -= ActionShot;
+	}
+
+	private void DisablePauseAndSlowMotion()
+	{
+		PausedGame = false;
+		EnableSlowMotion(false);
 	}
 
 	private void GameSettings()
@@ -145,10 +148,6 @@ public class GameManager : MonoBehaviour
 		}
 		else if(PausedGame)
 		{
-			if(UnpausedGame != null)
-			{
-				UnpausedGame();
-			}
 			PausedGame = false;
 			AudioListener.pause = false;
 			Time.timeScale = 1;
@@ -172,15 +171,13 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-	// BUTTONS
+	// =========================================================
+	// These methods are called by various buttons in game. 
+	// =========================================================
+
 	public void DisplayExitGamePrompt()
 	{
 		UIManager.Instance.DisplayUI(UIManager.CanvasNames.ExitGamePrompt, true);
-	}
-
-	public void HideExitGamePrompt()
-	{
-		UIManager.Instance.DisplayUI(UIManager.CanvasNames.ExitGamePrompt, false);
 	}
 
 	public void HideMenuPrompt()
@@ -188,11 +185,11 @@ public class GameManager : MonoBehaviour
 		UIManager.Instance.DisplayUI(UIManager.CanvasNames.MainMenuPrompt, false);
 	}
 
-	public void SaveBeforeReturningToPreviousMenu()
+	/*public void SaveBeforeReturningToPreviousMenu()
 	{
 		SaveGame();
 		SceneController.Instance.LoadScene("InGameMenu");
-	}
+	}*/
 
 	public void ReturnToLevelSelectMenu()
 	{

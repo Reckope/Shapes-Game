@@ -42,15 +42,7 @@ public class LevelManager : MonoBehaviour
 
 	private void Awake()
 	{
-		if(_instance != null && _instance != this)
-		{
-			Debug.LogError("Error: Another instance of LevelManager has been found in scene " + " '" + SceneController.GetActiveScene() + "'.");
-			Destroy(this.gameObject);
-		} 
-		else
-		{
-			_instance = this;
-		}
+		Instanced();
 	}
 
 	private void OnEnable()
@@ -65,12 +57,24 @@ public class LevelManager : MonoBehaviour
 	{
 		InstantiateLevelButtons();
 		InitializeLevels();
-		Debug.Log(Application.dataPath);
 	}
 
 	// ============================================================
 	// Level Manager Methods
 	// ============================================================
+
+	private void Instanced()
+	{
+		if(_instance != null && _instance != this)
+		{
+			Debug.LogError("Error: Another instance of LevelManager has been found in scene " + " '" + SceneController.GetActiveScene() + "'.");
+			Destroy(this.gameObject);
+		} 
+		else
+		{
+			_instance = this;
+		}
+	}
 
 	// We then instantiate level buttons for each level in the json file. Designers can simply
 	// add a level to the file, and this will automatically create a button for it. 
@@ -145,7 +149,6 @@ public class LevelManager : MonoBehaviour
 		else
 		{
 			GameData.ActiveLevelName = "Not currently on a level.";
-			GameData.ActiveLevelIndex = -1;
 			LevelIsCurrentlyActive = false;
 		}
 
@@ -158,18 +161,15 @@ public class LevelManager : MonoBehaviour
 		LevelInfo level = GameData.levelData.levels.Find((x) => x.buildIndex == completedLevelBuildIndex);
 
 		level.isActive = false;
-		//GameData.LevelIsActive = false;
 		if(successfullyCompleted)
 		{
 			level.isCompleted = true;
-			if(completedLevelBuildIndex == HighestUnlockedLevelBuildIndex() && completedLevelBuildIndex + 1 < GameData.levelData.levels.Count)
+			if(completedLevelBuildIndex == HighestUnlockedLevelBuildIndex() && completedLevelBuildIndex++ < GameData.levelData.levels.Count)
 			{
 				GameData.ActiveLevelIndex++;
 				GameData.levelData.levels[GameData.ActiveLevelIndex].isUnlocked = true;
 			}
 		}
-		//SceneManager.LoadScene("LevelSelect");
-
 		Debug.Log("Active Level: " + level.levelName + " Is Active: " + level.isActive);
 	}
 
@@ -187,12 +187,15 @@ public class LevelManager : MonoBehaviour
 		return numberOfUnlockedLevels;
 	}
 
+	// ============================================================
+	// These methods are used for buttons in LevelSelect to call. 
+	// ============================================================
+
 	private void HandleExitLevel()
 	{
 		SetActiveLevel(GameData.ActiveLevelIndex, false);
 	}
 
-	//Methods for Buttons in LevelSelect
 	public void SaveGame()
 	{
 		GameManager.Instance.SaveGame();
@@ -200,12 +203,13 @@ public class LevelManager : MonoBehaviour
 
 	public void ReturnToPreviousMenu()
 	{
-		GameManager.Instance.SaveBeforeReturningToPreviousMenu();
+		GameManager.Instance.SaveGame();
+		SceneController.Instance.LoadScene("InGameMenu");
 	}
 
 	public void ConfirmExitGame()
 	{
-		GameManager.Instance.ExitGame();
+		GameManager.Instance.DisplayExitGamePrompt();
 	}
 
 	public void ExitGame()
@@ -215,7 +219,7 @@ public class LevelManager : MonoBehaviour
 
 	public void HideExitGamePrompt()
 	{
-		GameManager.Instance.HideExitGamePrompt();
+		UIManager.Instance.DisplayUI(UIManager.CanvasNames.ExitGamePrompt, false);
 	}
 
 	public void DisplayFeedbackText(string feedback)

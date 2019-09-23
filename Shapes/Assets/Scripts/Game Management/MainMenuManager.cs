@@ -1,27 +1,49 @@
-﻿using System;
+﻿/* Author: Joe Davis
+ * Project: Shapes
+ * 2019
+ * Notes:
+ * This is used on the main menu, where the player initially loads into. 
+ * Attach this to an object in MainMenu.
+ */
+
+using System;
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Assertions;
 
 public class MainMenuManager : MonoBehaviour
 {
+	// GameObjects
 	public GameObject mainMenuButtons;
 	public GameObject confirmNewGamePrompt;
 	public Button loadGameButton;
 
-	// Start is called before the first frame update
-	void Start()
+	// =========================================================
+	// MonoBehaviour Methods (In order of execution)
+	// =========================================================
+
+	private void Start()
 	{
-		HandleLoadGameButton();
+		Assert.IsNotNull(loadGameButton);
+		InteractWithLoadGameButton();
+
+		Assert.IsNotNull(confirmNewGamePrompt);
 		confirmNewGamePrompt.SetActive(false);
+
+		Assert.IsNotNull(mainMenuButtons);
 		mainMenuButtons.SetActive(true);
 	}
 
-	private void HandleLoadGameButton()
+	// =========================================================
+	// Main Menu Methods
+	// =========================================================
+
+	private void InteractWithLoadGameButton()
 	{
-		if(File.Exists(Application.dataPath + "/LevelData.json"))
+		if(File.Exists(Application.dataPath + GameData.LevelDataFileName))
 		{
 			loadGameButton.interactable = true;
 		}
@@ -54,6 +76,10 @@ public class MainMenuManager : MonoBehaviour
 		GameData.SaveGame();
 		SceneController.Instance.LoadScene("InGameMenu");
 	}
+
+	// =========================================================
+	// These methods are used by the buttons in the Main Menu.
+	// =========================================================
 
 	public void LoadExistingGame()
 	{

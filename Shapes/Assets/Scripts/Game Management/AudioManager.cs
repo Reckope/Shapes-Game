@@ -106,7 +106,7 @@ public class AudioManager : MonoBehaviour
 
 	// Wrapper for event.
 	// Otherwise, would have to make the event type IEnumerator, which
-	// can mess up other non-IEnumerator classes that subscribed to the event.
+	// can mess up other non-IEnumerator methods that subscrib to the event.
 	private void FadeMusic()
 	{
 		StartCoroutine(FadeOutMusic());

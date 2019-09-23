@@ -16,14 +16,19 @@ using System;
 
 public class SceneController : MonoBehaviour
 {
-
 	// Singleton
 	public static SceneController Instance { get { return _instance; } }
 	private static SceneController _instance;
 
+	// Events
 	public static event Action LoadedScene;
 
 	private void Start()
+	{
+		Instanced();
+	}
+
+	private void Instanced()
 	{
 		if(_instance != null && _instance != this)
 		{
@@ -36,7 +41,6 @@ public class SceneController : MonoBehaviour
 		}
 	}
 
-	// Check if the scene can be loaded.
 	public void LoadScene(string sceneName)
 	{
 		if(Application.CanStreamedLevelBeLoaded(sceneName))
@@ -58,6 +62,7 @@ public class SceneController : MonoBehaviour
 		LoadScene(GetActiveScene());
 	}
 
+	// Other classes can call this to see what the active scene is. 
 	public static String GetActiveScene()
 	{
 		return SceneManager.GetActiveScene().name;

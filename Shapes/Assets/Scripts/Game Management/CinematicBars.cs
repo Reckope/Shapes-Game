@@ -10,28 +10,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Assertions;
 
-public class CinematicBars : MonoBehaviour {
-
+public class CinematicBars : MonoBehaviour 
+{
+	// Bars
 	private RectTransform topBar, bottomBar;
-	const float BLACK_BAR_SIZE = 300f;
-	const int ANCHOR_MIN = 0;
-	const int ANCHOR_MAX = 1;
+
+	// Global Variables
+	private const int ANCHOR_MIN = 0;
+	private const int ANCHOR_MAX = 1;
+
+	private float barSize = 300f;
 	private float changeSizeAmount;
 	private float targetSize;
 	private float barSpeed;
-	public bool isActive;
+	private bool isActive;
 
-	// ---------------------------------------------------------------------------------
+	// =========================================================
+	// MonoBehaviour Methods (In order of execution)
+	// =========================================================
 
 	void OnEnable()
 	{
 		CreateBars();
-	}
-
-	void Start () 
-	{
-		//barSpeed = 1f;
 	}
 	
 	// Update is called once per frame
@@ -62,10 +64,14 @@ public class CinematicBars : MonoBehaviour {
 		}
 	}
 
+	// =========================================================
+	// Cinematic Bars Methods
+	// =========================================================
+
 	// Display the cinematic bars
 	public void ShowCinematicBars(float barSpeed)
 	{
-		float targetSize = BLACK_BAR_SIZE;
+		float targetSize = barSize;
 		this.targetSize = targetSize;
 		changeSizeAmount = (targetSize - topBar.sizeDelta.y) / barSpeed;
 		isActive = true;

@@ -1,10 +1,21 @@
-﻿using System;
+﻿/* Author: Joe Davis
+ * Project: Shapes
+ * 2019
+ * Notes:
+ * This controls & stores the UI throughout the game.
+ * Attach this to the canvas within the scene.
+
+ */
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.Assertions;
 
+// Information about the canvas beign loaded. 
 [Serializable]
 public class CanvasInfo
 {
@@ -31,12 +42,18 @@ public class UIManager : MonoBehaviour
 
 	public List<CanvasInfo> canvases = new List<CanvasInfo>();
 
-	public delegate void PromptActionMethod();
-	public PromptActionMethod PromptAction;
+	// =========================================================
+	// MonoBehaviour Methods (In order of execution)
+	// =========================================================
 
 	private void OnEnable()
 	{
 		LevelCompleteTrigger.LevelIsComplete += DisplayCompletedLevelUI;
+	}
+
+	private void Start()
+	{
+		Instanced();
 	}
 
 	private void OnDisable()
@@ -44,8 +61,11 @@ public class UIManager : MonoBehaviour
 		LevelCompleteTrigger.LevelIsComplete -= DisplayCompletedLevelUI;
 	}
 
-	// Start is called before the first frame update
-	void Start()
+	// =========================================================
+	// UI Controller Methods.
+	// =========================================================
+
+	private void Instanced()
 	{
 		if(_instance != null && _instance != this)
 		{
@@ -61,17 +81,15 @@ public class UIManager : MonoBehaviour
 	public void DisplayUI(CanvasNames canvasName, bool display)
 	{
 		CanvasInfo ui = canvases.Find((x) => x.name == canvasName);
+		Assert.IsNotNull(ui);
 		ui.canvas.SetActive(display);
 	}
 
-	public void PromptYes(PromptActionMethod action)
-	{
-		action();
-	}
-
+	// This is used by events that dont pass over a canvas name. 
 	private void DisplayCompletedLevelUI()
 	{
 		CanvasInfo ui = canvases.Find((x) => x.name == CanvasNames.CompletedLevel);
+		Assert.IsNotNull(ui);
 		ui.canvas.SetActive(true);
 	}
 }

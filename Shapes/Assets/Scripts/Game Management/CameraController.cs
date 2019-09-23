@@ -57,9 +57,10 @@ public class CameraController : MonoBehaviour
 
 	private void Awake()
 	{
+		Instanced();
 		CinematicBars = GameObject.FindObjectOfType(typeof(CinematicBars)) as CinematicBars;
 		Assert.IsNotNull(CinematicBars);
-		player = GameObject.FindGameObjectWithTag("Player").transform;
+		player = GameObject.FindGameObjectWithTag(Ped.PedType.Player.ToString()).transform;
 		Camera = GetComponent<Camera>();
 		Assert.IsNotNull(Camera);
 		Animator = GetComponent<Animator>();
@@ -68,21 +69,18 @@ public class CameraController : MonoBehaviour
 		Assert.IsNotNull(AudioLowPassFilter);
 	}
 
-	void OnEnable()
+	private void OnEnable()
 	{
 		followPlayer = true;
 		GameManager.Instance.ActionShotIsActive += Action;
 		LevelCompleteTrigger.LevelIsComplete += StopFollowingPlayer;
-		Level04.PlayLevel04Intro += LevelFourIntro;
-		//Level01.PlayLevel01Intro += LevelOneIntro;
-		Player.HasDied += PlayerDied;
+		Player.HasDied += MuffleMusic;
 	}
 
-	void Start()
+	private void Start()
 	{
 		AudioLowPassFilter.enabled = false;
 		distanceAhead = distanceAheadOfPlayer;
-		Instanced();
 	}
 
 	private void Update()
@@ -98,9 +96,7 @@ public class CameraController : MonoBehaviour
 	{
 		GameManager.Instance.ActionShotIsActive -= Action;
 		LevelCompleteTrigger.LevelIsComplete -= StopFollowingPlayer;
-		Level04.PlayLevel04Intro -= LevelFourIntro;
-		//Level01.PlayLevel01Intro -= LevelOneIntro;
-		Player.HasDied -= PlayerDied;
+		Player.HasDied -= MuffleMusic;
 	}
 
 	// =========================================================
@@ -176,6 +172,7 @@ public class CameraController : MonoBehaviour
 		Animator.Play(scene, 0);
 	}
 
+	// Used by Animation event
 	private void FinishCutscene()
 	{
 		CinematicBars.HideCinematicBars(0.8f);
@@ -187,13 +184,9 @@ public class CameraController : MonoBehaviour
 		followPlayer = true;
 	}
 
-	private void LevelFourIntro()
-	{
-		//CutsceneIsActive();
-		//transform.position = new Vector3(90f, 28f, transform.position.z);
-		Animator.SetBool("playLevelFourIntro", true);
-		Invoke("FollowPlayer", 35.3f);
-	}
+	// End of Mission Controller methods.
+
+	// These methods are used by events.
 
 	private void Action(bool actionIsEnabled)
 	{
@@ -210,10 +203,5 @@ public class CameraController : MonoBehaviour
 	public void MuffleMusic()
 	{
 		AudioLowPassFilter.enabled = true;
-	}
-
-	private void PlayerDied()
-	{
-		MuffleMusic();
 	}
 }

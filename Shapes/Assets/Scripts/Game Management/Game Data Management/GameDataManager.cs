@@ -4,6 +4,7 @@
 * 2019
 * Notes: 
 * This is used for managing all the storage data.
+* Could this be handled better and not have 2 lists?
 */
 
 using System;
@@ -33,7 +34,7 @@ public class PlayerStatsinfo
 	public float value;
 }
 
-// Store the levels from LevelData.json in a generic list.
+// Store the data from json files in a generic list.
 [Serializable]
 public class LevelDataCollection
 {
@@ -60,11 +61,16 @@ public static class GameData
 		AegisKilled
 	}
 
+	// Lists
 	public static List<LevelInfo> levels = new List<LevelInfo>();
 	public static List<PlayerStatsinfo> playerStats = new List<PlayerStatsinfo>();
 
-	public static string LevelFilePathLocation { get { return Application.dataPath + "/LevelData.json"; } }
-	public static string PlayerStatsFilePathLocation { get { return Application.dataPath + "/PlayerStats.json"; } }
+	// Global Variables
+	public static string LevelDataFileName { get { return "/LevelData.json"; } }
+	public static string PlayerStatsFileName { get { return "/PlayerStats.json"; } }
+
+	public static string LevelFilePathLocation { get { return Application.dataPath + LevelDataFileName; } }
+	public static string PlayerStatsFilePathLocation { get { return Application.dataPath + PlayerStatsFileName; } }
 
 	public static string ActiveLevelName { get; set; }
 	public static int ActiveLevelIndex { get; set; }
@@ -79,6 +85,7 @@ public static class GameData
 		File.Delete(PlayerStatsFilePathLocation);
 	}
 
+	//First we load the data from the Resources folder. 
 	public static void LoadLevelDataFromResources()
 	{
 		TextAsset levelDataText = (TextAsset)Resources.Load("LevelData", typeof(TextAsset));
@@ -94,6 +101,7 @@ public static class GameData
 		playerStats = new List<PlayerStatsinfo>(playerStatsData.playerStats);
 	}
 
+	// Once loaded, we can load the game from a local save. 
 	public static void LoadGame()
 	{
 		if(File.Exists(LevelFilePathLocation) && File.Exists(PlayerStatsFilePathLocation))
@@ -114,6 +122,8 @@ public static class GameData
 		File.WriteAllText(PlayerStatsFilePathLocation, dataPlayerStats);
 		//Debug.Log("Saved to: " + Application.dataPath);
 	}
+
+	// Increment stats 
 
 	public static void IncrementPlayerStatsData(PlayerStatIDs statID)
 	{

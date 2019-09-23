@@ -89,7 +89,7 @@ public class Player : Ped
 	{
 		LevelCompleteTrigger.LevelIsComplete += CompletedLevel;
 		Level04.PlayLevel04Intro += RollIntoLevel;
-		CameraController.CutsceneIsStarting += Cutscene;
+		CameraController.CutsceneIsStarting += InCutscene;
 		CameraController.CutsceneIsFinished += ReturnToNormal;
 	}
 
@@ -97,7 +97,7 @@ public class Player : Ped
 	{
 		LevelCompleteTrigger.LevelIsComplete -= CompletedLevel;
 		Level04.PlayLevel04Intro -= RollIntoLevel;
-		CameraController.CutsceneIsStarting -= Cutscene;
+		CameraController.CutsceneIsStarting -= InCutscene;
 		CameraController.CutsceneIsFinished -= ReturnToNormal;
 	}
 
@@ -293,29 +293,33 @@ public class Player : Ped
 		// No idea why it worked in the editor, but not in release. 
 		if(this != null)
 		{
-			transform.position = new Vector2(-580.5f, -2.44f);
+			transform.position = new Vector2(-589.5f, -2.44f);
 			levelFourIsActive = true;
-			Invoke("ReturnToNormal", 52.6f);
+			Invoke("FinishLevelFour", 52.6f);
 		}
 	}
 
-	private void Cutscene()
+	private void FinishLevelFour()
+	{
+		levelFourIsActive = false;
+		MorphToBallInput = false;
+		ReturnToNormal();
+	}
+
+	private void InCutscene()
 	{
 		inputIsEnabled = false;
 		MovementDirection = (int)Direction.Idle;
 	}
 
-	private void ReturnToNormalLevelOne()
-	{
-		inputIsEnabled = true;
-	}
-
 	private void ReturnToNormal()
 	{
+		if(levelFourIsActive)
+		{
+			return;
+		}
 		AudioSource.volume = 1f;
-		levelFourIsActive = false;
 		inputIsEnabled = true;
-		MorphToBallInput = false;
 		MovementDirection = (int)Direction.Idle;
 	}
 

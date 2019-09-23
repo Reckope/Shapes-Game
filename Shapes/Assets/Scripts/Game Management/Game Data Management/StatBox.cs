@@ -32,7 +32,7 @@ public class StatBox : MonoBehaviour
 	private const float SECONDS_IN_ONE_HOUR = 3600f;
 
 	// ============================================================
-	// MonoBehaviour Methods
+	// MonoBehaviour Methods (In order of execution)
 	// ============================================================
 
 	void Start()
