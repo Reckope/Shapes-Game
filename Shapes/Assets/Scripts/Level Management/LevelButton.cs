@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using UnityEngine.EventSystems;
+using UnityEngine.Assertions;
 
 public class LevelButton : MonoBehaviour
 {
@@ -34,39 +34,31 @@ public class LevelButton : MonoBehaviour
 	public bool IsCompleted { get; set; }
 
 	// ============================================================
-	// MonoBehaviour Methods.
+	// MonoBehaviour Methods (In order of execution)
 	// ============================================================
 
 	private void Awake()
 	{
-		GetButtonComponents();
+		levelButton = GetComponent<Button>();
+		Assert.IsNotNull(levelButton);
+		levelImage = GetComponent<Image>();
+		Assert.IsNotNull(levelImage);
+
+		Assert.IsNotNull(levelNumberText);
+		Assert.IsNotNull(lockedLevelSprite);
+		Assert.IsNotNull(levelNameText);
 	}
 
-	void Start()
+	private void Start()
 	{
 		SetLevelUnlockState();
-		//levelInformation.text = null;
 	}
 
 	// ============================================================
 	// Level Button Methods
 	// ============================================================
 
-	private void GetButtonComponents()
-	{
-		if(GetComponent<Button>() == null)
-		{
-			levelButton = gameObject.AddComponent(typeof(Button)) as Button;
-		}
-		if(GetComponent<Image>() == null)
-		{
-			levelImage = gameObject.AddComponent(typeof(Image)) as Image;
-		}
-		levelButton = GetComponent<Button>();
-		levelImage = GetComponent<Image>();
-	}
-
-	// We then enable the level depending on if it's unlocked or not. 
+	// We enable the level depending on if it's unlocked or not. 
 	public void SetLevelUnlockState()
 	{
 		if(IsUnlocked)
@@ -84,33 +76,8 @@ public class LevelButton : MonoBehaviour
 			levelButton.interactable = false;
 		}
 	}
-/*
-	// Display the level information whilst the player hovers over the 
-	// level button. 
-	public void DisplayLevelInformation()
-	{
-		if(levelInformation != null)
-		{
-			if(this.isUnlocked)
-			{
-				levelInformation.text = description;
-			}
-			else
-			{
-				levelInformation.text = "LOCKED";
-			}
-		}
-		else
-		{
-			Debug.Log("Missing Object Reference: Text levelInformation");
-		}
-	}
-*/
-	public void HideLevelInformation()
-	{
-		//levelInformation.text = null;
-	}
 
+	// WHen the level button is clicked
 	public void StartLevel()
 	{
 		if(Application.CanStreamedLevelBeLoaded(ID))
@@ -124,6 +91,7 @@ public class LevelButton : MonoBehaviour
 		}
 	}
 
+	// Called by the levelManager to update level locked status. 
 	public void DisableLevel(bool unlocked)
 	{
 		IsUnlocked = unlocked;

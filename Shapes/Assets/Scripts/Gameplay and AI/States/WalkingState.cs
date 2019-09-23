@@ -32,7 +32,7 @@ public class WalkingState : State
 
 	public override void UpdateState()
 	{
-		if(ped.IsGrounded)
+		if(ped.IsGrounded && ped.Animator.enabled)
 		{
 			ped.Animator.speed = ped.Speed - (ped.Speed / walkingAnimationSpeed);
 		}

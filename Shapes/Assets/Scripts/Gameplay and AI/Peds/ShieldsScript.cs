@@ -11,6 +11,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class ShieldsScript : Ped
 {
@@ -41,6 +42,7 @@ public class ShieldsScript : Ped
 		base.Awake();
 
 		shieldAI = GetComponent<AI>();
+		Assert.IsNotNull(shieldAI);
 	}
 
 	protected override void Start()
@@ -84,7 +86,7 @@ public class ShieldsScript : Ped
 				{
 					SetPedState(States.HorizontalShield);
 				}
-				else
+				else if(_name == PedNames.Priwen)
 				{
 					SetPedState(States.VerticalShield);
 				}

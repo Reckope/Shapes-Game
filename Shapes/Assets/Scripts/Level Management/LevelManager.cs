@@ -9,14 +9,11 @@
 */
 
 using System;
-using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Assertions;
-using UnityEngine.SceneManagement;
-
 
 public class LevelManager : MonoBehaviour
 {

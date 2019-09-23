@@ -11,6 +11,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class CinderScript : Ped
 {
@@ -28,13 +29,13 @@ public class CinderScript : Ped
 	[SerializeField]
 	private bool _blockAI = false;
 	[SerializeField][Range(0.1f, 7.0f)]
-	private float _speed = 1f, _alertedSpeed = 5;
+	private float _speed = 1f, _alertedSpeed = 5, _timeToMorph = 0.7f;
 	private float _jumpForce = 7f;
 	private float _groundCheckRadius = 0.1f;
 	private float _sideCheckRadius = 0.4f;
 
 	// ==============================================================
-	// Monobehaviour Methods.
+	// Monobehaviour Methods (In order of execution)
 	// ==============================================================
 
 	protected override void Awake()
@@ -42,6 +43,7 @@ public class CinderScript : Ped
 		base.Awake();
 
 		cinderAI = GetComponent<AI>();
+		Assert.IsNotNull(cinderAI);
 	}
 
 	protected override void Start()
@@ -51,9 +53,21 @@ public class CinderScript : Ped
 		pedType = PedType.Enemy;
 		Name = _name.ToString();
 		JumpForce = _jumpForce;
+		Assert.AreNotEqual(_jumpForce, 0);
 		SideCheckRadius = _sideCheckRadius;
 		GroundCheckRadius = _groundCheckRadius;
 		MovementDirection = (int)_startMovementDirection;
+		FaceDirection = (int)_startFaceDirection;
+
+		if(_blockAI)
+		{
+			MovementDirection = (int)Direction.Idle;
+			cinderAI.enabled = false;
+		}
+		else
+		{
+			MovementDirection = (int)_startMovementDirection;
+		}
 		FaceDirection = (int)_startFaceDirection;
 	}
 
@@ -62,6 +76,7 @@ public class CinderScript : Ped
 		base.Update();
 		
 		Speed = _speed;
+		
 		if(!_blockAI)
 		{
 			if(!HasMorphed && !IsAlerted)
@@ -83,6 +98,7 @@ public class CinderScript : Ped
 
 	private IEnumerator AttemptToSquashPlayer()
 	{
+		Assert.IsTrue(IsAlerted);
 		Speed = _alertedSpeed;
 		MovementDirection = (int)FaceDirection;
 		if
@@ -93,7 +109,8 @@ public class CinderScript : Ped
 		)
 		{
 			Jumped = true;
-			yield return new WaitForSeconds(0.7f);
+			Assert.AreNotEqual(_timeToMorph, 0);
+			yield return new WaitForSeconds(_timeToMorph);
 			if(!IsAlerted)
 			{
 				yield break;

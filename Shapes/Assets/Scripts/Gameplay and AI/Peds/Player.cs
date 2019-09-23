@@ -12,6 +12,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class Player : Ped
 {
@@ -19,8 +20,7 @@ public class Player : Ped
 	public static Player Instance { get { return _instance; } }
 	private static Player _instance;
 
-	private CinematicBars CinematicBars;
-
+	// Events
 	public static event Action HasDied;
 
 	// ============================================================
@@ -32,10 +32,11 @@ public class Player : Ped
 	private PedNames _name = PedNames.Morphy;
 	[SerializeField][Range(0.1f, 15.0f)]
 	private float _speed = 0.1f, _jumpForce = 0.1f, blockCheckRadius = 1.4f;
-	public bool isDead, isInvulnerable, inputIsEnabled = true;
+	private bool inputIsEnabled = true;
+	public bool IsInvulnerable { get; private set; }
+	public bool Dead { get; set; }
 	public int Lives { get; set; }
 	public int MaxLives { get; set; }
-	public int _FaceDirection { get; private set; }
 
 	private bool levelFourIsActive;
 
@@ -57,7 +58,7 @@ public class Player : Ped
 	public event Action<int> OnLivesChanged;
 
 	// ============================================================
-	// MonoBehaviour methods
+	// MonoBehaviour methods (In order of execution)
 	// ============================================================
 
 	// We override all of the peds' MonoBehaviour methods to 
@@ -66,23 +67,13 @@ public class Player : Ped
 	{
 		base.Awake();
 
-		CinematicBars = GameObject.FindObjectOfType(typeof(CinematicBars)) as CinematicBars;
 		audioSource = GetComponent<AudioSource>();
-		if(_instance != null && _instance != this)
-		{
-			Debug.Log("Error: Another instance of Player has been found in scene " + " '" + SceneController.GetActiveScene() + "'.");
-			Destroy(this.gameObject);
-		} 
-		else
-		{
-			_instance = this;
-		}
-
+		Assert.IsNotNull(audioSource);
+		Instanced();
 		pedType = PedType.Player;
 		Name = _name.ToString();
 		GroundCheckRadius = _groundCheckRadius;
 		SideCheckRadius = _sideCheckRadius;
-		blockFeedback.SetActive(false);
 	}
 
 	private void OnEnable()
@@ -91,14 +82,7 @@ public class Player : Ped
 		Level04.PlayLevel04Intro += RollIntoLevel;
 		CameraController.CutsceneIsStarting += InCutscene;
 		CameraController.CutsceneIsFinished += ReturnToNormal;
-	}
-
-	private void OnDisable()
-	{
-		LevelCompleteTrigger.LevelIsComplete -= CompletedLevel;
-		Level04.PlayLevel04Intro -= RollIntoLevel;
-		CameraController.CutsceneIsStarting -= InCutscene;
-		CameraController.CutsceneIsFinished -= ReturnToNormal;
+		OnLivesChanged += DisplayLives;
 	}
 
 	protected override void Start()
@@ -108,20 +92,20 @@ public class Player : Ped
 		stateMachine.SetState(new IdleState(stateMachine, this));
 		Lives = 3;
 		MaxLives = 3;
-		isInvulnerable = false;
-		OnLivesChanged += DisplayLives;
+		IsInvulnerable = false;
 		DisplayLives(Lives);
+		blockFeedback.SetActive(false);
 	}
 
 	protected override void Update()
 	{
 		base.Update();
 
-		_FaceDirection = FaceDirection;
-		isDead = IsDead;
+		//LookDirection = FaceDirection;
+		Dead = IsDead;
 		Speed = _speed;
 		JumpForce = _jumpForce;
-		if(!isDead && inputIsEnabled)
+		if(!Dead && inputIsEnabled)
 		{
 			HandlePlayerInput();
 		}
@@ -135,6 +119,7 @@ public class Player : Ped
 			DisplayLives(Lives);
 		}
 
+		// Workaround
 		if(levelFourIsActive)
 		{
 			AudioSource.volume = 0;
@@ -143,7 +128,14 @@ public class Player : Ped
 			inputIsEnabled = false;
 			MovementDirection = (int)Direction.Right;
 		}
+	}
 
+	private void OnDisable()
+	{
+		LevelCompleteTrigger.LevelIsComplete -= CompletedLevel;
+		Level04.PlayLevel04Intro -= RollIntoLevel;
+		CameraController.CutsceneIsStarting -= InCutscene;
+		CameraController.CutsceneIsFinished -= ReturnToNormal;
 	}
 
 	// ============================================================
@@ -157,7 +149,7 @@ public class Player : Ped
 
 		MovementDirection = Input.GetAxisRaw("Horizontal");
 
-		// Returns true every frame. This is used to detect when the 
+		// Returns true while the button is pressed. This is used to detect when the 
 		// player has released the key associated with the state.
 		MorphToBallInput = Input.GetKey("down");
 		MorphToBlockInput = Input.GetKey("up");
@@ -209,12 +201,25 @@ public class Player : Ped
 	}
 
 	// ============================================================
-	// Player Related tasks.
+	// Player Methods
 	// ============================================================
+
+	private void Instanced()
+	{
+		if(_instance != null && _instance != this)
+		{
+			Debug.Log("Error: Another instance of Player has been found in scene " + " '" + SceneController.GetActiveScene() + "'.");
+			Destroy(this.gameObject);
+		} 
+		else
+		{
+			_instance = this;
+		}
+	}
 
 	private void CompletedLevel()
 	{
-		isInvulnerable = true;
+		IsInvulnerable = true;
 		inputIsEnabled = false;
 		IsAbleToJump = false;
 	}
@@ -272,9 +277,9 @@ public class Player : Ped
 
 	private IEnumerator BecomeTemporarilyInvulnerable(int seconds)
 	{
-		isInvulnerable = true;
+		IsInvulnerable = true;
 		yield return new WaitForSeconds(seconds);
-		isInvulnerable = false;
+		IsInvulnerable = false;
 	}
 
 	public IEnumerator PlayerDied()

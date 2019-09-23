@@ -141,7 +141,6 @@ public class Ped : MonoBehaviour
 
 	// Interaction Events
 	public event Action HasHitGround;
-	public event Action HasHitWater;
 	public event Action HasHitPlayer;
 	public event Action HasHitEnemy;
 	public event Action HasHitBallState;
@@ -149,7 +148,6 @@ public class Ped : MonoBehaviour
 	public event Action HasHitHorizontalShieldState;
 	public event Action HasHitVerticalShieldState;
 	public event Action HasHitSaw;
-	public static event Action EnemyHasDied;
 
 	// Player Input
 	public bool MorphToBallInput { get; protected set; }
@@ -160,25 +158,29 @@ public class Ped : MonoBehaviour
 	public List<AudioClip> pedSounds;
 
 	// ============================================================
-	// MonoBehaviour methods
+	// MonoBehaviour methods (In order of execution)
 	// ============================================================
 
 	protected virtual void Awake()
 	{
 		player = GameObject.FindGameObjectWithTag("Player");
 		Rigidbody2D = GetComponent<Rigidbody2D>();
+		Assert.IsNotNull(Rigidbody2D);
 		Collider2D = GetComponent<Collider2D>();
+		Assert.IsNotNull(Collider2D);
 		Animator = GetComponent<Animator>();
+		Assert.IsNotNull(Animator);
 		AudioSource = GetComponent<AudioSource>();
 		Assert.IsNotNull(AudioSource);
 		stateMachine = GetComponent<StateMachine>();
+		Assert.IsNotNull(stateMachine);
+		HasHitSaw += HitSaw;
 	}
 
 	protected virtual void Start()
 	{
 		Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
 		Rigidbody2D.bodyType = RigidbodyType2D.Dynamic;
-		HasHitSaw += HitSaw;
 		rotation = areaColliders.transform.rotation;
 		AudioSource.spatialBlend = 1f;
 		IsAbleToMove = true;
@@ -213,7 +215,7 @@ public class Ped : MonoBehaviour
 	}
 
 	// ============================================================
-	// Properties with logic.
+	// Ped Methods
 	// ============================================================
 
 	// Set Movement Direction as a property so the state is
@@ -244,15 +246,8 @@ public class Ped : MonoBehaviour
 	public float DistanceBetweenPedAndPlayer 
 	{ 
 		get 
-		{ 
-			if(player != null)
-			{
-				return Vector2.Distance(player.transform.position, gameObject.transform.position);
-			}
-			else
-			{
-				return 999; 
-			}
+	{
+			return Vector2.Distance(player.transform.position, gameObject.transform.position);
 		} 
 	}
 
@@ -282,14 +277,14 @@ public class Ped : MonoBehaviour
 	{
 		if(!HasMorphed)
 		{
-			if(Rigidbody2D.velocity.x > 0)
+			if(Rigidbody2D.velocity.x > (int)Direction.Idle)
 			{
 				transform.eulerAngles = new Vector3(0, 0, 0);
-				FaceDirection = 1;
+				FaceDirection = (int)Direction.Right;
 			}
-			else if(Rigidbody2D.velocity.x < 0 || FaceDirection == -1)
+			else if(Rigidbody2D.velocity.x < (int)Direction.Idle || FaceDirection == -1)
 			{
-				FaceDirection = -1;
+				FaceDirection = (int)Direction.Left;
 				transform.eulerAngles = new Vector3(0, 180, 0);
 			}
 		}
@@ -309,7 +304,7 @@ public class Ped : MonoBehaviour
 
 	public void ExitMorphState()
 	{
-		if(MovementDirection == 0)
+		if(MovementDirection == (int)Direction.Idle)
 		{
 			stateMachine.SetState(new IdleState(stateMachine, this));
 		}
@@ -409,10 +404,6 @@ public class Ped : MonoBehaviour
 		{
 			HasHitGround();
 		}
-		else if(col.gameObject.layer == LayerMask.NameToLayer("Water") && HasHitWater != null)
-		{
-			HasHitWater();
-		}
 	}
 
 	public void ChangeTag(States stateTag)
@@ -449,16 +440,16 @@ public class Ped : MonoBehaviour
 			PlaySound(PedSounds.Ouch, true, false, 1f);
 			if(pedType == PedType.Player)
 			{
-				if(!Player.Instance.isInvulnerable)
+				if(!Player.Instance.IsInvulnerable)
 				{
 					Player.Instance.LoseLives(1);
 				}
 			}
 			else
 			{
-				if(EnemyHasDied != null)
+				if(Name != PedNames.Cinder.ToString())
 				{
-					EnemyHasDied();
+					StartCoroutine(GameManager.Instance.EnableActionShot());
 				}
 				Die();
 			}
@@ -491,7 +482,6 @@ public class Ped : MonoBehaviour
 	public void Destroy()
 	{
 		IsDead = true;
-		//Destroy(this.gameObject);
 		this.gameObject.SetActive(false);
 	}
 
@@ -543,12 +533,16 @@ public class Ped : MonoBehaviour
 		}
 
 		Vector2 visionDirection = Vector2.down;
-		float visionDistance = 9999f;
+		float visionDistance = 99999f;
 
 		RaycastHit2D distanceFromGround = Physics2D.Raycast(visionSpawn, visionDirection, visionDistance);
 
 		return distanceFromGround.distance;
 	}
+
+	// ============================================================
+	// Bounce Away
+	// ============================================================
 
 	// Bounce away from objects. 
 	public void BounceAway()
@@ -567,6 +561,10 @@ public class Ped : MonoBehaviour
 		IsAbleToMove = true;
 	}
 
+	// ============================================================
+	// Ped sound methods
+	// ============================================================
+
 	// Any ped can call this and play a sound locally :)
 	public void PlaySound(PedSounds sounds, bool play, bool loop, float volume)
 	{
@@ -575,12 +573,12 @@ public class Ped : MonoBehaviour
 		{
 			if(clip.name == sound)
 			{
+				Assert.IsNotNull(clip);
 				AudioSource.clip = clip;
 				if(play && loop)
 				{
 					AudioSource.loop = loop;
-					AudioSource.volume = volume;
-					AudioSource.Play();
+					AudioSource.PlayOneShot(clip, volume);
 				}
 				else if(play && !loop)
 				{

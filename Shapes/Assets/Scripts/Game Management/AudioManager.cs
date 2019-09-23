@@ -116,7 +116,7 @@ public class AudioManager : MonoBehaviour
 	{
 		float startVolume = AudioListener.volume;
  
-		while (AudioListener.volume > MUTE) 
+		while (AudioListener.volume > MUTE && !LevelManager.LevelIsCurrentlyActive) 
 		{
 			AudioListener.volume -= startVolume * Time.deltaTime / fadeOutMusicTime;
 			yield return null;

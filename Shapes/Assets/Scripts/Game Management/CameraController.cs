@@ -19,6 +19,12 @@ public class CameraController : MonoBehaviour
 	public static CameraController Instance { get { return _instance; } }
 	private static CameraController _instance;
 
+	public enum Cutscenes
+	{
+		Level01Intro,
+		Level04Intro
+	}
+
 	// Classes
 	private CinematicBars CinematicBars;
 
@@ -156,8 +162,10 @@ public class CameraController : MonoBehaviour
 		transform.position = new Vector3(xAxis, yAxis, transform.position.z);
 	}
 
-	public void PlayCutscene(string scene)
+	public void PlayCutscene(Cutscenes scene)
 	{
+		string _scene = scene.ToString();
+
 		CinematicBars.ShowCinematicBars(1.3f);
 		if(CutsceneIsStarting != null)
 		{
@@ -165,11 +173,11 @@ public class CameraController : MonoBehaviour
 		}
 		if(CutsceneIsActive != null)
 		{
-			CutsceneIsActive(scene);
+			CutsceneIsActive(_scene);
 		}
 		followPlayer = false;
 		Animator.enabled = true;
-		Animator.Play(scene, 0);
+		Animator.Play(_scene, 0);
 	}
 
 	// Used by Animation event

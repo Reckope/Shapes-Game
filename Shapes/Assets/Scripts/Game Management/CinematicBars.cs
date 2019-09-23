@@ -39,7 +39,7 @@ public class CinematicBars : MonoBehaviour
 	// Update is called once per frame
 	private void Update () 
 	{
-		if(isActive && !Player.Instance.isDead)
+		if(isActive && !Player.Instance.Dead)
 		{
 			Vector2 sizeDelta = topBar.sizeDelta;
 			sizeDelta.y += changeSizeAmount * Time.deltaTime;

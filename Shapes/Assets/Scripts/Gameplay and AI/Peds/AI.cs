@@ -10,6 +10,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 [RequireComponent(typeof(Ped))]
 public class AI : MonoBehaviour
@@ -32,8 +33,7 @@ public class AI : MonoBehaviour
 	// Global variables
 	[Header("AI Settings")]
 	[SerializeField][Range(5f, 15.0f)]
-	private float visionDistance = 10;
-
+	private float _visionDistance = 10;
 
 	public bool HasReachedLedgeOnLeftSide
 	{ 
@@ -46,12 +46,13 @@ public class AI : MonoBehaviour
 	}
 
 	// ==============================================================
-	// Monobehaviour Methods.
+	// Monobehaviour Methods (in order of execution)
 	// ==============================================================
 
 	protected void Awake()
 	{
 		ped = GetComponent<Ped>();
+		Assert.IsNotNull(ped);
 	}
 
 	// ============================================================
@@ -70,10 +71,6 @@ public class AI : MonoBehaviour
 		}
 	}
 
-	// ============================================================
-	// Player Related tasks.
-	// ============================================================
-
 	public void DetectPlayer(LookDirection requestedDirection)
 	{
 		Vector2 visionDirection = Vector2.zero;
@@ -81,6 +78,8 @@ public class AI : MonoBehaviour
 		Vector2 left = ped.leftCheck.transform.position;
 		Vector2 right = ped.rightCheck.transform.position;
 
+		// The Raycast can't pass through objects with colliders, so
+		// need to switch the spawn left to right. 
 		if(ped.FaceDirection == (int)Ped.Direction.Left)
 		{
 			visionSpawn = left;
@@ -90,6 +89,7 @@ public class AI : MonoBehaviour
 			visionSpawn = right;
 		}
 
+		// Which direction should the raycast point?
 		switch(requestedDirection)
 		{
 			case LookDirection.StraightAhead:
@@ -111,9 +111,10 @@ public class AI : MonoBehaviour
 				visionDirection = Vector2.down;
 			break;
 		}
-		RaycastHit2D lineOfSight = Physics2D.Raycast(visionSpawn, visionDirection, visionDistance);
 
-		if(lineOfSight.collider != null && lineOfSight.collider.gameObject.layer == LayerMask.NameToLayer("Player")){
+		RaycastHit2D lineOfSight = Physics2D.Raycast(visionSpawn, visionDirection, _visionDistance);
+
+		if(lineOfSight.collider != null && lineOfSight.collider.gameObject.layer == LayerMask.NameToLayer(Ped.PedType.Player.ToString())){
 			ped.IsAlerted = true;
 		}
 	}

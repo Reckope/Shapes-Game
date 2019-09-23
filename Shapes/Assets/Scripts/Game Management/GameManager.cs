@@ -45,7 +45,6 @@ public class GameManager : MonoBehaviour
 	private void OnEnable()
 	{
 		SceneController.LoadedScene += DisablePauseAndSlowMotion;
-		Ped.EnemyHasDied += ActionShot;
 	}
 
 	private void Start()
@@ -73,7 +72,6 @@ public class GameManager : MonoBehaviour
 	private void OnDisable()
 	{
 		SceneController.LoadedScene -= DisablePauseAndSlowMotion;
-		Ped.EnemyHasDied -= ActionShot;
 	}
 
 	private void DisablePauseAndSlowMotion()
@@ -96,12 +94,6 @@ public class GameManager : MonoBehaviour
 
 		// Make the game run as fast as possible
 		Application.targetFrameRate = 300;
-	}
-
-	// Wrapper for event 
-	private void ActionShot()
-	{
-		StartCoroutine(EnableActionShot());
 	}
 
 	// Percentage chance that the action shot will activate when
@@ -184,12 +176,6 @@ public class GameManager : MonoBehaviour
 	{
 		UIManager.Instance.DisplayUI(UIManager.CanvasNames.MainMenuPrompt, false);
 	}
-
-	/*public void SaveBeforeReturningToPreviousMenu()
-	{
-		SaveGame();
-		SceneController.Instance.LoadScene("InGameMenu");
-	}*/
 
 	public void ReturnToLevelSelectMenu()
 	{

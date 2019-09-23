@@ -11,6 +11,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class DynamoScript : Ped
 {
@@ -33,7 +34,7 @@ public class DynamoScript : Ped
 	private float _sideCheckRadius = 0.4f;
 
 	// ==============================================================
-	// Monobehaviour Methods.
+	// Monobehaviour Methods (in order of execution).
 	// ==============================================================
 
 	protected override void Awake()
@@ -41,6 +42,7 @@ public class DynamoScript : Ped
 		base.Awake();
 
 		dynamoAI = GetComponent<AI>();
+		Assert.IsNotNull(dynamoAI);
 	}
 
 	protected override void Start()
@@ -51,6 +53,7 @@ public class DynamoScript : Ped
 		Name = _name.ToString();
 		SideCheckRadius = _sideCheckRadius;
 		GroundCheckRadius = _groundCheckRadius;
+
 		if(_blockAI)
 		{
 			MovementDirection = (int)Direction.Idle;

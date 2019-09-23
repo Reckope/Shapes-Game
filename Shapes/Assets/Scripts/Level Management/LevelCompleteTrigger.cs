@@ -1,20 +1,24 @@
-﻿using System;
+﻿/* 
+* Author: Joe Davis
+* Project: Shapes
+* 2019
+* Notes: 
+* This is used to trigger the end of a level.
+* Attach this to a trigger box collider. 
+*/
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class LevelCompleteTrigger : MonoBehaviour
 {
-	Ped ped;
-
+	// Events
 	public static event Action<int, bool> CompletedLevel;
 	// Used for other objects (Camera, player etc)
 	public static event Action LevelIsComplete;
-
-	void Start()
-	{
-		//ped = GameObject.FindObjectOfType(typeof(Ped)) as Ped;
-	}
 
 	public void OnTriggerEnter2D(Collider2D col)
 	{
