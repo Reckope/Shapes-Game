@@ -25,12 +25,12 @@ public class PauseMenu : MonoBehaviour
 
 	public void ExitGame()
 	{
-		GameManager.Instance.DisplayExitGamePrompt();
+		Application.Quit();
 	}
 
 	public void ConfirmExitGame()
 	{
-		Application.Quit();
+		GameManager.Instance.DisplayExitGamePrompt();
 	}
 
 	public void HideExitGamePrompt()

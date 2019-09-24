@@ -42,6 +42,7 @@ public class AudioManager : MonoBehaviour
 		Player.HasDied += PlayGameOver;
 		LevelCompleteTrigger.LevelIsComplete += FadeMusic;
 		LevelManager.LevelHasActivated += HandleMenuMusic;
+		GameManager.Instance.ActionShotIsActive += ActionShotSound;
 	}
 
 	private void Start()
@@ -56,6 +57,7 @@ public class AudioManager : MonoBehaviour
 		Player.HasDied -= PlayGameOver;
 		LevelCompleteTrigger.LevelIsComplete -= FadeMusic;
 		LevelManager.LevelHasActivated -= HandleMenuMusic;
+		GameManager.Instance.ActionShotIsActive -= ActionShotSound;
 	}
 
 	// =========================================================
@@ -102,6 +104,21 @@ public class AudioManager : MonoBehaviour
 	{
 		AudioListener.pause = false;
 		AudioListener.volume = 1f;
+	}
+
+	private void ActionShotSound(bool active)
+	{
+		float quiet = 0.6f;
+		float normal = 1f;
+		
+		if(active)
+		{
+			AudioListener.volume = quiet;
+		}
+		else
+		{
+			AudioListener.volume = normal;
+		}
 	}
 
 	// Wrapper for event.

@@ -156,12 +156,12 @@ public class LevelManager : MonoBehaviour
 	{
 		Debug.Log("Completed level! " + completedLevelBuildIndex + " " + successfullyCompleted);
 		LevelInfo level = GameData.levelData.levels.Find((x) => x.buildIndex == completedLevelBuildIndex);
-
+		Assert.IsNotNull(level);
 		level.isActive = false;
 		if(successfullyCompleted)
 		{
 			level.isCompleted = true;
-			if(completedLevelBuildIndex == HighestUnlockedLevelBuildIndex() && completedLevelBuildIndex++ < GameData.levelData.levels.Count)
+			if(completedLevelBuildIndex == HighestUnlockedLevelBuildIndex() && completedLevelBuildIndex + 1 < GameData.levelData.levels.Count)
 			{
 				GameData.ActiveLevelIndex++;
 				GameData.levelData.levels[GameData.ActiveLevelIndex].isUnlocked = true;
