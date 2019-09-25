@@ -1804,4 +1804,4 @@ ScriptsOnlyBuild:
   - Assets/Scenes/Levels/Tutorial.unity
   - Assets/Scenes/InGameMenu.unity
   - Assets/Scenes/Controls.unity
-  playerPath: /Users/JoeDavis/Documents/Unity Projects/Shapes/Builds/v10.4_Windows/Shapes.exe
+  playerPath: /Users/JoeDavis/Documents/Unity Projects/Shapes/Builds/v10.5_Windowsx64/Shapes.exe
