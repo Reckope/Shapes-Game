@@ -10,6 +10,7 @@ If you're reviewing the project to provide feedback, please navigate to the foll
 
 * Source Code - "Shapes\Assets\Scripts"
 * Gameplay Video - "https://www.youtube.com/watch?v=AtMjZgbF-Ao"
+* .exe file - "Shapes\Builds"
 
 If launching the game in Unity Editor, please only launch from the Main Menu scene. Otherwise, data will not get loaded and you will recieve a bunch of null exception errors. 
 
