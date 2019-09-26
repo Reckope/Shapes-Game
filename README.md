@@ -11,6 +11,11 @@ If you're reviewing the project to provide feedback, please navigate to the foll
 * Source Code - "Shapes\Assets\Scripts"
 * Gameplay Video - "https://www.youtube.com/watch?v=AtMjZgbF-Ao"
 
+<<<<<<< HEAD
+=======
+If launching the game in Unity Editor, please only launch from the Main Menu scene. Otherwise, data will not get loaded and you will recieve a bunch of null exception errors. 
+
+>>>>>>> 2119a440d37ab9508dab51afa25034c95e21c449
 Improvements based on previous feedback
 -	Game mechanics are not as fairly standard (I hope).
 -	Made the overall game feel more natural (no invisible walls).
